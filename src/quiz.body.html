@@ -85,7 +85,7 @@ function submit() {
   done = true; clearInterval(timer);
   const correct = ans.filter((a, i) => a !== null && a === Q.qs[i].a).length, wrong = ans.filter((a, i) => a !== null && a !== Q.qs[i].a).length, blank = n - correct - wrong, m = marks();
   const used = Q.meta.min * 60 - Math.max(secs, 0);
-  saveResult(Q.meta.id, { marks: m, correct, wrong, blank, max: maxM, used });
+  saveResult(Q.meta.id, { marks: m, correct, wrong, blank, max: maxM, used }, Q.qs.map((q, i) => ({ t: q.topic, k: q.kind === "Numerical" ? "N" : "C", s: ans[i] === null ? "b" : ans[i] === q.a ? "c" : "w", q: q.q, o: q.o, a: q.a, u: ans[i], e: q.e || "" })));
   const by = {}; Q.qs.forEach((q, i) => { const b = by[q.topic] = by[q.topic] || { c: 0, w: 0, t: 0 }; b.t++; if (ans[i] === null) return; ans[i] === q.a ? b.c++ : b.w++; });
   const pct = Math.round(Math.max(0, m) / maxM * 100);
   app.innerHTML = `

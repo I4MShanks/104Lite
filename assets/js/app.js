@@ -56,7 +56,30 @@ const store = {
   set(k, v) { return k === "theme" ? RAW.set(k, v) : RAW.set(ns() + k, v); }
 };
 const results = () => store.get("results", {});
-function saveResult(id, r) { const all = results(); const p = all[id] || { attempts: 0, best: -Infinity }; all[id] = { attempts: p.attempts + 1, best: Math.max(p.best, r.marks), last: r, at: Date.now() }; store.set("results", all); }
+function saveResult(id, r, items) {
+  const all = results(); const p = all[id] || { attempts: 0, best: -Infinity }; all[id] = { attempts: p.attempts + 1, best: Math.max(p.best, r.marks), last: r, at: Date.now() }; store.set("results", all);
+  /* per-question log for topic-wise analysis: every attempt of every mock/quiz */
+  if (items) { // per-question log (question, options, your answer, correct answer, explanation); trimmed oldest-first if storage is tight
+    const log = store.get("log", []); log.push({ id, v: r.variant || 0, at: Date.now(), items }); while (log.length > 150) log.shift();
+    const key = "lite104:" + ns() + "log";
+    for (;;) { try { localStorage.setItem(key, JSON.stringify(log)); break; } catch (e) { if (log.length <= 1) break; log.shift(); } }
+  }
+}
+/* aggregate the log by topic → { topic: { c, w, b, n:{c,w,b}, k:{c,w,b}, src:{ quizId: {c,w,b} } } } */
+function topicStats() {
+  const S = {}; const z = () => ({ c: 0, w: 0, b: 0 });
+  for (const a of store.get("log", [])) for (const it of a.items) {
+    const T = S[it.t] = S[it.t] || { ...z(), n: z(), k: z(), src: {} };
+    T[it.s]++; (it.k === "N" ? T.n : T.k)[it.s]++; (T.src[a.id] = T.src[a.id] || z())[it.s]++;
+  }
+  return S;
+}
+function topicQuestions(t) { // every logged question of topic t, newest first
+  const out = [];
+  for (const a of store.get("log", [])) a.items.forEach((it, i) => { if (it.t === t && it.q) out.push({ ...it, src: a.id, at: a.at, n: i + 1 }); });
+  return out.reverse();
+}
+function quizTitle(id) { const m = /^mock-(\d+)$/.exec(id); if (m) return "Mock " + String(m[1]).padStart(2, "0"); const t = /^t-(\w+)-(\d)$/.exec(id); if (t) { const T = (window.TOPICS || []).find(x => x.id === t[1]); return (T ? T.code + " " : "") + "Quiz " + t[2]; } return id; }
 
 /* ---------- marking ---------- */
 const MARK = { right: 3, wrong: -1, blank: 0 };
@@ -212,5 +235,5 @@ function calculator() {
   let dx, dy; $("#calcBar").onpointerdown = e => { const r = el.getBoundingClientRect(); dx = e.clientX - r.left; dy = e.clientY - r.top; const mv = ev => { el.style.left = ev.clientX - dx + "px"; el.style.top = ev.clientY - dy + "px"; el.style.right = "auto"; el.style.bottom = "auto"; }; document.addEventListener("pointermove", mv); document.addEventListener("pointerup", () => document.removeEventListener("pointermove", mv), { once: true }); };
 }
 
-window.ACE = { auth, RAW, $, esc, pad, params, store, results, saveResult, MARK, MOCKS, EXPS, topicQuizzes, buildQuiz, variant, bumpVariant, shell, toast, calculator, calcEval, hash };
+window.ACE = { topicStats, topicQuestions, quizTitle, auth, RAW, $, esc, pad, params, store, results, saveResult, MARK, MOCKS, EXPS, topicQuizzes, buildQuiz, variant, bumpVariant, shell, toast, calculator, calcEval, hash };
 })();
