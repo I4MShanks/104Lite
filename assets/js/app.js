@@ -27,9 +27,15 @@ function shell(o) {
       <div class="flex flex-col min-w-0"><span class="font-label-mono-sm text-label-mono-sm text-secondary truncate uppercase">${esc(o.kicker || "BITS U104 // 104Lite")}</span>
       <span class="font-title-md text-title-md truncate">${esc(o.title || "Foundations of Measurement")}</span></div>
     </div>
-    <span class="font-label-mono-sm text-label-mono-sm px-2 py-1 rounded-full bg-surface-container text-on-surface-variant flex-shrink-0">Sem I · 2026–27</span>
+    <div class="flex items-center gap-2 flex-shrink-0"><span class="hidden sm:inline font-label-mono-sm text-label-mono-sm px-2 py-1 rounded-full bg-surface-container text-on-surface-variant">Sem I · 2026–27</span>
+    <button id="themeBtn" aria-label="Toggle dark mode" title="Dark / light mode" class="w-10 h-10 rounded-full bg-surface-container-low hover:bg-surface-container-high text-on-surface flex items-center justify-center"><span class="material-symbols-outlined text-[21px]">${document.documentElement.classList.contains("dark") ? "light_mode" : "dark_mode"}</span></button></div>
   </div>`;
   document.body.prepend(head);
+  head.querySelector("#themeBtn").onclick = () => {
+    const root = document.documentElement, toDark = !root.classList.contains("dark");
+    const apply = () => { root.classList.add("theme-anim"); root.classList.toggle("dark", toDark); store.set("theme", toDark ? "dark" : "light"); head.querySelector("#themeBtn span").textContent = toDark ? "light_mode" : "dark_mode"; setTimeout(() => root.classList.remove("theme-anim"), 500); };
+    document.startViewTransition && !matchMedia("(prefers-reduced-motion: reduce)").matches ? document.startViewTransition(apply) : apply();
+  };
   if (o.nav !== false) {
     const nav = document.createElement("nav");
     nav.className = "fixed bottom-0 w-full z-40 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_-2px_12px_rgba(11,28,48,0.06)]";
@@ -116,7 +122,7 @@ function calcHTML(key) {
   const c = CALC[key]; if (!c) return "";
   return `<div class="bg-surface-container-low rounded-lg p-3 flex flex-col gap-2">
     <div class="flex items-center gap-2 text-secondary"><span class="material-symbols-outlined text-[18px]">calculate</span><span class="font-label-mono-sm text-label-mono-sm font-semibold uppercase">${c.title}</span></div>
-    <div class="grid grid-cols-2 gap-2">${c.inputs.map(([id, l, u, d, t]) => `<label class="flex flex-col gap-0.5 ${t === "text" ? "col-span-2" : ""}"><span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant">${l}${u ? ` (${u})` : ""}</span><input id="c_${id}" value="${d}" ${t === "text" ? 'type="text"' : 'type="number" step="any"'} class="w-full px-2.5 py-1.5 rounded-lg bg-surface-container-lowest border border-[#E2E8F0] font-label-mono-md text-label-mono-md focus:outline-none focus:border-[#06B6D4] focus:ring-2 focus:ring-[rgba(6,182,212,0.15)]"></label>`).join("")}</div>
+    <div class="grid grid-cols-2 gap-2">${c.inputs.map(([id, l, u, d, t]) => `<label class="flex flex-col gap-0.5 ${t === "text" ? "col-span-2" : ""}"><span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant">${l}${u ? ` (${u})` : ""}</span><input id="c_${id}" value="${d}" ${t === "text" ? 'type="text"' : 'type="number" step="any"'} class="w-full px-2.5 py-1.5 rounded-lg bg-surface-container-lowest border border-outline-variant/70 font-label-mono-md text-label-mono-md focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20"></label>`).join("")}</div>
     <div id="calcOut" class="font-body-sm text-body-sm text-on-surface bg-surface-container-lowest rounded p-2.5 leading-relaxed"></div></div>`;
 }
 function bindCalc(key) {

@@ -2,6 +2,9 @@
 <html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
 <title>Lectures · 104Lite</title><meta name="description" content="104Lite — lectures, podcasts, video overviews, lab manuals and tests for BITS U104 Foundations of Measurement & Experimentation."/>
 <link rel="icon" href="assets/logo.svg"/>
+<script>try{var t=localStorage.getItem("lite104:theme");t=t?JSON.parse(t):(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark")document.documentElement.classList.add("dark")}catch(e){}</script>
+<meta name="theme-color" content="#0a1120" media="(prefers-color-scheme: dark)"/><meta name="theme-color" content="#f8f9ff" media="(prefers-color-scheme: light)"/>
+<link rel="stylesheet" href="assets/theme.css"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com"></script><script src="assets/js/tw.js"></script>
@@ -15,7 +18,7 @@
   <div class="relative flex items-center w-full"><span class="absolute left-3.5 text-on-surface-variant material-symbols-outlined text-[20px]">search</span>
   <input id="q" type="search" placeholder="Search topics, instruments, formulas…" class="w-full pl-10 pr-3 py-2.5 rounded-xl bg-surface-container-low placeholder:text-outline font-body-md text-body-md focus:bg-surface-container-lowest focus:outline-none shadow-sm"></div>
 </section>
-<div id="list" class="px-gutter-mobile flex flex-col gap-space-sm mt-space-sm"></div>
+<div id="list" class="stagger px-gutter-mobile flex flex-col gap-space-sm mt-space-sm"></div>
 <p id="empty" class="hidden text-center text-on-surface-variant font-body-sm text-body-sm py-space-xl">No lectures match. Try another keyword.</p>
 </main>
 <script>

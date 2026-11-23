@@ -15,7 +15,7 @@
   <div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm">
     <div class="flex items-center gap-space-md">
       <div class="relative w-16 h-16 flex-shrink-0">
-        <svg class="w-16 h-16 -rotate-90" viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" fill="none" stroke="#d3e4fe" stroke-width="5"/><circle id="ring" cx="32" cy="32" r="26" fill="none" stroke="#00687a" stroke-width="5" stroke-linecap="round" stroke-dasharray="163.36" stroke-dashoffset="163.36" style="transition:stroke-dashoffset .8s"/></svg>
+        <svg class="w-16 h-16 -rotate-90" viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" fill="none" stroke="rgb(var(--c-surface-variant))" stroke-width="5"/><circle id="ring" cx="32" cy="32" r="26" fill="none" stroke="rgb(var(--c-secondary))" stroke-width="5" stroke-linecap="round" stroke-dasharray="163.36" stroke-dashoffset="163.36" style="transition:stroke-dashoffset .8s"/></svg>
         <div class="absolute inset-0 flex flex-col items-center justify-center"><span id="ringPct" class="font-label-mono-md text-label-mono-md text-secondary font-bold leading-none">0%</span><span class="font-label-mono-sm text-[9px] text-on-surface-variant mt-0.5">DONE</span></div>
       </div>
       <div class="flex-1 min-w-0">
@@ -37,7 +37,7 @@
 <!-- Sample tests -->
 <section class="mt-space-lg px-gutter-mobile">
   <div class="flex items-center justify-between mb-space-sm"><div class="flex items-center gap-2"><div class="w-2.5 h-2.5 rounded-full bg-secondary"></div><h2 class="font-title-md text-title-md">4 Comprehensive Sample Tests</h2></div><span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant">27 Qs · all 9 lectures</span></div>
-  <div id="tests" class="space-y-space-sm"></div>
+  <div id="tests" class="stagger space-y-space-sm"></div>
 </section>
 <!-- Lectures -->
 <section class="mt-space-lg px-gutter-mobile">
@@ -45,7 +45,7 @@
     <div><h2 class="font-title-md text-title-md">Lectures by Topic</h2><p class="font-body-sm text-body-sm text-on-surface-variant">Each with video, podcast, notes, lab manual & booklet</p></div>
     <a href="lectures.html" class="font-label-mono-sm text-label-mono-sm text-secondary font-semibold flex items-center whitespace-nowrap">View All (9)<span class="material-symbols-outlined text-[16px]">chevron_right</span></a>
   </div>
-  <div id="lecs" class="grid sm:grid-cols-2 gap-space-md"></div>
+  <div id="lecs" class="stagger grid sm:grid-cols-2 gap-space-md"></div>
 </section>
 </main>
 <script>
