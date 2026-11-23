@@ -510,7 +510,6 @@ Direct Conversion to Electrical Signals – They convert the linear displacement
 are easy to process.
 
 LAB MANUAL SECTION FOR THIS LECTURE'S EXPERIMENT:
-
 5. LVDT: sensitivity of a displacement transducer (EEE)
 Aim: study the measurement protocol and find the sensitivity of an LVDT.
 1. Calibrate the CRO: 1 V/div and 1 ms/div; connect the Y-input to the CAL terminal – you should see 1 V

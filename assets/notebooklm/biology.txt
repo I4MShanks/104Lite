@@ -260,7 +260,6 @@ Final result of experiment – replicated
 multiple times – scientifically conclusive
 
 LAB MANUAL SECTION FOR THIS LECTURE'S EXPERIMENT:
-
 1. BMI and its correlation with blood pressure (Biological Sciences)
 Aim: measure height, weight and blood pressure with replicates, classify the data types, compute BMI from
 averaged replicates, and find the Pearson correlation coefficient r between BMI and BP.

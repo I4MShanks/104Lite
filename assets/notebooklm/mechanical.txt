@@ -694,7 +694,6 @@ prob_exceeds);
 3 of 3
 
 LAB MANUAL SECTION FOR THIS LECTURE'S EXPERIMENT:
-
 6. Viscosity with an Ostwald viscometer (Mechanical Engineering)
 Aim: find the dynamic and kinematic viscosity of 20% and 40% v/v glycerol–water solutions, using water
 as the reference, and evaluate repeatability and uncertainty.

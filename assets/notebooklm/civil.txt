@@ -847,7 +847,6 @@ Questions?
 73
 
 LAB MANUAL SECTION FOR THIS LECTURE'S EXPERIMENT:
-
 4. Height of a building with a theodolite (Civil Engineering)
 Aim: find the height of a building by trigonometric levelling: a theodolite measures the vertical angle to
 the top and a tape measures the horizontal distance.

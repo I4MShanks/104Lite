@@ -344,7 +344,6 @@ Go measure it carefully. Happy learning.
 19 / 19
 
 LAB MANUAL SECTION FOR THIS LECTURE'S EXPERIMENT:
-
 8. Surface tension by capillary rise (Physics)
 Aim: measure the surface tension of water, a 5 mM SDS solution and glycerol–water mixtures (this semester
 25% and 50%; the manual also lists ethanol and pure glycerine) by capillary rise, using two techniques of
@@ -425,5 +424,3 @@ microscope δh/h ≈ 0.013%, so the radius term dominates (1.3%).
 BITS U104 · Ch. 3: The eight experiments
 
 Compre Guide 2026-27 · page 6 of 7
-
-

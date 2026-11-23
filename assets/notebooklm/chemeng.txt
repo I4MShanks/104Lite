@@ -110,7 +110,6 @@ Head loss H =
 29 September 2026
 
 LAB MANUAL SECTION FOR THIS LECTURE'S EXPERIMENT:
-
 2. Flow rate with a venturimeter and an orificemeter (Chemical
 Engineering)
 Aim: determine the flow rate of water in a pipe using a venturimeter and an orificemeter.
@@ -210,18 +209,3 @@ keep the apparatus dust-free.
 BITS U104 · Ch. 3: The eight experiments
 
 Compre Guide 2026-27 · page 2 of 7
-
-3. Build your own pH scale (Chemistry)
-Aim: make a simple pH scale using a natural indicator from turmeric. Hypothesis: plant pigments change
-colour with acidity, so household substances can be ranked by pH.
-pH = −log₁₀[H⁺]; acids < 7 < bases (at 25 °C); one pH unit = a factor of 10 in [H⁺].
-Turmeric contains curcumin. In acidic to neutral solutions it stays protonated and yellow. In alkaline
-solutions phenolic deprotonation and keto–enol tautomerism (at the active methylene between the two
-carbonyls) change its conjugation, giving a bathochromic (red) shift – the colour turns orange to red.
-Procedure: about 1 g turmeric in 100 mL warm water (filter); equal volumes of indicator in each tube; add
-a few drops of each substance (lemon juice, vinegar, soda water, Sprite, baking-soda solution, soap,
-detergent, tap water, soda ash); compare colours on a white background; arrange from acidic to alkaline.
-Validation: test an unknown and compare with standard pH paper.
-Limitation: turmeric is yellow over the whole acidic–neutral range, so it separates acids from bases well
-but can’t rank acids against each other; it’s an approximate scale.
-Precautions: clean glassware (contamination), equal volumes of indicator, safe disposal.

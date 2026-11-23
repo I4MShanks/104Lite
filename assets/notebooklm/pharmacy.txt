@@ -337,7 +337,6 @@ Thank
 You
 
 LAB MANUAL SECTION FOR THIS LECTURE'S EXPERIMENT:
-
 7. Quality of tablets (Pharmacy)
 Aim: judge tablet quality by hardness, friability and disintegration time.
 Test
