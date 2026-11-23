@@ -1,4 +1,4 @@
-/* ACE104 shared app shell, storage, narration engine and result-booklet calculators */
+/* 104Lite shared app shell, storage, narration engine and result-booklet calculators */
 (function () {
 const $ = (s, r = document) => r.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -8,8 +8,8 @@ const params = new URLSearchParams(location.search);
 
 /* ---------- storage ---------- */
 const store = {
-  get(k, d) { try { const v = localStorage.getItem("ace104:" + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
-  set(k, v) { try { localStorage.setItem("ace104:" + k, JSON.stringify(v)); } catch (e) {} }
+  get(k, d) { try { const v = localStorage.getItem("lite104:" + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem("lite104:" + k, JSON.stringify(v)); } catch (e) {} }
 };
 function markVisited(id) { const v = store.get("visited", []); if (!v.includes(id)) { v.push(id); store.set("visited", v); } }
 function scores() { return store.get("scores", {}); }
@@ -23,8 +23,8 @@ function shell(o) {
   head.innerHTML = `<div class="max-w-3xl mx-auto h-16 px-gutter-mobile flex items-center justify-between gap-space-sm">
     <div class="flex items-center gap-space-sm min-w-0">
       ${o.back ? `<a href="${o.back}" aria-label="Go back" class="min-w-[44px] min-h-[44px] -ml-2 flex items-center justify-center rounded-lg hover:text-secondary"><span class="material-symbols-outlined text-[24px]">arrow_back</span></a>` : ""}
-      <a href="index.html" class="flex-shrink-0"><img src="assets/logo.svg" alt="ACE104 logo" class="h-8 w-8"></a>
-      <div class="flex flex-col min-w-0"><span class="font-label-mono-sm text-label-mono-sm text-secondary truncate uppercase">${esc(o.kicker || "BITS U104 // ACE104")}</span>
+      <a href="index.html" class="flex-shrink-0"><img src="assets/logo.svg" alt="104Lite logo" class="h-8 w-8"></a>
+      <div class="flex flex-col min-w-0"><span class="font-label-mono-sm text-label-mono-sm text-secondary truncate uppercase">${esc(o.kicker || "BITS U104 // 104Lite")}</span>
       <span class="font-title-md text-title-md truncate">${esc(o.title || "Foundations of Measurement")}</span></div>
     </div>
     <span class="font-label-mono-sm text-label-mono-sm px-2 py-1 rounded-full bg-surface-container text-on-surface-variant flex-shrink-0">Sem I · 2026–27</span>

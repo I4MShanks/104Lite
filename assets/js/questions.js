@@ -1,4 +1,4 @@
-/* ACE104 question bank — 12 MCQs per lecture. a = index of the correct option. */
+/* 104Lite question bank — 12 MCQs per lecture. a = index of the correct option. */
 window.QUESTIONS = {
 fundamentals: [
  {q:"How many base quantities are there in the SI (ISQ) system?", o:["5","6","7","9"], a:2, e:"Length, mass, time, temperature, electric current, amount of substance and luminous intensity."},

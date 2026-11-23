@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-<title>Lecture · ACE104</title><meta name="description" content="ACE104 — lectures, podcasts, video overviews, lab manuals and tests for BITS U104 Foundations of Measurement & Experimentation."/>
+<title>Lecture · 104Lite</title><meta name="description" content="104Lite — lectures, podcasts, video overviews, lab manuals and tests for BITS U104 Foundations of Measurement & Experimentation."/>
 <link rel="icon" href="assets/logo.svg"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet"/>
@@ -14,7 +14,7 @@
 const { $, esc, pad, slideSrc, params, shell, markVisited, scores, toast, TTS, calcHTML, bindCalc, store } = ACE;
 const L = LECTURES.find(x => x.id === params.get("id")) || LECTURES[0];
 const M = (window.MEDIA || {})[L.id] || {};
-document.title = `L${pad(L.no)} ${L.track} · ACE104`;
+document.title = `L${pad(L.no)} ${L.track} · 104Lite`;
 shell({ active: "lectures", back: "lectures.html", kicker: "Foundations of Measurement", title: "Lecture Session" });
 markVisited(L.id);
 const best = (scores()[L.id] || {}).best;
@@ -57,7 +57,7 @@ app.innerHTML = `
 <section class="px-gutter-mobile my-space-sm"><div class="${card} p-space-md flex flex-col gap-3.5">
   <div class="flex items-start justify-between gap-3"><div class="flex items-center gap-3 min-w-0">
     <div class="w-11 h-11 rounded-lg bg-primary-container flex items-center justify-center flex-shrink-0 text-secondary-fixed shadow-sm"><span class="material-symbols-outlined text-[24px]">podcasts</span></div>
-    <div class="flex flex-col min-w-0"><span class="font-label-mono-sm text-label-mono-sm text-secondary uppercase font-semibold">ACE104 Audio #${pad(L.no)}</span><h4 class="font-title-md text-title-md truncate">${esc(L.track)}: ${esc(L.short)}</h4></div></div>
+    <div class="flex flex-col min-w-0"><span class="font-label-mono-sm text-label-mono-sm text-secondary uppercase font-semibold">104Lite Audio #${pad(L.no)}</span><h4 class="font-title-md text-title-md truncate">${esc(L.track)}: ${esc(L.short)}</h4></div></div>
     <span class="font-label-mono-sm text-label-mono-sm px-2 py-0.5 rounded bg-surface-container text-on-surface-variant flex-shrink-0">${M.audio ? "NotebookLM" : "2 hosts"}</span></div>
   ${M.audio ? `<audio id="pAudio" src="${M.audio}" preload="metadata"></audio>` : ""}
   <div class="bg-surface-container-low p-3 rounded-lg flex flex-col gap-2 shadow-inner">

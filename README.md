@@ -1,8 +1,8 @@
-# ACE104
+# 104Lite
 
 A study site for **BITS U104 — Foundations of Measurement & Experimentation** (BITS Pilani, Semester I 2026–27).
 
-**Live site:** https://i4mshanks.github.io/ACE104/
+**Live site:** https://i4mshanks.github.io/104Lite/
 
 ## What's inside
 

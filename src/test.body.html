@@ -16,7 +16,7 @@ const T = buildTest(key) || buildTest("s1");
 const SEED = String(Date.now());
 T.qs = T.qs.map(q => ACE.shuffleOpts(q, SEED));
 const isSample = /^s\d$/.test(T.meta.id);
-document.title = T.meta.title + " · ACE104";
+document.title = T.meta.title + " · 104Lite";
 shell({ nav: false, back: isSample ? "index.html" : `lecture.html?id=${T.meta.id}`, kicker: "Foundations of Measurement", title: "Active Assessment" });
 const LEC = Object.fromEntries(LECTURES.map(l => [l.id, l]));
 const n = T.qs.length;

@@ -1,4 +1,4 @@
-/* ACE104 — lecture content for BITS U104 Foundations of Measurement & Experimentation.
+/* 104Lite — lecture content for BITS U104 Foundations of Measurement & Experimentation.
    Content is written from the lecture slides and the 2026-27 Compre Guide (chapters 1–3).
    narration[].s = slide page number shown while that segment is spoken. */
 window.LECTURES = [
@@ -51,7 +51,7 @@ window.LECTURES = [
     { s: 32, t: "Finally, common devices: manometers, Bourdon and diaphragm gauges for pressure, venturi meters, rotameters and anemometers for flow, and thermometers, thermocouples and thermistors for temperature. You will meet many of these again in the department experiments." }
   ],
   podcast: [
-    ["A","Welcome to the ACE104 study podcast. Today: the opening lecture of U104 on the foundations of measurement."],
+    ["A","Welcome to the 104Lite study podcast. Today: the opening lecture of U104 on the foundations of measurement."],
     ["B","And it's the one everything else depends on. Measurement is basically comparing an unknown quantity with a standard, right?"],
     ["A","Exactly. And a proper result has three parts: a number, a unit and an uncertainty. Forget the uncertainty and it isn't really science."],
     ["B","The lecture made a big deal about accuracy versus precision."],
@@ -120,7 +120,7 @@ window.LECTURES = [
     { s: 31, t: "To summarise: observe, hypothesise, design with controls and replication, and conclude only when results are replicated. In the lab you will apply this by measuring BMI and blood pressure and testing their correlation." }
   ],
   podcast: [
-    ["A","This is ACE104. Today it's biology: how do you measure something that's alive?"],
+    ["A","This is 104Lite. Today it's biology: how do you measure something that's alive?"],
     ["B","Professor Verma's answer is that mostly you don't. You measure a signal related to life, like light scattered by cells."],
     ["A","Which is why OD six hundred is described as a proxy, not a cell count."],
     ["B","Right. You have to correlate it with real counts, and at high density it stops being linear, so you dilute."],
@@ -180,7 +180,7 @@ window.LECTURES = [
     { s: 16, t: "In the lab you will measure the manometer head, compute the theoretical discharge, time the rise in the measuring tank for the actual discharge, and find the coefficient of discharge for both meters." }
   ],
   podcast: [
-    ["A","ACE104 here. Today, chemical engineering and the art of measuring flow."],
+    ["A","104Lite here. Today, chemical engineering and the art of measuring flow."],
     ["B","Professor Pani starts with the five process variables: level, pressure, flow, temperature, composition."],
     ["A","Then a whole zoo of pressure gauges. The ones to remember for vacuum are McLeod, Pirani and ionisation."],
     ["B","The heart of it is venturi versus orifice. Both are differential pressure meters."],
@@ -249,7 +249,7 @@ window.LECTURES = [
     { s: 24, t: "Choosing a technique depends on the sample state, concentration range, matrix complexity, required precision and whether the method must be non-destructive. In the lab you'll build a pH scale using turmeric as a natural indicator." }
   ],
   podcast: [
-    ["A","ACE104 podcast, chemistry edition. This lecture packed in a huge range of instruments."],
+    ["A","104Lite podcast, chemistry edition. This lecture packed in a huge range of instruments."],
     ["B","But it starts with the simplest idea: calibration. Signal equals k times concentration plus the blank."],
     ["A","LOD is three sigma over m, LOQ is ten sigma over m. Sigma is the standard deviation of the blank, m is the slope."],
     ["B","Standard addition is worth understanding. You spike the sample itself, so matrix effects cancel out."],
@@ -315,7 +315,7 @@ window.LECTURES = [
     { s: 19, t: "The take-home message: a simple force balance gives a quantitative measurement of a fundamental property that governs everything from breathing to microfluidic chip design." }
   ],
   podcast: [
-    ["A","Welcome back to ACE104. Today, physics: why does water climb up a thin glass tube?"],
+    ["A","Welcome back to 104Lite. Today, physics: why does water climb up a thin glass tube?"],
     ["B","Because surface molecules feel a net inward pull. The surface acts like a stretched skin."],
     ["A","And the derivation is short. Two pi r gamma cos theta equals pi r squared h rho g."],
     ["B","With theta zero, gamma equals h rho g r over two. Memorise that."],
@@ -385,7 +385,7 @@ window.LECTURES = [
     { s: 41, t: "The LVDT has a wide range, no friction, high sensitivity, low hysteresis and low power use. In the lab you'll find its sensitivity as the slope of output voltage against displacement." }
   ],
   podcast: [
-    ["A","ACE104, EEE episode. Today it's sensors and the LVDT."],
+    ["A","104Lite, EEE episode. Today it's sensors and the LVDT."],
     ["B","Dr. Sujan starts with the general measuring system. Sensing element, conversion, processing, transmission, display."],
     ["A","The textbook example of conversion is the strain gauge plus bridge, turning resistance change into voltage."],
     ["B","Then a long list of static characteristics. People confuse threshold and resolution."],
@@ -449,7 +449,7 @@ window.LECTURES = [
     { s: 31, t: "The lecture ends with code for both approaches, so you can check that propagation and Monte Carlo give consistent uncertainties." }
   ],
   podcast: [
-    ["A","ACE104 again. Today: honey, glycerol, and how to measure stickiness."],
+    ["A","104Lite again. Today: honey, glycerol, and how to measure stickiness."],
     ["B","The Ostwald viscometer. It's built on Poiseuille's law: Q equals pi r to the four delta p over eight mu L."],
     ["A","The clever bit is that the liquid drives itself. Delta p is rho g h, Q is V over t, so mu equals K rho t."],
     ["B","And since K is the same tube every time, compare with water. Mu x equals mu water times rho x t x over rho water t water."],
@@ -519,7 +519,7 @@ window.LECTURES = [
     { s: 36, t: "The disintegration apparatus is a basket rack with six tubes moving up and down in a one litre beaker. For dispersible tablets in water at about 25 degrees, all six must disintegrate within three minutes." }
   ],
   podcast: [
-    ["A","ACE104 podcast. Today: what makes a good tablet? Pharmacy with Dr. Sidhu."],
+    ["A","104Lite podcast. Today: what makes a good tablet? Pharmacy with Dr. Sidhu."],
     ["B","Three tests: hardness, friability, disintegration. Strong enough to survive, but able to fall apart in your body."],
     ["A","Hardness first. The Monsanto tester is basically a screw clamp. Target is 4 to 8 kg per square centimetre."],
     ["B","About 40 to 78 newtons. And remember 1 kg per square centimetre is about 9.8 newtons."],
@@ -589,7 +589,7 @@ window.LECTURES = [
     { s: 19, t: "In the lab you'll use a theodolite to find a building's height: H equals instrument height plus distance times the tangent of the elevation angle." }
   ],
   podcast: [
-    ["A","Final ACE104 lecture episode: civil engineering and surveying."],
+    ["A","Final 104Lite lecture episode: civil engineering and surveying."],
     ["B","Dr. Gupta opened with a fun question: how tall is the tallest building you can see? No apps."],
     ["A","The hint was the Sun. Measure a shadow you can reach to find a height you can't. That's surveying in one idea."],
     ["B","Two principles. Work from the whole to the part, and fix each new point from two known ones."],
