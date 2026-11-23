@@ -5,10 +5,55 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;",
 const pad = n => String(n).padStart(2, "0");
 const params = new URLSearchParams(location.search);
 
-/* ---------- storage ---------- */
-const store = {
+/* ---------- accounts (on-device) ---------- */
+const RAW = {
   get(k, d) { try { const v = localStorage.getItem("lite104:" + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
-  set(k, v) { try { localStorage.setItem("lite104:" + k, JSON.stringify(v)); } catch (e) {} }
+  set(k, v) { try { localStorage.setItem("lite104:" + k, JSON.stringify(v)); } catch (e) {} },
+  del(k) { try { localStorage.removeItem("lite104:" + k); } catch (e) {} }
+};
+const auth = {
+  session() { return RAW.get("session", null); },
+  users() { return RAW.get("users", {}); },
+  key(name) { return name.trim().toLowerCase().replace(/\s+/g, " "); },
+  async hash(pw, saltB64) {
+    const enc = new TextEncoder(), salt = saltB64 ? Uint8Array.from(atob(saltB64), c => c.charCodeAt(0)) : crypto.getRandomValues(new Uint8Array(16));
+    const base = await crypto.subtle.importKey("raw", enc.encode(pw), "PBKDF2", false, ["deriveBits"]);
+    const bits = await crypto.subtle.deriveBits({ name: "PBKDF2", salt, iterations: 150000, hash: "SHA-256" }, base, 256);
+    const b64 = a => btoa(String.fromCharCode(...new Uint8Array(a)));
+    return { salt: b64(salt), hash: b64(bits) };
+  },
+  async signup(name, pw) {
+    const k = this.key(name), U = this.users();
+    if (k.length < 3) throw "Name must be at least 3 characters.";
+    if (!/^[\w .@-]+$/.test(k)) throw "Use letters, numbers, spaces, . _ @ - only.";
+    if (pw.length < 6) throw "Password must be at least 6 characters.";
+    if (U[k]) throw "That name is already taken on this device — log in instead.";
+    U[k] = { display: name.trim(), ...(await this.hash(pw)), created: Date.now() };
+    RAW.set("users", U); this.start(k, false);
+  },
+  async login(name, pw) {
+    const k = this.key(name), u = this.users()[k];
+    if (!u) throw "No account with that name on this device.";
+    const h = await this.hash(pw, u.salt);
+    if (h.hash !== u.hash) throw "Incorrect password.";
+    this.start(k, false);
+  },
+  guest() { this.start("guest", true); },
+  start(k, guest) {
+    RAW.set("session", { u: k, guest, at: Date.now() });
+    // adopt scores saved before accounts existed
+    if (!RAW.get("migrated", false)) { const old = RAW.get("results", null); if (old) { RAW.set(`u:${k}:results`, old); RAW.del("results"); } RAW.set("migrated", true); }
+  },
+  logout() { RAW.del("session"); location.href = "login.html"; },
+  name() { const s = this.session(); if (!s) return null; return s.guest ? "Guest" : (this.users()[s.u] || {}).display || s.u; },
+  async deleteAccount() { const s = this.session(); if (!s || s.guest) return; const U = this.users(); delete U[s.u]; RAW.set("users", U);
+    Object.keys(localStorage).filter(k => k.startsWith(`lite104:u:${s.u}:`)).forEach(k => localStorage.removeItem(k)); this.logout(); }
+};
+/* per-user storage: every key is namespaced by the signed-in account (or guest) */
+const ns = () => { const s = auth.session(); return `u:${s ? s.u : "guest"}:`; };
+const store = {
+  get(k, d) { return k === "theme" ? RAW.get(k, d) : RAW.get(ns() + k, d); },
+  set(k, v) { return k === "theme" ? RAW.set(k, v) : RAW.set(ns() + k, v); }
 };
 const results = () => store.get("results", {});
 function saveResult(id, r) { const all = results(); const p = all[id] || { attempts: 0, best: -Infinity }; all[id] = { attempts: p.attempts + 1, best: Math.max(p.best, r.marks), last: r, at: Date.now() }; store.set("results", all); }
@@ -75,6 +120,8 @@ function buildQuiz(id) {
 /* ---------- shell ---------- */
 const NAV = [["home", "index.html", "home", "Home"], ["topics", "topics.html", "category", "Topics"], ["mocks", "mocks.html", "timer", "Mocks"], ["formulas", "formulas.html", "functions", "Formulas"]];
 function shell(o) {
+  if (!auth.session()) { window.__gated = 1; location.replace("login.html?next=" + encodeURIComponent((location.pathname.split("/").pop() || "index.html") + location.search)); throw new Error("LITE_GATE"); }
+  const sess = auth.session(), uname = auth.name(), initials = sess.guest ? "G" : uname.split(/\s+/).map(w => w[0]).join("").slice(0, 2).toUpperCase();
   const head = document.createElement("header");
   head.className = "fixed top-0 w-full z-40 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.06)]";
   head.innerHTML = `<div class="max-w-3xl mx-auto h-16 px-gutter-mobile flex items-center justify-between gap-space-sm">
@@ -85,9 +132,21 @@ function shell(o) {
       <span class="font-title-md text-title-md truncate">${esc(o.title || "104Lite")}</span></div>
     </div>
     <div class="flex items-center gap-2 flex-shrink-0">${o.right || ""}
+    <div class="relative"><button id="userBtn" aria-label="Account" title="${esc(uname)}" class="w-10 h-10 rounded-full ${sess.guest ? "bg-surface-container-high text-on-surface-variant" : "bg-secondary text-on-secondary"} flex items-center justify-center font-label-mono-md text-label-mono-md font-bold">${sess.guest ? '<span class="material-symbols-outlined text-[20px]">person</span>' : esc(initials)}</button>
+      <div id="userMenu" class="hidden absolute right-0 top-12 w-60 rounded-xl bg-surface-container-lowest shadow-xl border border-outline-variant/60 p-2 fade-in z-50">
+        <div class="px-2.5 py-2"><p class="font-title-md text-title-md truncate">${esc(uname)}</p><p class="font-label-mono-sm text-label-mono-sm text-on-surface-variant">${sess.guest ? "Guest — scores kept on this device" : "Signed in on this device"}</p></div>
+        ${sess.guest ? `<a href="login.html?mode=signup" class="flex items-center gap-2 px-2.5 py-2 rounded-lg hover:bg-surface-container-low font-body-sm text-body-sm"><span class="material-symbols-outlined text-[18px] text-secondary">person_add</span>Create an account</a>` : ""}
+        <button id="logoutBtn" class="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg hover:bg-surface-container-low font-body-sm text-body-sm text-left"><span class="material-symbols-outlined text-[18px] text-secondary">logout</span>${sess.guest ? "Exit guest mode" : "Log out"}</button>
+        ${sess.guest ? "" : `<button id="delBtn" class="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg hover:bg-error-container/40 font-body-sm text-body-sm text-left text-error"><span class="material-symbols-outlined text-[18px]">delete</span>Delete account</button>`}
+      </div></div>
     <button id="themeBtn" aria-label="Toggle dark mode" title="Dark / light mode" class="w-10 h-10 rounded-full bg-surface-container-low hover:bg-surface-container-high text-on-surface flex items-center justify-center"><span class="material-symbols-outlined text-[21px]">${document.documentElement.classList.contains("dark") ? "light_mode" : "dark_mode"}</span></button></div>
   </div>`;
   document.body.prepend(head);
+  const um = head.querySelector("#userMenu");
+  head.querySelector("#userBtn").onclick = e => { e.stopPropagation(); um.classList.toggle("hidden"); };
+  document.addEventListener("click", e => { if (!um.contains(e.target)) um.classList.add("hidden"); });
+  head.querySelector("#logoutBtn").onclick = () => { if (!document.querySelector("#timer") || confirm("Leave this quiz? Your answers so far will be lost.")) auth.logout(); };
+  const del = head.querySelector("#delBtn"); if (del) del.onclick = () => { if (confirm(`Delete the account "${uname}" and all its scores from this device? This can't be undone.`)) auth.deleteAccount(); };
   head.querySelector("#themeBtn").onclick = () => {
     const root = document.documentElement, toDark = !root.classList.contains("dark");
     const apply = () => { root.classList.add("theme-anim"); root.classList.toggle("dark", toDark); store.set("theme", toDark ? "dark" : "light"); head.querySelector("#themeBtn span").textContent = toDark ? "light_mode" : "dark_mode"; setTimeout(() => root.classList.remove("theme-anim"), 500); };
@@ -153,5 +212,5 @@ function calculator() {
   let dx, dy; $("#calcBar").onpointerdown = e => { const r = el.getBoundingClientRect(); dx = e.clientX - r.left; dy = e.clientY - r.top; const mv = ev => { el.style.left = ev.clientX - dx + "px"; el.style.top = ev.clientY - dy + "px"; el.style.right = "auto"; el.style.bottom = "auto"; }; document.addEventListener("pointermove", mv); document.addEventListener("pointerup", () => document.removeEventListener("pointermove", mv), { once: true }); };
 }
 
-window.ACE = { $, esc, pad, params, store, results, saveResult, MARK, MOCKS, EXPS, topicQuizzes, buildQuiz, variant, bumpVariant, shell, toast, calculator, calcEval, hash };
+window.ACE = { auth, RAW, $, esc, pad, params, store, results, saveResult, MARK, MOCKS, EXPS, topicQuizzes, buildQuiz, variant, bumpVariant, shell, toast, calculator, calcEval, hash };
 })();

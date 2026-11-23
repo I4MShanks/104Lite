@@ -10,7 +10,8 @@ Compre prep for **BITS U104 — Foundations of Measurement & Experimentation** (
 - **Marking**: +3 correct, −1 wrong, 0 unattempted.
 - **Built-in scientific calculator** (DEG/RAD, log/ln, powers, √, scientific notation), plus a **formula sheet** for every topic.
 - Results show a marks breakdown, topic-wise performance and worked solutions. "New numbers" gives a fresh variant of any quiz.
-- Dark and light mode. Scores are saved only in your browser.
+- **Log in or continue as a guest.** Accounts live on this device and browser, and each one has its own scores. Passwords are stored as a PBKDF2-SHA256 salted hash, never in plain text. There is no server, so accounts do not sync across devices.
+- Dark and light mode.
 
 ## Topics
 L1 Measurement Fundamentals · E1 BMI & BP (Bio) · E2 Venturi & Orifice (Chem Engg) · E3 pH & Analytical Chemistry · E4 Theodolite & Surveying (Civil) · E5 LVDT & Sensors (EEE) · E6 Ostwald Viscometer (Mech) · E7 Tablet Quality (Pharmacy) · E8 Surface Tension (Physics)
