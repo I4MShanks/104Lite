@@ -620,3 +620,47 @@ window.GUIDES = [
   { file: "guide-ch2-instruments-methods.pdf", title: "Ch. 2 — Instruments & methods across the departments", pages: 5, tag: "COMPRE GUIDE" },
   { file: "guide-ch3-experiments.pdf", title: "Ch. 3 — The eight experiments (lab manual)", pages: 7, tag: "LAB MANUAL" }
 ];
+
+/* Result & Observation Booklet layouts (Academic Year 2026-27), mirrored from the printed booklet.
+   t = table title, c = columns, r = row labels (or a number of blank rows), note = text under the table. */
+window.BOOKLETS = {
+  fundamentals: [
+    { t: "Repeated readings of one quantity", c: ["Trial", "Reading xᵢ", "xᵢ − x̄", "(xᵢ − x̄)²"], r: 5, note: "x̄ = Σxᵢ/N;  s = √[Σ(xᵢ − x̄)²/(N − 1)];  standard error = s/√N." }
+  ],
+  biology: [
+    { t: "Table 1. Raw data from replicates and mean of replicates for the individual observation", c: ["Details", "Height (m)", "Weight (kg)", "SBP (mmHg)", "DBP (mmHg)"], r: ["1.", "2.", "3.", "Mean of replicates"], note: "BMI = Weight / (Height)²  →  category: Underweight < 18.5 · Normal 18.5–24.9 · Overweight 25–29.9 · Obese ≥ 30." },
+    { t: "Table 2. Calculated BMI and SBP_avg from each group member, with other variables for correlation analysis", c: ["Sl.", "xᵢ (BMI)", "yᵢ (SBP_avg)", "Xᵢ = xᵢ − x̄", "Yᵢ = yᵢ − ȳ", "Xᵢ²", "Yᵢ²", "XᵢYᵢ"], r: ["1.", "2.", "3.", "4.", "5.", "6.", "7.", "8.", "9.", "10.", "Mean / Σ of group"], note: "Pearson correlation r = ΣXᵢYᵢ / √(ΣXᵢ² · ΣYᵢ²).  Inference: data categories of height, weight, BMI and BP, and the type of correlation between BMI and BP." }
+  ],
+  chemeng: [
+    { t: "Observation table — Venturimeter and Orificemeter", c: ["S.No.", "Pressure difference h (cm)", "Rise of water level in measuring tank R (cm)", "Time taken for R, t (s)"], r: 3 },
+    { t: "Result and discussion — Venturimeter and Orificemeter", c: ["S.No.", "Manometric height difference H (m)", "Flow rate from venturi/orifice Qt (m³/s)", "Actual flow rate Qa (m³/s)", "Cd = Qa/Qt"], r: 3, note: "H = (h/100)(ρm/ρw − 1) m of water; Qt = a₁a₂√(2gH)/√(a₁² − a₂²); A = 0.1 m²; ρm = 13 600, ρw = 1000 kg/m³; g = 9.81 m/s². d₁ = 28 mm (a₁ = 6.157 × 10⁻⁴ m²), d₂ = 14 mm (a₂ = 1.539 × 10⁻⁴ m²) for both meters." }
+  ],
+  chemistry: [
+    { t: "Observations — colour of turmeric indicator", c: ["Substance", "Colour observed", "Acidic / Neutral / Basic", "pH paper value"], r: ["Lemon juice", "Vinegar", "Soda water", "Sprite", "Tap water", "Baking-soda solution", "Soap solution", "Detergent", "Soda ash", "Unknown sample"], note: "Arrange the substances from most acidic to most alkaline and validate the unknown with standard pH paper." }
+  ],
+  physics: [
+    { t: "Table 8.1: Bore radius (calibrated), room temperature and liquid densities", c: ["Liquid", "ρ₂₀ (kg/m³)", "γ_lit (N/m)", "Calculated ρ(T) (kg/m³)"], r: ["Water", "25% glycerol", "50% glycerol", "5 mM SDS (aq.)"], note: "r = 0.275 mm, δr = 0.0035 mm. Room temperature T = ____ °C.  ρ_water(T) ≈ 998.2 − 0.20(T − 20);  ρ_SDS(T) ≈ ρ_water(T) (dilute)." },
+    { t: "Table 8.2: Capillary rise — graph paper / scale (single reading, LC = 1 mm, δh = 0.05 cm)", c: ["Liquid", "h_scale (cm)", "δh_scale (cm)"], r: ["Water", "25% glycerol", "50% glycerol", "5 mM SDS (aq.)"] },
+    { t: "Table 8.3: Capillary rise — second technique (web app: δh = σ of 5 repeats; microscope: δh = LC/√2)", c: ["Liquid", "R_top / reading 1", "R_bottom / reading 2", "h (cm)", "δh (cm)"], r: ["Water", "25% glycerol", "50% glycerol", "5 mM SDS (aq.)"] },
+    { t: "Table 8.4: Surface tension — computed values, propagated uncertainty and comparison", c: ["Liquid", "γ_scale (N/m)", "δγ_scale (N/m)", "γ_2nd (N/m)", "δγ_2nd (N/m)", "% error (scale)", "% error (2nd)"], r: ["Water", "25% glycerol", "50% glycerol", "5 mM SDS (aq.)"], note: "γ = hρ(T)gr/2;  δγ = γ√[(δh/h)² + (δr/r)²]  (δρ neglected).  Convert all lengths to metres before substituting!  % error = |γ_measured − γ_lit| / γ_lit × 100." }
+  ],
+  eee: [
+    { t: "Observation table", c: ["Parameter", "Value"], r: ["Least count of the screw gauge (mm)", "Sensitivity of the CRO (V/div)", "Null point reading (mm)"] },
+    { t: "Table 1: Displacement of cantilever plate w.r.t. null and DSO reading", c: ["No.", "Displacement Up (mm)", "Displacement Down (mm)", "DSO RMS Up (mV)", "DSO RMS Down (mV)", "DC output (mV)"], r: 8, note: "Plot output (y) against displacement (x). Sensitivity = slope = ΔV/Δx, found separately for the up and down sides." }
+  ],
+  mechanical: [
+    { t: "Experiment parameters", c: ["Parameter", "Value"], r: ["Reference liquid", "Target working temperature", "Accepted water viscosity used (μw)", "Pycnometer volume (V)", "Balance readability", "Stopwatch resolution", "Number of timing trials"], note: "Booklet defaults: water, μw = 0.890 mPa·s (25 °C), V = 25.00 mL, 0.001 g, 0.01 s, 5 per liquid." },
+    { t: "Pycnometer: reference water", c: ["Trial", "Empty pycnometer m₀ (g)", "Filled m_w,bottle (g)", "Net water mass m_w (g)", "Density ρ_w (kg/m³)"], r: 5, note: "m = m_f − m₀;  ρ = m/V." },
+    { t: "Pycnometer: test solutions", c: ["Solution · Trial", "Empty m₀ (g)", "Filled m_f (g)", "Net m (g)", "Density ρ (kg/m³)"], r: ["20% v/v · 1", "20% v/v · 2", "20% v/v · 3", "20% v/v · 4", "20% v/v · 5", "40% v/v · 1", "40% v/v · 2", "40% v/v · 3", "40% v/v · 4", "40% v/v · 5"] },
+    { t: "Flow time", c: ["Solution", "Temperature (°C)", "Trial 1 (s)", "Trial 2 (s)", "Trial 3 (s)", "Trial 4 (s)", "Trial 5 (s)"], r: ["Water (reference)", "20% v/v glycerol–water", "40% v/v glycerol–water"] },
+    { t: "Calculations", c: ["Test liquid", "ρx (kg/m³)", "tx (s)", "μw (mPa·s)", "ρw (kg/m³)", "tw (s)", "μx (mPa·s)", "νx (mm²/s)"], r: ["20% v/v glycerol–water", "40% v/v glycerol–water"], note: "μx = μw(ρx tx)/(ρw tw);  νx = μx/ρx. Attach plots." }
+  ],
+  pharmacy: [
+    { t: "A. Determination of tablet hardness (Monsanto tester)", c: ["No.", "Tablet sample", "Hardness (kg/cm²)", "Hardness (N)", "Remark"], r: ["1", "2", "3", "4", "5", "6", "Average hardness"], note: "Average hardness = Σ readings / number of tablets.  1 kg/cm² ≈ 9.807 N;  1 kp = 1 kgf ≈ 9.807 N. Accept 4–8 kg/cm² for conventional compressed tablets." },
+    { t: "B. Determination of tablet friability", c: ["Parameter", "Observation"], r: ["Name of tablet", "Tablet type", "Number of tablets taken", "Average tablet weight", "Apparatus used", "Rotation speed", "Number of revolutions", "Test duration", "Initial weight W₀ (g)", "Final weight after tumbling and de-dusting W_f (g)", "Weight loss W₀ − W_f (g)", "Friability (%)", "Tablets cracked / chipped / broken (Yes/No)"], note: "Complies with the USP criterion if mean weight loss ≤ 1.0% and no significant cracking, cleaving or breakage." },
+    { t: "C. Disintegration time of dispersible tablets", c: ["Tablet No.", "Disintegrated within 3 min (Yes/No)", "Individual disintegration time"], r: 6, note: "Record name and type of tablet and number taken (6). Result: mean disintegration time; complies with the IP requirement if all six disintegrate within 3 min." }
+  ],
+  civil: [
+    { t: "Observation table", c: ["Obs.", "Station", "Horizontal distance D (m)", "Instrument height h (m)", "Face", "Vertical angle θ", "Mean θ", "Calculated height H (m)"], r: ["1 · O₁", "", "2 · O₁", "", "3 · O₂", ""], note: "Rows in pairs: Face Left (FL) then Face Right (FR). Distance between stations O₁ and O₂ (two-station method, if used): b = ____ m.  Formula: H = h + D tan θ." }
+  ]
+};

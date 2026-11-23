@@ -79,9 +79,12 @@ const CALC = {
     run() { const a = $("#c_vals").value.split(/[ ,;]+/).map(parseFloat).filter(isFinite); const n = a.length; if (n < 2) return "Enter at least two readings.";
       const m = a.reduce((x, y) => x + y) / n, s = Math.sqrt(a.reduce((x, y) => x + (y - m) ** 2, 0) / (n - 1)), se = s / Math.sqrt(n);
       return `N = ${n} · mean = <b>${fmt(m, 4)}</b> · s = ${fmt(s, 3)} · SE = s/√N = ${fmt(se, 3)} · %RSD = ${fmt(100 * s / m, 3)}%<br>Report: <b>${fmt(m, 4)} ± ${fmt(se, 2)}</b>`; } },
-  bmi: { title: "BMI from averaged replicates", inputs: [["h", "Mean height", "m", "1.721"], ["w", "Mean weight", "kg", "68.5"]],
+  bmi: { title: "BMI & Pearson correlation (BMI vs SBP)", inputs: [["h", "Mean height", "m", "1.721"], ["w", "Mean weight", "kg", "68.5"], ["gx", "Group BMIs xᵢ", "", "20.5, 22.0, 23.1, 24.6, 26.2, 28.0", "text"], ["gy", "Group SBP_avg yᵢ", "mmHg", "110, 112, 118, 115, 124, 127", "text"]],
     run() { const h = num("h"), w = num("w"); const b = w / (h * h); const c = b < 18.5 ? "Underweight" : b < 25 ? "Normal" : b < 30 ? "Overweight" : "Obese";
-      return `BMI = ${fmt(w)} / ${fmt(h)}² = <b>${fmt(b, 3)} kg/m²</b> → <b>${c}</b>`; } },
+      const p = s => $("#c_" + s).value.split(/[ ,;]+/).map(parseFloat).filter(isFinite); const x = p("gx"), y = p("gy"), n = Math.min(x.length, y.length);
+      let r = "—"; if (n >= 3) { const mx = x.slice(0, n).reduce((a, v) => a + v) / n, my = y.slice(0, n).reduce((a, v) => a + v) / n; let sxy = 0, sxx = 0, syy = 0;
+        for (let i = 0; i < n; i++) { const X = x[i] - mx, Y = y[i] - my; sxy += X * Y; sxx += X * X; syy += Y * Y; } r = sxy / Math.sqrt(sxx * syy); }
+      return `BMI = ${fmt(w)} / ${fmt(h)}² = <b>${fmt(b, 3)} kg/m²</b> → <b>${c}</b><br>Group of ${n}: r = ΣXᵢYᵢ/√(ΣXᵢ²·ΣYᵢ²) = <b>${typeof r === "number" ? fmt(r, 3) : r}</b>${typeof r === "number" ? ` → ${r > 0.5 ? "strong positive" : r > 0 ? "weak positive" : r > -0.5 ? "weak negative" : "strong negative"} association (not causation)` : ""}`; } },
   venturi: { title: "Venturi / orifice: Qt, Qa and Cd", inputs: [["h", "Manometer reading h", "cm Hg", "10"], ["R", "Tank rise R", "cm", "4.6"], ["t", "Time t", "s", "6.0"]],
     run() { const a1 = 6.157e-4, a2 = 1.539e-4, H = (num("h") / 100) * (13600 / 1000 - 1); const Qt = a1 * a2 * Math.sqrt(2 * 9.81 * H) / Math.sqrt(a1 * a1 - a2 * a2); const Qa = 0.1 * (num("R") / 100) / num("t");
       return `H = ${fmt(H)} m of water · Qt = ${fmt(Qt, 3)} m³/s · Qa = ${fmt(Qa, 3)} m³/s<br>C<sub>d</sub> = Qa/Qt = <b>${fmt(Qa / Qt, 3)}</b> (venturi ≈ 0.95–0.98, orifice ≈ 0.6–0.65)`; } },
