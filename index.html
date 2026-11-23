@@ -5,12 +5,12 @@
 <script>(function(){try{if(!localStorage.getItem("lite104:session")&&!/login\.html$/.test(location.pathname)){var n=location.pathname.split("/").pop()||"index.html";window.__gated=1;document.documentElement.style.visibility="hidden";location.replace("login.html?next="+encodeURIComponent(n+location.search));}}catch(e){}})();window.addEventListener("error",function(e){if(window.__gated)e.preventDefault()});</script>
 <script>try{var t=localStorage.getItem("lite104:theme");t=t?JSON.parse(t):(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark")document.documentElement.classList.add("dark")}catch(e){}</script>
 <meta name="theme-color" content="#0a1120" media="(prefers-color-scheme: dark)"/><meta name="theme-color" content="#f8f9ff" media="(prefers-color-scheme: light)"/>
-<link rel="stylesheet" href="assets/theme.css?v=202611231549"/>
+<link rel="stylesheet" href="assets/theme.css?v=202611231557"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet"/>
-<script src="https://cdn.tailwindcss.com"></script><script src="assets/js/tw.js?v=202611231549"></script>
+<script src="https://cdn.tailwindcss.com"></script><script src="assets/js/tw.js?v=202611231557"></script>
 <style>html,body{margin:0}body{overscroll-behavior:none;font-family:Inter,system-ui,sans-serif}::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400;line-height:1}.fill{font-variation-settings:'FILL' 1}@media print{header,nav,.noprint{display:none!important}main{padding:0!important}}</style>
-<script src="assets/js/topics.js?v=202611231549"></script><script src="assets/js/bank.js?v=202611231549"></script><script src="assets/js/app.js?v=202611231549"></script>
+<script src="assets/js/topics.js?v=202611231557"></script><script src="assets/js/bank.js?v=202611231557"></script><script src="assets/js/app.js?v=202611231557"></script>
 </head>
 <body class="bg-surface text-on-surface antialiased min-h-screen">
 <main class="max-w-3xl mx-auto pt-16 pb-28">
@@ -47,8 +47,10 @@
   </div>
 </section>
 <section class="mt-space-lg px-gutter-mobile">
-  <div class="flex items-center justify-between mb-space-sm"><div class="flex items-center gap-2"><div class="w-2.5 h-2.5 rounded-full bg-primary"></div><h2 class="font-title-md text-title-md">Topic-wise Analysis</h2></div><span id="anaMeta" class="font-label-mono-sm text-label-mono-sm text-on-surface-variant"></span></div>
+  <div class="flex items-center justify-between mb-space-sm"><div class="flex items-center gap-2"><div class="w-2.5 h-2.5 rounded-full bg-primary"></div><h2 class="font-title-md text-title-md">Analysis</h2></div><span id="anaMeta" class="font-label-mono-sm text-label-mono-sm text-on-surface-variant"></span></div>
+  <div class="inline-flex p-1 mb-2 rounded-lg bg-surface-container font-label-mono-sm text-label-mono-sm"><button data-v="topic" class="anaTab px-3 py-1 rounded-md bg-surface-container-lowest shadow-sm font-semibold">By topic</button><button data-v="mock" class="anaTab px-3 py-1 rounded-md text-on-surface-variant">By mock</button></div>
   <div id="ana" class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden"></div>
+  <div id="anaM" class="hidden bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden"></div>
 </section>
 <section class="mt-space-lg px-gutter-mobile">
   <div class="flex items-center justify-between mb-space-sm"><div class="flex items-center gap-2"><div class="w-2.5 h-2.5 rounded-full bg-secondary"></div><h2 class="font-title-md text-title-md">Mixed Mock Tests</h2></div><a href="mocks.html" class="font-label-mono-sm text-label-mono-sm text-secondary font-semibold flex items-center">All 10<span class="material-symbols-outlined text-[16px]">chevron_right</span></a></div>
@@ -116,6 +118,33 @@ topics.innerHTML = TOPICS.map(t => { const qz = topicQuizzes(t.id); return `<a h
   <p class="px-space-md py-2 font-label-mono-sm text-[10px] text-on-surface-variant border-t border-outline-variant/50">Every question from every mock and topic quiz is pooled under its own topic. Accuracy = correct ÷ (correct + wrong). Tap a topic to see where its questions came from.</p>`;
   ACE.bindQFilters(ana);
   document.querySelectorAll(".anaRow").forEach(r => r.onclick = () => { const d = document.querySelector(`.anaDet[data-d="${r.dataset.t}"]`); if (!d) return; d.classList.toggle("hidden"); d.classList.add("fade-in"); r.querySelector(".chev").style.transform = d.classList.contains("hidden") ? "" : "rotate(180deg)"; });
+})();
+
+/* ---------- mock-wise analysis ---------- */
+(() => {
+  const R = ACE.results(), log = ACE.store.get("log", []);
+  const rows = ACE.MOCKS.map(m => { const at = log.filter(a => a.id === m.id), last = at[at.length - 1], r = R[m.id];
+    const c = last ? last.items.filter(x => x.s === "c").length : r ? r.last.correct : null, w = last ? last.items.filter(x => x.s === "w").length : r ? r.last.wrong : null, b = last ? last.items.filter(x => x.s === "b").length : r ? r.last.blank : null;
+    return { m, r, at, c, w, b }; });
+  const done = rows.filter(x => x.r);
+  const acc = x => x.c + x.w ? Math.round(x.c / (x.c + x.w) * 100) + "%" : "—";
+  if (!done.length) { anaM.innerHTML = `<div class="p-space-md flex items-start gap-3"><span class="material-symbols-outlined text-secondary text-[22px]">quiz</span><p class="font-body-sm text-body-sm text-on-surface-variant">No mocks yet. Each mock you take shows up here with its marks, correct / wrong / unattempted, a topic-by-topic breakdown and every question.</p></div>`; }
+  else anaM.innerHTML = `<div class="overflow-x-auto no-scrollbar"><table class="w-full font-label-mono-sm text-label-mono-sm">
+    <thead class="bg-surface-container-low text-on-surface-variant"><tr><th class="px-3 py-2 text-left">Mock</th><th class="px-2 py-2">Tries</th><th class="px-2 py-2">Last</th><th class="px-2 py-2">Best</th><th class="px-2 py-2 text-secondary">Correct</th><th class="px-2 py-2 text-error">Wrong</th><th class="px-2 py-2">Unattempted</th><th class="px-2 py-2">Accuracy</th></tr></thead>
+    <tbody>${rows.map(x => `<tr data-m="${x.m.id}" class="mRow border-t border-outline-variant/50 text-center ${x.r ? (x.at.length ? "cursor-pointer hover:bg-surface-container-low" : "") : "opacity-50"}">
+      <td class="px-3 py-2 text-left whitespace-nowrap font-semibold">Mock ${ACE.pad(x.m.n)}${x.at.length ? ' <span class="material-symbols-outlined text-[14px] align-[-3px] text-on-surface-variant chev transition-transform">expand_more</span>' : ""}</td>
+      <td>${x.r ? x.r.attempts : "—"}</td><td>${x.r ? x.r.last.marks + '<span class="text-on-surface-variant">/60</span>' : "—"}</td><td class="font-semibold">${x.r ? x.r.best : "—"}</td>
+      <td class="text-secondary font-semibold">${x.c ?? "—"}</td><td class="text-error font-semibold">${x.w ?? "—"}</td><td>${x.b ?? "—"}</td><td>${x.r ? acc(x) : "—"}</td></tr>
+      ${x.at.length ? `<tr class="mDet hidden"><td colspan="8" class="px-3 pb-3 pt-2 bg-surface-container-low/60 text-left"><div class="mPanel" data-k="home" data-p="${x.m.id}"></div></td></tr>` : ""}`).join("")}</tbody></table></div>
+    <p class="px-space-md py-2 font-label-mono-sm text-[10px] text-on-surface-variant border-t border-outline-variant/50">Correct / Wrong / Unattempted are from your latest attempt. Tap a mock for its topic breakdown and every question.</p>`;
+  if (done.length) anaMeta.dataset.m = `${done.length}/10 mocks taken`;
+  document.querySelectorAll(".mRow").forEach(r => r.onclick = () => { const d = r.nextElementSibling; if (!d || !d.classList.contains("mDet")) return; const p = d.querySelector(".mPanel");
+    const open = d.classList.toggle("hidden") === false; if (open && !p.innerHTML) ACE.attemptPanel(r.dataset.m, p); r.querySelector(".chev").style.transform = open ? "rotate(180deg)" : ""; });
+  anaMeta.dataset.t = anaMeta.textContent;
+  document.querySelectorAll(".anaTab").forEach(b => b.onclick = () => { const m = b.dataset.v === "mock";
+    document.querySelectorAll(".anaTab").forEach(x => { const on = x === b; x.classList.toggle("bg-surface-container-lowest", on); x.classList.toggle("shadow-sm", on); x.classList.toggle("font-semibold", on); x.classList.toggle("text-on-surface-variant", !on); });
+    ana.classList.toggle("hidden", m); anaM.classList.toggle("hidden", !m); anaM.classList.add("fade-in"); ana.classList.add("fade-in");
+    anaMeta.textContent = (m ? anaMeta.dataset.m : anaMeta.dataset.t) || ""; });
 })();
 </script>
 </body></html>

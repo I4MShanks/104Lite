@@ -94,6 +94,22 @@ function bindQFilters(root = document) {
     document.querySelectorAll(`.qf[data-qt="${k}"]`).forEach(x => { const on = x === b; x.classList.toggle("bg-secondary", on); x.classList.toggle("text-on-secondary", on); });
     document.querySelectorAll(`[data-ql="${k}"] .qi`).forEach(d => d.classList.toggle("hidden", f !== "all" && d.dataset.s !== f)); });
 }
+function attemptPanel(id, p, sel) { // per-attempt question analysis (topic quizzes + mocks)
+  const at = quizAttempts(id); if (!at.length) { p.innerHTML = ""; return; } sel = sel ?? at.length - 1; const A = at[sel];
+  const items = A.items.map((it, i) => ({ ...it, n: i + 1, src: id })), cnt = (s, L = items) => L.filter(x => x.s === s).length;
+  const col = { c: "bg-secondary text-on-secondary", w: "bg-error text-on-error", b: "bg-surface-container-highest text-on-surface-variant" };
+  const byT = window.TOPICS.map(t => [t, items.filter(x => x.t === t.id)]).filter(([, L]) => L.length);
+  p.innerHTML = `<div class="fade-in">
+    ${at.length > 1 ? `<div class="flex gap-1.5 flex-wrap mb-2 font-label-mono-sm text-label-mono-sm">${at.map((a, j) => `<button data-j="${j}" class="atBtn px-2.5 py-1 rounded-lg border ${j === sel ? "border-secondary bg-secondary/15 text-secondary font-semibold" : "border-outline-variant"}">Attempt ${j + 1}<span class="text-on-surface-variant font-normal"> · ${new Date(a.at).toLocaleDateString(undefined, { day: "numeric", month: "short" })}</span></button>`).join("")}</div>` : ""}
+    <div class="grid grid-cols-4 gap-2 mb-2 text-center font-label-mono-sm text-label-mono-sm">${[["Marks", 3 * cnt("c") - cnt("w") + "/" + 3 * items.length, ""], ["Correct", cnt("c"), "text-secondary"], ["Wrong", cnt("w"), "text-error"], ["Unattempted", cnt("b"), ""]].map(([k, v, c]) => `<div class="rounded-lg bg-surface-container-lowest p-1.5"><p class="text-[10px] text-on-surface-variant">${k}</p><p class="font-semibold ${c}">${v}</p></div>`).join("")}</div>
+    ${byT.length > 1 ? `<table class="w-full mb-3 font-label-mono-sm text-label-mono-sm bg-surface-container-lowest rounded-lg overflow-hidden"><thead class="text-on-surface-variant"><tr><th class="text-left px-2 py-1">Topic</th><th>Qs</th><th class="text-secondary">Correct</th><th class="text-error">Wrong</th><th>Unattempted</th><th>Marks</th></tr></thead><tbody>
+      ${byT.map(([t, L]) => `<tr class="border-t border-outline-variant/40 text-center"><td class="text-left px-2 py-1 whitespace-nowrap"><span class="text-secondary font-semibold">${t.code}</span> ${esc(t.dept)}</td><td>${L.length}</td><td class="text-secondary">${cnt("c", L)}</td><td class="text-error">${cnt("w", L)}</td><td>${cnt("b", L)}</td><td>${3 * cnt("c", L) - cnt("w", L)}/${3 * L.length}</td></tr>`).join("")}</tbody></table>` : ""}
+    <div class="flex gap-1 flex-wrap mb-3">${items.map((x, i) => `<button data-n="${i}" title="Q${i + 1}" class="qDot w-7 h-7 rounded-md font-label-mono-sm text-[11px] font-semibold ${col[x.s]}">${i + 1}</button>`).join("")}</div>
+    ${qReviewHTML(items, id + "-" + sel + "-" + (p.dataset.k || ""), false)}</div>`;
+  bindQFilters(p);
+  p.querySelectorAll(".atBtn").forEach(b => b.onclick = e => { e.stopPropagation(); attemptPanel(id, p, +b.dataset.j); });
+  p.querySelectorAll(".qDot").forEach(b => b.onclick = e => { e.stopPropagation(); const d = p.querySelectorAll(".qi")[+b.dataset.n]; p.querySelector('.qf[data-f="all"]').click(); d.open = true; d.scrollIntoView({ behavior: "smooth", block: "nearest" }); });
+}
 function quizTitle(id) { const m = /^mock-(\d+)$/.exec(id); if (m) return "Mock " + String(m[1]).padStart(2, "0"); const t = /^t-(\w+)-(\d)$/.exec(id); if (t) { const T = (window.TOPICS || []).find(x => x.id === t[1]); return (T ? T.code + " " : "") + "Quiz " + t[2]; } return id; }
 
 /* ---------- marking ---------- */
@@ -250,5 +266,5 @@ function calculator() {
   let dx, dy; $("#calcBar").onpointerdown = e => { const r = el.getBoundingClientRect(); dx = e.clientX - r.left; dy = e.clientY - r.top; const mv = ev => { el.style.left = ev.clientX - dx + "px"; el.style.top = ev.clientY - dy + "px"; el.style.right = "auto"; el.style.bottom = "auto"; }; document.addEventListener("pointermove", mv); document.addEventListener("pointerup", () => document.removeEventListener("pointermove", mv), { once: true }); };
 }
 
-window.ACE = { topicStats, topicQuestions, quizAttempts, qReviewHTML, bindQFilters, quizTitle, auth, RAW, $, esc, pad, params, store, results, saveResult, MARK, MOCKS, EXPS, topicQuizzes, buildQuiz, variant, bumpVariant, shell, toast, calculator, calcEval, hash };
+window.ACE = { attemptPanel, topicStats, topicQuestions, quizAttempts, qReviewHTML, bindQFilters, quizTitle, auth, RAW, $, esc, pad, params, store, results, saveResult, MARK, MOCKS, EXPS, topicQuizzes, buildQuiz, variant, bumpVariant, shell, toast, calculator, calcEval, hash };
 })();

@@ -21,20 +21,7 @@ app.innerHTML = `
   <div class="flex flex-col gap-2">${T.f.map(([k, v]) => `<div class="rounded-lg bg-surface-container-low p-2.5"><p class="font-label-mono-sm text-label-mono-sm text-on-surface-variant">${esc(k)}</p><p class="font-label-mono-md text-label-mono-md mt-0.5">${esc(v)}</p></div>`).join("")}</div>
 </section>
 <p class="mt-space-md font-label-mono-sm text-label-mono-sm text-on-surface-variant text-center">Bank: ${B.gen.length} numerical generators · ${B.con.length} conceptual problems. "New numbers" after a quiz gives a fresh variant.</p>`;
-function renderQA(id, sel) {
-  const at = ACE.quizAttempts(id), p = document.querySelector(`.qaPanel[data-p="${id}"]`); sel = sel ?? at.length - 1; const A = at[sel];
-  const items = A.items.map((it, i) => ({ ...it, n: i + 1, src: id })), cnt = s => items.filter(x => x.s === s).length;
-  const col = { c: "bg-secondary text-on-secondary", w: "bg-error text-on-error", b: "bg-surface-container-highest text-on-surface-variant" };
-  p.innerHTML = `<div class="fade-in">
-    ${at.length > 1 ? `<div class="flex gap-1.5 flex-wrap mb-2 font-label-mono-sm text-label-mono-sm">${at.map((a, j) => `<button data-j="${j}" class="atBtn px-2.5 py-1 rounded-lg border ${j === sel ? "border-secondary bg-secondary/15 text-secondary font-semibold" : "border-outline-variant"}">Attempt ${j + 1}<span class="text-on-surface-variant font-normal"> · ${new Date(a.at).toLocaleDateString(undefined, { day: "numeric", month: "short" })}</span></button>`).join("")}</div>` : ""}
-    <div class="grid grid-cols-4 gap-2 mb-2 text-center font-label-mono-sm text-label-mono-sm">${[["Marks", 3 * cnt("c") - cnt("w") + "/" + 3 * items.length, ""], ["Correct", cnt("c"), "text-secondary"], ["Wrong", cnt("w"), "text-error"], ["Unattempted", cnt("b"), ""]].map(([k, v, c]) => `<div class="rounded-lg bg-surface-container-lowest p-1.5"><p class="text-[10px] text-on-surface-variant">${k}</p><p class="font-semibold ${c}">${v}</p></div>`).join("")}</div>
-    <div class="flex gap-1 flex-wrap mb-3">${items.map((x, i) => `<button data-n="${i}" title="Q${i + 1}" class="qDot w-7 h-7 rounded-md font-label-mono-sm text-[11px] font-semibold ${col[x.s]}">${i + 1}</button>`).join("")}</div>
-    ${ACE.qReviewHTML(items, id + "-" + sel, false)}</div>`;
-  ACE.bindQFilters(p);
-  p.querySelectorAll(".atBtn").forEach(b => b.onclick = () => renderQA(id, +b.dataset.j));
-  p.querySelectorAll(".qDot").forEach(b => b.onclick = () => { const d = p.querySelectorAll(".qi")[+b.dataset.n]; p.querySelector(`.qf[data-f="all"]`).click(); d.open = true; d.scrollIntoView({ behavior: "smooth", block: "nearest" }); });
-}
 document.querySelectorAll(".qaBtn").forEach(b => b.onclick = () => { const id = b.dataset.qa, p = document.querySelector(`.qaPanel[data-p="${id}"]`), open = p.classList.toggle("hidden") === false;
-  if (open && !p.innerHTML) renderQA(id); b.querySelector(".chev").style.transform = open ? "rotate(180deg)" : ""; });
+  if (open && !p.innerHTML) ACE.attemptPanel(id, p); b.querySelector(".chev").style.transform = open ? "rotate(180deg)" : ""; });
 </script>
 </body></html>
