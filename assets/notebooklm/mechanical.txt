@@ -1,0 +1,800 @@
+BITS U104 Foundations of Measurement & Experimentation — lecture slide text (mechanical).
+
+Foundation of Measurements
+and Experiments
+BITS Pilani
+Pilani Campus
+Dr. Biswadip Shome
+Mechanical Engineering
+Outline of the Lecture
+Introduction to Uncertainties
+Ostwald Viscometer
+Uncertainty using Propagation of
+Error
+Uncertainty using Monte-Carlo Method
+BITS Pilani
+Pilani Campus
+Introduction to Uncertainty
+Introduction
+§ Statistics/statistical analysis is a mathematical tool for
+quantitative analysis of measurement data and
+extracting useful information from data.
+§ Summarize the observations by estimating the
+average (true mean) and the variance (uncertainty)
+§ Propagate the measurement error through a
+mathematical model to estimate the error in the
+derived quantity
+§ Explore use of Probabilistic Monte Carlo method to
+calculate uncertainty
+Error and Uncertainty
+§ Error = Measured value – True value. It is often expressed in
+percentage as: (Measured value – True value)/ True value × 100
+§ Uncertainty in a stated measurement is the interval of confidence
+around the measured value such that the measured value is certain
+not to lie outside this stated interval.
+§ Uncertainty interval is usually assigned in the following formats:
+L = 1.00 ± 0.01 m or 1.00 m ± 1%. Uncertainties may also be stated
+along with a probability
+Types of Errors
+§ We will look at Random errors only
+§ Gross errors and Systematic errors
+would be ignored in this example
+Uncertainty Analysis and Propagation of
+Uncertainty
+§ Method by Kline and McClintock [1]
+§ Estimate uncertainty in the calculated result based on uncertainties
+in the primary measurements
+§ Result 𝑅 is a given function of the primary measurement variables
+𝑅 = 𝑅(𝑥! , 𝑥" , 𝑥# , . . . , 𝑥$ )
+§ Uncertainty in the result (𝑅) based on uncertainties in primary
+measurements
+𝛿% =
+"
+"
+"
+𝜕𝑅
+𝜕𝑅
+𝜕𝑅
+𝛿! +
+𝛿" + ⋯ +
+𝛿$
+𝜕𝑥!
+𝜕𝑥"
+𝜕𝑥$
+!/"
+[1] Kline, S. J., and McClintock, F. A. (1953). Describing uncertainties in single-sample experiments.
+Mechanical Engineering, 75(1), 3–8.
+BITS Pilani
+Pilani Campus
+Ostwald Viscometer
+Ostwald Viscometer – Theory
+§ Uses Poiseuille’s law to determine the
+viscosity
+𝜋𝑟 ' Δ𝑝
+𝑄=
+8𝜇𝐿
+§ It does not provide direct measurement
+of viscosity
+§ It provides a indirect measurement of
+viscosity with reference to a known
+viscosity of another reference fluid
+Ostwald Viscometer
+Ostwald Viscometer – Theory
+§ Uses Poiseuille’s law to determine the
+viscosity
+𝜋𝑟 ' Δ𝑝
+𝑄=
+8𝜇𝐿
+Δ𝑝 = 𝜌𝑔ℎ
+𝑄 = 𝑉/𝑡
+𝜋𝑟 ' 𝑔ℎ
+𝜇=
+𝜌𝑡 = 𝐾𝜌𝑡
+8𝑉𝐿
+where 𝐾 is Viscometer constant
+Oswald Viscometer
+Ostwald Viscometer – Methodology
+§ Uses Poiseuille’s law to determine the
+viscosity
+𝜇 = 𝐾𝜌𝑡
+§ For a given Ostwald viscometer, 𝐾
+remains constant
+𝜇
+𝜌
+=
+𝜇(
+𝜌(
+𝑡
+𝑡(
+§ For our case, we use water as the
+reference fluid
+Oswald Viscometer
+BITS Pilani
+Pilani Campus
+Uncertainty Calculation using Propagation of Error
+Water Density – Measurement
+Trial
+1
+2
+3
+4
+5
+Empty mass
+(g)
+52
+53
+51
+52
+51
+Filled mass
+(g)
+102
+104
+100
+102
+101
+Net mass
+(g)
+50
+51
+49
+50
+50
+Mean 𝜌 (kg/m3)
+Std Dev 𝜌 (kg/m3)
+$
+$
+Volume of Pycnometer = 50 mL
+1
+𝑥̅ =
+. 𝑥!
+𝑛
+!"#
+Density
+(kg/m3)
+1000.0
+1020.0
+980.0
+1000.0
+1000.0
+1000.0
+14.1
+𝜎=
+𝑥! − 𝑥̅ %
+#
+𝑛−1
+!"#
+20% Glycerol-Water Density - Measurement
+Trial
+1
+2
+3
+4
+5
+Empty mass
+(g)
+52
+52
+52
+52
+52
+Volume of Pycnometer = 50 mL
+Filled mass
+(g)
+103
+104
+104
+103
+102
+Net mass
+(g)
+51
+52
+52
+51
+50
+Mean 𝜌 (kg/m3)
+Std Dev 𝜌 (kg/m3)
+$
+1
+𝑥̅ =
+. 𝑥!
+𝑛
+!"#
+Density
+(kg/m3)
+1020.0
+1040.0
+1040.0
+1020.0
+1000.0
+1024.0
+16.7
+&
+𝜎=
+𝑥! − 𝑥̅ %
+#
+𝑛−1
+!"#
+40% Glycerol-Water Density - Measurement
+Trial
+1
+2
+3
+4
+5
+Empty mass
+(g)
+53
+53
+53
+52
+52
+Filled mass
+(g)
+109
+109
+110
+108
+109
+Net mass
+(g)
+56
+56
+57
+56
+57
+Mean 𝜌 (kg/m3)
+Std Dev 𝜌 (kg/m3)
+$
+%
+Volume of Pycnometer = 50 mL
+1
+𝑥̅ =
+. 𝑥!
+𝑏
+!"#
+Density
+(kg/m3)
+1120.0
+1120.0
+1140.0
+1120.0
+1140.0
+1128.0
+11.0
+𝜎=
+𝑥! − 𝑥̅ %
+#
+𝑛−1
+!"#
+Flow Time Measurement
+Fluid
+Water
+20% Glycerol
+40% Glycerol
+Temperature Trial-1 Trial-2 Trial-3 Trial-4 Trial-5 Mean Std. Dev
+(°C)
+(s)
+(s)
+(s)
+(s)
+(s)
+(s)
+(s)
+31
+31
+31
+94
+166
+338
+97
+168
+337
+96
+167
+339
+95
+165
+336
+96
+164
+340
+95.6
+166
+338
+$
+$
+1
+𝑥̅ =
+. 𝑥!
+𝑛
+!"#
+1.14
+1.58
+1.58
+𝜎=
+𝑥! − 𝑥̅ %
+#
+𝑛−1
+!"#
+Viscosity Calculations
+Fluid
+𝜌
+(kg/m3)
+t
+(s)
+𝜇(
+𝜌(
+(mPa-s) (kg/m3)
+𝑡(
+(s)
+𝜇
+𝜈
+(mPa-s) (mm2/s)
+20% Glycerol
+40% Glycerol
+1032
+1128
+166
+338
+0.7644
+0.7644
+95.6
+95.6
+1.3592
+3.0485
+𝜇
+𝜌
+=
+𝜇(
+𝜌(
+𝜇
+𝜈=
+𝜌
+𝑡
+𝑡(
+1000
+1000
+1.3273
+2.7026
+where subscript 𝑤 refers to water and 𝜇 is the
+dynamic viscosity. For water, 𝜇( = 0.7644 mPa-s
+where 𝜈 is the kinematic viscosity and
+𝜌 is the density
+Uncertainty Calculations
+§ Dynamic viscosity
+𝜇
+𝜌
+=
+𝜇(
+𝜌(
+𝑡
+𝑡(
+§ Uncertainty using Method of Propagation of Errors
+𝛿𝜇
+=
+𝜇
+𝛿𝜌
+𝜌
+"
+𝛿𝑡
++
+𝑡
+"
+𝛿𝜌(
++
+𝜌(
+"
+𝛿𝑡(
++
+𝑡(
+" !/"
+where 𝛿 is the uncertainty
+What are the Individual Uncertainties ?
+§ Uncertainty can be Type-A or Type-B
+§ Type-A Evaluation: Uncertainty derived from standard deviation of
+repeated experimental measurements
+§ Type-B Evaluation: Uncertainty estimated from non-statistical sources,
+such as instrument calibration limits, manufacturer specifications, etc.
+§ Total uncertainty is derived using Root Mean Square (RMS) approach
+𝛿=
+𝛿0" + 𝛿1"
+§ For our case, we will assume that there are no uncertainties associated
+with the measurement instruments. Thus, 𝛿1 = 0 and 𝛿 = 𝛿0
+Type-A Evaluation
+§ If we have 𝑛 measurements of variable 𝜙
+§ We calculate an arithmetic mean of 𝜙 and a standard deviation of 𝜙
+§ Uncertainty in 𝜙 can be estimated from
+𝛿2 = 𝜎2 / 𝑛
+where 𝜎2 is the standard deviation of 𝜙
+and 𝑛 is the number of measurement samples
+Evaluation of the Uncertainties Using
+Propagation of Errors
+Fluid
+Water
+20%
+40%
+Density (kg/m3)
+Mean Std Dev 𝜎/ 𝑛
+1000 14.1
+6.32
+1024 16.7
+7.48
+1128 11.0
+4.90
+𝛿 = 𝜎/ 𝑛
+Number of sample (𝑛) = 5
+Time (s)
+Mean Std. Dev 𝜎/ 𝑛
+95.6
+1.14
+0.51
+166
+1.58
+0.71
+338
+1.58
+0.71
+𝛿𝜇
+=
+𝜇
+𝛿𝜌
+𝜌
+"
+𝛿𝑡
++
+𝑡
+Dynamic Viscosity (mPa-s)
+Mean
+𝛿 (%) 𝛿 (mPa-s)
+0.7644
+1.3592
+1.1832
+0.0161
+3.0485
+0.9575
+0.0292
+"
+𝛿𝜌(
++
+𝜌(
+"
+𝛿𝑡(
++
+𝑡(
+" !/"
+Graphical Representation of Experimental Data
+§ It is assumed that there is no
+uncertainty in calculating the %
+volume of Glycerol in the mixture –
+Lack of horizontal bars
+§ As water is the reference fluid, thus,
+Uncertainty = 0 for viscosity of
+pure water (0% Glycerol) – hence
+there is no error bars shown
+Viscosity of Glycerol-Water Mixture
+6
+Viscosity (mPa-s)
+§ Error bars denoting the
+measurement uncertainty should
+be shown when plotting
+experimental data
+Measurement
+5
+Reference
+4
+Size of error bars are enlarged by
+20X for graphical clarity
+3
+2
+1
+0
+0
+10
+20
+30
+% Glycerol by Volume
+40
+50
+Reference: N.-S. Cheng (2008), “Formula for the Viscosity of a
+Glycerol–Water Mixture,” Industrial & Engineering Chemistry
+Research 47(9), pp. 3285-3288. doi:10.1021/ie071349z.
+BITS Pilani
+Pilani Campus
+Uncertainty Calculation using Probabilistic
+Monte Carlo Method
+Evaluation of the Uncertainties Using
+Monte Carlo Method
+§ Calculating uncertainty using propagation of error
+methodology works if the 𝜕y/𝜕𝑥3 can be calculated
+analytically
+§ If the function dependence of 𝑦 on 𝑥3 is complex,
+analytical determination of the partial derivatives
+𝜕y/𝜕𝑥3 is difficult, if not impossible
+§ For such cases, probabilistic calculation of uncertainty
+is preferred
+§ Probabilistic calculation is commonly referred to as the
+Monte Carlo method
+Steps Involved in Calculating Uncertainties
+Using Monte Carlo Method
+§ Steps involved in Monte Carlo based method for
+calculating uncertainty
+1) Assign a probability distribution to each input
+variable (𝑥3 )
+2) Generate many random values according to those
+distributions
+3) Calculate the output (𝑦) for each set of random
+values
+4) Analyze the resulting output distribution
+5) Calculate its standard deviation and uncertainty
+interval
+What Sort of Probability Distribution
+Should I Choose
+Nature of Uncertainty
+Suitable distribution
+Random errors from many sources
+Normal
+Instrument resolution or specified limits
+Uniform
+Known minimum, maximum and most likely value
+Triangular
+Positive and right-skewed values
+Log-normal
+Small sample, estimating the mean
+Student's t
+In our case, we are performing random sampling by repeated measurements.
+Thus, a Normal distribution is an appropriate choice for our 𝑥3
+Steps Involved in Calculating Uncertainties
+Using Monte Carlo Method
+𝑦=
+1
+𝜎√2𝜋
+̅
+" %!&
+!# '
+𝑒
+𝑋"
+!
+𝑋!
+−3𝜎
+Mean
+3𝜎
+𝑋#
+𝑋'
+𝑌 = 𝑓(𝑋! , 𝑋" , … . . 𝑋$ )
+𝑋$
+𝑌
+Normal Probability
+Distribution
+Probabilistic Determination of Uncertainties
+for 20% Glycerol-Water Mixture
+Mean = 166, SD = 1.58
+time Glycerol-Water (s)
+Mean = 1024, SD = 16.7
+𝜌 Glycerol-Water (kg/m3)
+20% Glycerol-Water
+Viscosity (mPa-s)
+n = 10,000
+Mean = 1.360 mPa-s
+SD = 0.036 mPa-s
+Mean = 1000, SD = 14.1
+𝜌 Water (kg/m3)
+Mean = 95.6, SD = 1.14
+time Water (s)
+Probabilistic Calculations – Sensitivity of
+Number of Samples
+Standard Deviation
+Mean Value
+1.40
+1.38
+1.36
+1.34
+1
+10
+100
+1000
+10000
+Number of Samples (n)
+100000
+0.04
+0.03
+0.02
+1
+10
+100
+1000 10000 100000
+Number of Samples (n)
+§ n = 10,000 is a good compromise between accuracy and computation costs
+Probabilistic Determination of Uncertainties
+for 20% Glycerol-Water Mixture
+§ Number of samples (n) = 10,000
+§ Mean value = 1.360 mPa-s
+§ Standard deviation (𝜎) = 0.036 mPa-s
+§ Uncertainty with 95% Confidence interval = 1.96𝜎 = 0.071 mPa-s
+§ Viscosity of 20% Glycerol-water mixture is 𝟏. 𝟑𝟔 ± 𝟎. 𝟎𝟕𝟏 mPa-s
+BITS Pilani
+Pilani Campus
+Code for Calculating Uncertainty using
+Probabilistic Monte Carlo Method
+Code to Calculate Uncertainty using Probabilistic
+Monte Carlo Method for 20% Glycerol-Water Mixture
+% Octave Script: Monte Carlo Probabilistic Calculation
+clear; clc;
+%% 1. Define Simulation Parameters
+numSamples = 10000; % Number of random trials
+%% 2. Define Input Probability Distributions
+% Variable water viscosity in mPa-s (A)
+% Normal distribution (Mean = 0.7644, StdDev = 0.0)
+mu_A = 0.7644;
+sigma_A = 0.0;
+A = normrnd(mu_A, sigma_A, [numSamples, 1]);
+% Variable glycerol-water density in kg/m^3 (B)
+% Normal distribution (Mean = 1032.0, StdDev = 11.0)
+mu_B = 1024.0;
+sigma_B = 16.7;
+B = normrnd(mu_B, sigma_B, [numSamples, 1]);
+% Variable glycerol-water time in seconds (C)
+% Normal distribution (Mean = 166.0, StdDev = 1.8)
+mu_C = 166.0;
+sigma_C = 1.58;
+C = normrnd(mu_C, sigma_C, [numSamples, 1]);
+% Variable water density in kg/m^3 (D)
+% Normal distribution (Mean = 1000.0, StdDev = 14.1)
+mu_D = 1000.0;
+sigma_D = 14.1;
+D = normrnd(mu_D, sigma_D, [numSamples, 1]);
+1 of 3
+% Variable water time in seconds (E)
+% Normal distribution (Mean = 95.6, StdDev = 1.14)
+mu_E = 95.6;
+sigma_E = 1.1;
+E = normrnd(mu_E, sigma_E, [numSamples, 1]);
+%% 3. Evaluate the Formula
+% The operation is element-by-element
+% using .* and ./ for arrays
+Y = A .* B .* C ./ D ./ E
+%% 4. Analyze Probabilistic Results
+mean_Y = mean(Y);
+std_Y = std(Y);
+y11=prctile(Y, 2.5);
+% 2.5th percentile
+y22=prctile(Y, 97.5);
+% 97.5th percentile
+%% 6. Plot the Resulting Distribution
+figure;
+hist(Y, 100, 'Normalization', 'pdf', 'FaceColor', [0.2 0.6 0.8],
+'EdgeColor', 'none');
+grid on;
+hold on;
+% Add visual markers for Mean and Percentiles
+xline(mean_Y, 'r--', 'LineWidth', 2, 'Label', ['Mean: '
+num2str(round(mean_Y,1))]);
+xline(prctile_5, 'k:', 'LineWidth', 1.5, 'Label', 'p5');
+xline(prctile_95, 'k:', 'LineWidth', 1.5, 'Label', 'p95');
+title('Probabilistic Distribution of Y = A * B * C / D / E');
+xlabel('Output Value (Y)');
+ylabel('Probability Density');
+hold off;
+%
+% Calculate the probability that Y exceeds mean value
+threshold = mean_Y;
+prob_exceeds = mean(Y > threshold) * 100;
+%% 5. Display Summary Statistics in Command Window
+fprintf('--- Probabilistic Analysis Results ---\n');
+fprintf('Expected Value (Mean) of Y: %.3f\n', mean_Y);
+fprintf('Standard Deviation of Y: %.3f\n', std_Y);
+fprintf('2.5 th Percentile (p2.5):
+%.3f\n', y11);
+fprintf('97.5 th Percentile (p97.5): %.3f\n', y22);
+fprintf('Probability Y > %d:
+%.2f%%\n', threshold,
+prob_exceeds);
+2 of 3
+3 of 3
+
+LAB MANUAL SECTION FOR THIS LECTURE'S EXPERIMENT:
+
+6. Viscosity with an Ostwald viscometer (Mechanical Engineering)
+Aim: find the dynamic and kinematic viscosity of 20% and 40% v/v glycerol–water solutions, using water
+as the reference, and evaluate repeatability and uncertainty.
+Poiseuille’s law for slow laminar flow through a capillary: Q =
+
+πr4 ΔP
+. In the viscometer the driving
+8μL
+​
+
+pressure is the liquid’s own hydrostatic head, so μ = Kρt (t = time for the meniscus to fall between two
+marks).
+Relative method (no need to know K):
+
+μx = μw
+​
+
+ρx tx
+,
+ρw tw
+​
+
+​
+
+ν=
+
+​
+
+​
+
+​
+
+​
+
+μ
+(kinematic viscosity, m2 /s).
+ρ
+​
+
+Density with a pycnometer: ρ = (m_filled − m_empty)/V_pyc.
+Procedure: clean, bubble-free capillary; clamp vertically in a constant-temperature bath and wait for
+equilibrium; suck the liquid above the upper mark with a bulb (never by mouth); start the stopwatch
+when the bottom of the meniscus passes the upper mark and stop at the lower mark; at least five trials;
+repeat for each solution.
+
+2
+
+2
+
+2
+
+2
+
+m ) + ( uV ) ; ( μx ) = sum of the squared
+Uncertainty: mean tˉ, s, uA = s/ n; ( ρρ ) = ( um
+V
+μ
+u
+
+​
+
+​
+
+​
+
+​
+
+​
+
+​
+
+​
+
+​
+
+u
+
+​
+
+​
+
+x
+
+​
+
+​
+
+fractional uncertainties of μ_w, ρ_x, t_x, ρ_w, t_w.
+
+Assumptions: Newtonian liquids, slow laminar flow, viscometer vertical, same viscometer and marks for
+all liquids, constant temperature (~25 °C), no particles or bubbles.
+Viscosity increases with glycerol concentration (and falls with temperature, which is why temperature
+must be constant).
+
+BITS U104 · Ch. 3: The eight experiments
+
+Compre Guide 2026-27 · page 4 of 7
+
+Illustrative numbers
+Water: t_w = 60.0 s, ρ_w = 997 kg/m³, μ_w = 0.890 mPa·s (25 °C). 20% glycerol: t_x = 96.0 s, ρ_x =
+
+1050 kg/m³. μ_x = 0.890 × (1050 × 96.0)/(997 × 60.0) = 1.50 mPa·s; ν_x = 1.50 × 10⁻³/1050 = 1.43 ×
+10⁻⁶ m²/s.

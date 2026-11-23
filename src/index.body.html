@@ -1,0 +1,82 @@
+<body class="bg-surface text-on-surface antialiased min-h-screen">
+<main class="max-w-3xl mx-auto pt-16 pb-24">
+<!-- Hero -->
+<section class="px-gutter-mobile pt-space-md pb-space-lg bg-surface-container-low rounded-b-2xl shadow-sm">
+  <div class="flex items-start justify-between gap-space-sm mb-space-md">
+    <div class="min-w-0">
+      <div class="flex items-center gap-space-xs mb-1 flex-wrap">
+        <span class="font-label-mono-sm text-label-mono-sm uppercase text-secondary tracking-wider bg-secondary-fixed/50 px-2 py-0.5 rounded-full">BITS U104 // METROLOGY</span>
+        <span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-secondary-container animate-pulse inline-block"></span>Compre ready</span>
+      </div>
+      <h1 class="font-headline-lg-mobile text-headline-lg-mobile tracking-tight">Ace Foundations of Measurement</h1>
+      <p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">9 lectures · podcasts · video overviews · lab manuals · result booklets · tests</p>
+    </div>
+  </div>
+  <div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm">
+    <div class="flex items-center gap-space-md">
+      <div class="relative w-16 h-16 flex-shrink-0">
+        <svg class="w-16 h-16 -rotate-90" viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" fill="none" stroke="#d3e4fe" stroke-width="5"/><circle id="ring" cx="32" cy="32" r="26" fill="none" stroke="#00687a" stroke-width="5" stroke-linecap="round" stroke-dasharray="163.36" stroke-dashoffset="163.36" style="transition:stroke-dashoffset .8s"/></svg>
+        <div class="absolute inset-0 flex flex-col items-center justify-center"><span id="ringPct" class="font-label-mono-md text-label-mono-md text-secondary font-bold leading-none">0%</span><span class="font-label-mono-sm text-[9px] text-on-surface-variant mt-0.5">DONE</span></div>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-baseline justify-between mb-1 gap-2"><span class="font-title-md text-title-md">Course Mastery</span><span id="ringCount" class="font-label-mono-sm text-label-mono-sm text-secondary font-semibold whitespace-nowrap">0 / 9 Lectures</span></div>
+        <p id="nextUp" class="font-body-sm text-body-sm text-on-surface-variant mb-2 truncate">Next: Lecture 01</p>
+        <div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden"><div id="bar" class="bg-secondary h-full rounded-full transition-all duration-700" style="width:0%"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Stats ribbon -->
+<section class="px-gutter-mobile -mt-3">
+  <div class="grid grid-cols-3 gap-2 bg-primary-container text-on-primary rounded-xl p-space-sm shadow-md">
+    <div class="flex flex-col items-center text-center py-1"><span class="font-label-mono-sm text-[10px] uppercase text-primary-fixed-dim tracking-wider">Lectures opened</span><span id="stVisited" class="font-headline-sm text-headline-sm text-surface-bright font-bold mt-0.5">0</span><span class="font-label-mono-sm text-[10px] text-secondary-fixed">of 9</span></div>
+    <div class="flex flex-col items-center text-center py-1 border-x border-on-primary-fixed-variant/60"><span class="font-label-mono-sm text-[10px] uppercase text-primary-fixed-dim tracking-wider">Tests done</span><span id="stTests" class="font-headline-sm text-headline-sm text-surface-bright font-bold mt-0.5">0 / 4</span><span class="font-label-mono-sm text-[10px] text-tertiary-fixed-dim">sample tests</span></div>
+    <div class="flex flex-col items-center text-center py-1"><span class="font-label-mono-sm text-[10px] uppercase text-primary-fixed-dim tracking-wider">Avg score</span><span id="stAvg" class="font-headline-sm text-headline-sm text-surface-bright font-bold mt-0.5">—</span><span class="font-label-mono-sm text-[10px] text-secondary-fixed">all attempts</span></div>
+  </div>
+</section>
+<!-- Sample tests -->
+<section class="mt-space-lg px-gutter-mobile">
+  <div class="flex items-center justify-between mb-space-sm"><div class="flex items-center gap-2"><div class="w-2.5 h-2.5 rounded-full bg-secondary"></div><h2 class="font-title-md text-title-md">4 Comprehensive Sample Tests</h2></div><span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant">27 Qs · all 9 lectures</span></div>
+  <div id="tests" class="space-y-space-sm"></div>
+</section>
+<!-- Lectures -->
+<section class="mt-space-lg px-gutter-mobile">
+  <div class="flex items-center justify-between mb-space-sm">
+    <div><h2 class="font-title-md text-title-md">Lectures by Topic</h2><p class="font-body-sm text-body-sm text-on-surface-variant">Each with video, podcast, notes, lab manual & booklet</p></div>
+    <a href="lectures.html" class="font-label-mono-sm text-label-mono-sm text-secondary font-semibold flex items-center whitespace-nowrap">View All (9)<span class="material-symbols-outlined text-[16px]">chevron_right</span></a>
+  </div>
+  <div id="lecs" class="grid sm:grid-cols-2 gap-space-md"></div>
+</section>
+</main>
+<script>
+const { shell, scores, store, esc, pad, slideSrc, SAMPLE_TESTS } = ACE;
+shell({ active: "home" });
+const L = LECTURES, sc = scores(), visited = store.get("visited", []);
+const done = L.filter(l => visited.includes(l.id)).length, pct = Math.round(done / L.length * 100);
+document.getElementById("ring").style.strokeDashoffset = 163.36 * (1 - pct / 100);
+ringPct.textContent = pct + "%"; ringCount.textContent = `${done} / 9 Lectures`; bar.style.width = pct + "%";
+const nx = L.find(l => !visited.includes(l.id)); nextUp.textContent = nx ? `Next: ${nx.track} — ${nx.title}` : "All lectures opened — try a sample test!";
+stVisited.textContent = done;
+stTests.textContent = SAMPLE_TESTS.filter(t => sc[t.id]).length + " / 4";
+const all = Object.values(sc).map(s => s.last); stAvg.textContent = all.length ? Math.round(all.reduce((a, b) => a + b) / all.length) + "%" : "—";
+tests.innerHTML = SAMPLE_TESTS.map((t, i) => { const s = sc[t.id];
+  return `<a href="test.html?id=${t.id}" class="block bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all active:scale-[0.99]">
+  <div class="flex items-start justify-between gap-space-xs mb-2"><div class="flex flex-wrap items-center gap-1.5">
+   <span class="font-label-mono-sm text-label-mono-sm px-2 py-0.5 rounded-full bg-secondary-fixed/40 text-on-secondary-fixed-variant">Test ${pad(i + 1)}</span>
+   <span class="font-label-mono-sm text-label-mono-sm px-2 py-0.5 rounded-full ${i === 3 ? "bg-primary-container text-primary-fixed font-semibold" : "bg-surface-container text-on-surface-variant"}">${t.tag}</span></div>
+   ${s ? `<span class="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface-container text-secondary font-label-mono-sm text-label-mono-sm font-semibold"><span class="material-symbols-outlined text-[14px]">military_tech</span>Best: ${s.best}%</span>` : `<span class="font-label-mono-sm text-label-mono-sm px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-semibold">Ready to Start</span>`}</div>
+  <h3 class="font-title-md text-title-md mb-1">${esc(t.title.split("· ")[1])}</h3>
+  <p class="font-body-sm text-body-sm text-on-surface-variant mb-space-sm">${esc(t.desc)}</p>
+  <div class="flex items-center justify-between text-on-surface-variant font-label-mono-sm text-label-mono-sm"><div class="flex items-center gap-space-sm">
+   <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">quiz</span>27 Questions</span><span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">timer</span>${t.min} Min</span></div>
+   <span class="px-3.5 py-1.5 rounded-lg ${s ? "bg-surface-container-low text-secondary" : "bg-primary text-on-primary"} font-semibold flex items-center gap-1">${s ? "Retake" : "Start Now"}<span class="material-symbols-outlined text-[14px]">${s ? "replay" : "play_arrow"}</span></span></div></a>`; }).join("");
+lecs.innerHTML = L.map(l => { const m = (window.MEDIA || {})[l.id] || {};
+  return `<a href="lecture.html?id=${l.id}" class="block bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+  <div class="relative h-36 w-full bg-surface-container-high"><img src="${slideSrc(l.id, 1)}" alt="${esc(l.title)} title slide" class="w-full h-full object-cover" loading="lazy">
+   <div class="absolute inset-0 bg-gradient-to-t from-primary-container/85 via-primary-container/25 to-transparent"></div>
+   <span class="absolute top-2.5 left-2.5 font-label-mono-sm text-label-mono-sm ${visited.includes(l.id) ? "bg-secondary text-on-secondary" : "bg-surface-container-lowest/90 text-on-surface"} px-2.5 py-0.5 rounded-full font-semibold shadow-sm">Lecture ${pad(l.no)}${visited.includes(l.id) ? " · Opened" : ""}</span>
+   <div class="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between"><span class="font-label-mono-sm text-label-mono-sm bg-primary-container/75 backdrop-blur-md px-2 py-0.5 rounded text-secondary-fixed">${esc(l.track)} Track</span><span class="font-label-mono-sm text-label-mono-sm bg-primary-container/75 backdrop-blur-md px-2 py-0.5 rounded text-surface-bright flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">auto_stories</span>${l.slides} slides</span></div></div>
+  <div class="p-space-md"><h3 class="font-title-md text-title-md mb-1">${esc(l.title)}</h3><p class="font-body-sm text-body-sm text-on-surface-variant mb-space-sm">${esc(l.short)}</p>
+   <div class="flex flex-wrap gap-1.5">${[["videocam", m.video ? "Video" : "Video overview"], ["podcasts", "Podcast"], ["description", "Lab manual"], ["table_chart", "Booklet"], ["quiz", "12-Q quiz"]].map(([i, t]) => `<span class="flex items-center gap-1 px-2 py-1 rounded-lg bg-surface-container font-label-mono-sm text-label-mono-sm"><span class="material-symbols-outlined text-[15px] text-secondary">${i}</span>${t}</span>`).join("")}</div></div></a>`; }).join("");
+</script>
+</body></html>

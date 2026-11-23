@@ -1,0 +1,439 @@
+BITS U104 Foundations of Measurement & Experimentation — lecture slide text (pharmacy).
+
+Date:13-11-2026
+Evaluation of Tablets: Hardness, Friability and
+Disintegration
+BITS Pilani
+Pilani Campus
+Dr. Jagpreet Singh Sindhu
+Department of Pharmacy
+Tablets
+● Tablets are solid unit dosage forms containing one or
+more active pharmaceutical ingredients (APIs).
+● They are generally prepared by compression or molding.
+Tablets must possess adequate:
+1. Mechanical strength
+2. Physical integrity
+3. Drug release characteristics
+● Quality evaluation ensures consistent performance,
+stability and patient acceptability.
+Why evaluate tablets?
+Tablet evaluation ensures:
+1. Mechanical integrity during handling and
+transportation
+2. Resistance to abrasion and breakage
+3. Appropriate disintegration after administration
+4. Consistency between manufacturing batches
+5. Reproducible product quality
+In Process Quality Control Parameter
+IPQC refers to tests and checks performed during the manufacturing process to ensure that
+tablets consistently meet predetermined quality requirements.
+Purpose: Detect process variations early → prevent defective batches → maintain consistent
+tablet quality
+Tablet Hardness
+•
+It is the force required to cause a tablet to fracture or break under specified conditions
+• It is an indicator of tablet mechanical strength.
+1. Modern instruments generally report breaking force in Newtons (N).
+2. Older instruments may report values in kg/kp.
+• Excessive hardness is not necessarily desirable.
+• It may influence porosity and the subsequent disintegration behaviour of the tablet.
+Importance of Hardness
+Adequate hardness is required to:
+1. Prevent tablet breakage during handling
+2. Reduce damage during transportation
+3. Maintain tablet integrity during packaging
+4. Minimize chipping and cracking
+5. Provide consistent manufacturing performance
+Factors affecting tablet hardness
+Manufacturing factors
+Factors affecting tablet hardness
+-Formulation factors
+Types of hardness Testers- Monsanto Hardness tester
+Working:
+• The tablet is placed between the jaws.
+• The screw is rotated to gradually increase the force
+until the tablet fractures.
+• The force required to break the tablet is read from
+the scale.
+Advantages: Simple, inexpensive and easy to operate
+Limitation: Manual operation can introduce operator
+variability
+Types of hardness Testers- Pfizer Hardness tester
+Working:
+• The tablet is placed between two anvils
+• A lever-operated mechanism gradually
+applies increasing force until the tablet
+fractures
+• The breaking force is read from the calibrated
+scale.
+Advantages: Simple, inexpensive and easy to
+operate
+Limitation: Manual operation can introduce
+operator variability
+Types of hardness Testers- Digital Hardness tester
+Working:
+• The tablet is placed between two jaws
+• Automatically increasing force is applied
+until the tablet fractures
+• A load cell detects the breaking force and
+displays the hardness digitally
+Advantages: Accurate, rapid and minimizes
+operator variability with direct digital readings.
+Limitations: More expensive and requires
+electrical power/calibration compared with
+manual testers.
+Procedure for Hardness Testing
+1.Ensure that the tester is clean, calibrated, and the pointer/scale reads zero before starting
+2.Loosen the locking screw
+3. Place a tablet vertically between the two jaws, ensuring the tablet is properly aligned
+along its diameter.
+4. Adjust the screw knob gently so that the movable jaw just touches the tablet surface
+without applying pressure
+Procedure for Hardness Testing
+5.Note the initial reading if the scale does not auto-zero
+6. Slowly and steadily rotate the screw knob clockwise, applying gradually increasing
+compressive force on the tablet
+7. Continue applying pressure until the tablet fractures/breaks into two halves
+8. Observe and immediately note the reading indicated by the pointer on the calibrated
+scale at the moment of fracture.
+Procedure for Hardness Testing
+9. Release the screw, remove the broken tablet pieces, and reset the pointer to zero.
+10. Repeat the above steps for a total of 6 tablets from the same batch/sample.
+11. Record all readings in kg/cm²
+(convert to Newtons if required, using 1 kg/cm² ≈ 9.807 N)
+Acceptance Criteria
+As per pharmacopoeial and industrial practice;
+Conventional compressed tablets should typically possess a hardness in the range of 4–8
+kg/cm² (approximately 40–78 N),
+Although the acceptable range may vary depending on tablet size, shape, and intended use
+(e.g., chewable, effervescent, or sustained-release tablets may have different specifications).
+What is Friability?
+• Friability is the tendency of a tablet to lose particles or mass as a result of mechanical
+abrasion and shock.
+• It is particularly important for compressed, uncoated tablets.
+• It reflects the ability of a tablet to withstand handling during manufacturing,
+packaging and transportation.
+• Excessive friability may result in chipping, capping, powder formation and loss of tablet
+weight.
+• Friability is expressed as the percentage loss in tablet weight after mechanical tumbling.
+Importance of Friability.
+• Friability testing helps assess tablet resistance to:
+1. Abrasion
+2. Repeated
+3. mechanical impact
+4. Handling Transportation
+5. Packaging operations
+Principle of Friability.
+• A weighed sample of tablets is placed in a rotating drum.
+• During rotation:
+1. Tablets are lifted by the curved projection
+2. Tablets roll/slide and fall
+3. Tablets undergo repeated mechanical impact
+4. Tablets collide with the drum wall and with each other
+5. This produces abrasion and mechanical stress
+Principle of Friability.
+After rotation:
+1. Tablets are
+removed and
+dedusted
+2. Tablets are
+reweighed
+3. Friability is
+calculated from
+the percentage
+loss in weight
+Factors Influencing Tablet Friability:
+Formulation factors:
+1.
+2.
+3.
+4.
+Binder concentration
+Disintegrant
+Lubricant
+Moisture content
+•
+These factors influence tablet cohesiveness.
+• Adequate binder and optimum moisture generally reduce friability
+• Excessive lubricant or disintegrant may weaken interparticle bonding and increase
+friability.
+Factors Influencing Tablet Friability:
+2. Granule Properties:
+1.
+Granule size,
+2.
+Strength
+3.
+porosity
+4.
+Cohesiveness
+•
+These factors affect tablet integrity.
+•
+Properly formed and adequately cohesive granules produce stronger tablets with
+lower friability.
+Factors Influencing Tablet Friability
+3. Manufacturing Conditions:
+1. Compression force
+2.
+Compression speed
+3. Granulation conditions
+• These factors influence tablet strength and porosity.
+• Adequate compression and optimized granulation generally reduce friability
+• Inappropriate compression conditions may increase it.
+Roche Friability : Constructions
+1. Friability testing
+2. Important features
+3. Transparent rotating drum
+4. Internal curved projection
+5. Horizontal axis of rotation
+6. Removable side
+7. Controlled rotational speed
+Friability testing:
+Selection criteria:
+If the unit weight of tablets is less than or equal to 650mg then tablets corresponding to
+approximately 6.5g total weight
+If the tablet weighs greater than 650 mg in that case 10 tablets should be taken
+Test conditions :
+25+-1rpm x 100 revolutions (=4 min)
+Typical apparatus dimensions: 287 ± 4 mm internal diameter and 38 ± 2 mm depth
+The drum rotates about a horizontal axis.
+Acceptance for Friability testing
+For uncoated compressed tablets:
+maximum mean weight loss of not more than 1.0% is generally considered acceptable.
+• The presence of obviously cracked, cleaved, or broken tablets after tumbling indicates
+failure of the test.
+• If the result is doubtful or the weight loss exceeds the targeted value, the test should be
+repeated twice and the mean of the three tests should be determined.
+Introduction to Disintegration testing
+•
+Disintegration is the process by which a tablet breaks down into smaller particles after
+coming into contact with a suitable liquid medium.
+•
+Disintegration is different from dissolution
+•
+Disintegration: tablet breaks into smaller particles.
+•
+Dissolution: drug molecules enter solution.
+Importance of disintegration
+•
+Disintegration testing helps determine whether a tablet:
+•
+Breaks down within the specified time
+•
+Allows the drug-containing particles to become available
+•
+Has appropriate formulation performance
+•
+Is manufactured consistently
+Importance of disintegration
+Liquid contacts tablet
+↓
+Wetting
+↓
+Liquid penetration into pores
+↓
+Swelling / capillary action / deformation
+↓
+Breakdown of interparticle bonds
+↓
+Tablet fragments
+↓
+Smaller particles
+Factors affecting disintegrations
+Factors affecting disintegrations- Manufacturing factors
+Factors affecting disintegrations- Test conditions
+1.
+Medium: Composition and pH of the test medium affect wetting, swelling and
+breakup of the tablet.
+2.
+Temperature: Temperature influences the viscosity of the medium and the rate of
+water penetration and disintegrant action
+3.
+Apparatus conditions: Agitation/stroke frequency and movement of the apparatus
+affect the mechanical stress experienced by the tablet.
+Role of Disintegrants
+•
+Disintegrants promote tablet breakup by mechanisms such as:
+1.
+Swelling
+3. Repulsive forces
+2.
+Deformation
+4. Wicking/capillary action
+5. Strain recovery
+Examples
+1.
+Starch
+2.
+Sodium starch glycolate
+3.
+Croscarmellose sodium
+4.
+Cros-povidone
+5.
+Low-substituted hydroxypropyl cellulose
+Super disintegration
+Super-disintegrants are highly effective disintegrating agents used at low concentrations
+to rapidly break tablets into smaller particles upon contact with water
+Key characteristics:
+1. Rapid water uptake
+2. High swelling capacity
+3. Effective at low concentration
+4. Promotes rapid tablet breakup
+5. Enhances drug dissolution by increasing surface area
+1.
+Croscarmellose sodium
+2.
+Sodium starch glycolate
+3.
+Crosspovidone
+4.
+Low-substituted hydroxypropyl cellulose (L-HPC)
+Disintegration test apparatus
+Main components
+1.
+2.
+3.
+4.
+5.
+6.
+7.
+Basket-rack assembly
+Six glass tubes
+Mesh screens
+Disc arrangement where applicable
+Beaker containing test medium
+Temperature-control system
+Mechanical drive
+Apparatus specification
+•
+Basket-rack assembly: 6 open-ended transparent tubes.
+•
+Tube dimensions: approximately 75–80 mm long and 20.7–23.0 mm internal
+diameter.
+•
+Mesh: 10-mesh stainless-steel wire screen at the lower end of each tube.
+•
+Disc: Each tube may contain a cylindrical plastic disc, when specified.
+•
+Basket movement: Vertical movement of 53–57 mm.
+•
+Frequency: 29–32 cycles/minute.
+References
+[1] Aulton ME, Taylor KMG. Aulton's Pharmaceutics: The Design and Manufacture of Medicines. Elsevier.
+[2] Lachman L, Lieberman HA, Kanig JL. The Theory and Practice of Industrial Pharmacy.
+[3] United States Pharmacopeia (USP), General Chapter <1216> Tablet Friability.
+[4] Indian Pharmacopoeia Commission. Indian Pharmacopoeia, General Chapter 2.5.5 Friability of Uncoated Tablets. The IP has
+adopted the harmonized tablet-friability text.
+[5] United States Pharmacopeia (USP), General Chapter <701> Disintegration.
+[6] FDA/ICH Q4B Annex 5 — Disintegration Test General Chapter.
+[7] FDA/ICH Q6A — Specifications: Test Procedures and Acceptance Criteria for New Drug Substances and New Drug Products
+[8] Allen LV. Ansel's Pharmaceutical Dosage Forms and Drug Delivery Systems.
+[9] FDA. Quality Attribute Considerations for Chewable Tablets. Useful for the relationship between hardness, friability and
+disintegration.
+Thank
+You
+
+LAB MANUAL SECTION FOR THIS LECTURE'S EXPERIMENT:
+
+7. Quality of tablets (Pharmacy)
+Aim: judge tablet quality by hardness, friability and disintegration time.
+Test
+
+Instrument
+
+How
+
+Acceptance
+
+Hardness (diametral
+
+Monsanto hardness
+
+tablet between the jaws along
+
+conventional tablets typically 4–8
+
+crushing strength)
+
+tester
+
+its diameter; turn the screw
+
+kg/cm² (≈ 40–78 N); units
+
+slowly until it breaks; read the
+
+kg/cm², N, Strong-Cobb units,
+
+force; 6 tablets
+
+kilopond; 1 kg/cm² ≈ 9.807 N
+
+Friability (resistance
+
+friabilator: drum Ø
+
+de-dust and weigh W₀; 100
+
+≤ 1.0% mean weight loss, no
+
+to chipping in
+
+287 ± 4 mm, 38 ± 2
+
+revolutions at 25 ± 1 rpm
+
+cracked or broken tablets; if
+
+handling)
+
+mm deep, horizontal
+
+(~4 min); de-dust, weigh W_f
+
+doubtful, repeat twice and
+
+axis
+
+average three runs
+
+Disintegration
+
+basket-rack with six
+
+one tablet per tube, water at
+
+all six fully disintegrated within 3
+
+(dispersible tablets)
+
+tubes in a 1 L beaker
+
+24–26 °C, apparatus runs for
+
+min
+
+3 minutes
+
+Friability
+
+Friability (%) =
+
+W0 − Wf
+× 100
+W0
+​
+
+​
+
+​
+
+​
+
+Sample: whole tablets weighing about 6.5 g if each tablet is ≤ 650 mg; 10 tablets if each is > 650 mg.
+
+Worked example
+W₀ = 6.512 g, W_f = 6.468 g → friability = 0.044/6.512 × 100 = 0.68% → passes.

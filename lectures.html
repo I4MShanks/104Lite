@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>Lectures · ACE104</title><meta name="description" content="ACE104 — lectures, podcasts, video overviews, lab manuals and tests for BITS U104 Foundations of Measurement & Experimentation."/>
+<link rel="icon" href="assets/logo.svg"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script><script src="assets/js/tw.js"></script>
+<style>html,body{margin:0}body{overscroll-behavior:none;font-family:Inter,system-ui,sans-serif}::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400;line-height:1}.fill{font-variation-settings:'FILL' 1}@media print{header,nav,.noprint{display:none!important}main{padding:0!important}}</style>
+<script src="assets/js/lectures.js"></script><script src="assets/js/questions.js"></script><script src="assets/js/media.js"></script><script src="assets/js/app.js"></script>
+</head>
+<body class="bg-surface text-on-surface antialiased min-h-screen">
+<main class="max-w-3xl mx-auto pt-16 pb-24">
+<section class="sticky top-16 z-30 px-gutter-mobile pt-space-md pb-space-sm bg-surface/95 backdrop-blur-md">
+  <h2 class="font-headline-sm text-headline-sm mb-space-sm">All Lectures</h2>
+  <div class="relative flex items-center w-full"><span class="absolute left-3.5 text-on-surface-variant material-symbols-outlined text-[20px]">search</span>
+  <input id="q" type="search" placeholder="Search topics, instruments, formulas…" class="w-full pl-10 pr-3 py-2.5 rounded-xl bg-surface-container-low placeholder:text-outline font-body-md text-body-md focus:bg-surface-container-lowest focus:outline-none shadow-sm"></div>
+</section>
+<div id="list" class="px-gutter-mobile flex flex-col gap-space-sm mt-space-sm"></div>
+<p id="empty" class="hidden text-center text-on-surface-variant font-body-sm text-body-sm py-space-xl">No lectures match. Try another keyword.</p>
+</main>
+<script>
+const { shell, esc, pad, slideSrc, store, scores } = ACE;
+shell({ active: "lectures", title: "Lecture Library" });
+const visited = store.get("visited", []), sc = scores();
+list.innerHTML = LECTURES.map(l => `<a href="lecture.html?id=${l.id}" data-s="${esc((l.title + l.track + l.prof + l.short + l.summary + JSON.stringify(l.notes)).toLowerCase())}" class="lec flex gap-space-md bg-surface-container-lowest rounded-xl p-space-sm shadow-sm hover:shadow-md transition-shadow">
+  <img src="${slideSrc(l.id, 1)}" alt="" loading="lazy" class="w-28 sm:w-36 aspect-video object-cover rounded-lg flex-shrink-0 bg-surface-container">
+  <div class="flex flex-col min-w-0 flex-1 py-0.5">
+    <div class="flex items-center justify-between gap-1"><span class="font-label-mono-sm text-label-mono-sm text-secondary truncate">L${pad(l.no)} // ${esc(l.track.toUpperCase())}</span><span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant whitespace-nowrap">${esc(l.date)}</span></div>
+    <h3 class="font-title-md text-title-md leading-snug line-clamp-2">${esc(l.title)}</h3>
+    <p class="font-body-sm text-body-sm text-on-surface-variant truncate">${esc(l.prof)}</p>
+    <div class="flex items-center gap-2 mt-auto pt-1 font-label-mono-sm text-label-mono-sm text-on-surface-variant">
+      ${visited.includes(l.id) ? '<span class="text-secondary flex items-center gap-0.5"><span class="material-symbols-outlined text-[14px]">visibility</span>Opened</span>' : '<span class="flex items-center gap-0.5"><span class="material-symbols-outlined text-[14px]">fiber_new</span>New</span>'}
+      ${sc[l.id] ? `<span class="text-secondary flex items-center gap-0.5"><span class="material-symbols-outlined text-[14px]">military_tech</span>Quiz ${sc[l.id].best}%</span>` : ""}
+    </div></div></a>`).join("");
+q.oninput = () => { const v = q.value.toLowerCase().trim(); let k = 0; document.querySelectorAll(".lec").forEach(a => { const m = !v || a.dataset.s.includes(v); a.classList.toggle("hidden", !m); k += m; }); empty.classList.toggle("hidden", k > 0); };
+</script>
+</body></html>

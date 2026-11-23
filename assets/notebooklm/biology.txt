@@ -1,0 +1,303 @@
+BITS U104 Foundations of Measurement & Experimentation — lecture slide text (biology).
+
+Foundation of Measurements and Experiments
+BITS Pilani
+Prof S. K. Verma, Department of Biological Sciences
+Measurement of Biological Systems
+Outline; Learning objectives
+• Define measurement in biological systems
+• Distinguish qualitative vs quantitative observations
+• Explain Accuracy, Precision, Sensitivity, Specificity and Calibration
+• Understand major biological measurement methods
+• Design reliable measurements using controls, replicates and standards
+• Interpret measurements in their biological context
+“In biology, we rarely measure life directly; we
+measure signals, properties or processes that are
+related to life.”
+What is measurement?
+• How do we know that a biological system has changed?
+e.g. Bacterial growth
+“the bacteria have grown” is a qualitative observation.
+If we say:
+“The bacterial population increased from 100- to 150 cells/mL in 12
+hours,” we have made a measurement
+What is measurement?
+• Measurement
+• The process of assigning a numerical value to a property of a biological
+system using a defined method and appropriate standard or reference.
+• Biology: cell number, biomass, pH, metabolites, DNA/RNA, proteins,
+enzyme activity, rates
+• Key question: What exactly is being measured—and what does the
+signal represent?
+Qualitative vs quantitative
+Qualitative: It describes what is present or what has happened.
+'culture is turbid', 'colonies are red', 'cells are motile'
+Quantitative: It tells us how much.
+OD600 = 0.85; 2.5 × 108 CFU/mL; glucose = 2.5 g/L
+Quantification enables comparison, modelling and statistical inference
+Why measure biology?
+• Observe → Quan fy → Compare → Analyze → Predict
+• Measurement turns a biological observation into testable evidence
+• Applications: microbiology, environmental biotechnology, diagnostics,
+fermentation, ecology
+What can be measured?
+• Physical: mass, volume, temperature, pressure, density
+• Chemical: pH, concentration, dissolved oxygen, metabolites
+• Cellular: number, size, biomass, viability, membrane potential
+• Molecular: DNA, RNA, proteins, metabolites
+• Functional: growth rate, respiration, photosynthesis, enzyme activity
+The measurement chain
+Biological
+property
+Measur
+ement
+principle
+Detector /
+Sensor
+Signal
+Instrument
+Numerical
+value
+Important: an instrument usually measures a physical signal, not 'life'
+directly
+Units and scales
+• Use consistent units and report them clearly
+• 1 mg = 10-3 g; 1 µg = 10-6 g; 1 ng = 10-9 g; 1 pg = 10-12 g
+• Biology spans many orders of magnitude—from molecules to
+ecosystems
+Accuracy vs precision
+Accuracy = closeness to true/accepted value
+Precision = closeness of repeated measurements to one another
+10.0
+True value
+10.1 10.0 10.1
+High accuracy +
+precision
+12.1 12.2 12.1
+High precision,
+low accuracy
+9.1 12.2 8.1
+Low precision,
+low accuracy
+A method can be precise but inaccurate
+Best practice: seek both accuracy and precision
+Errors in biological measurement
+Instrumental: drift in spectrophotometer, poor calibration, defective
+sensor.
+Experimental: pipetting, dilution, mixing, timing, contamination
+Biological: natural cell-to-cell and sample-to-sample variation
+Human/data handling: reading, calculation and transcription errors
+Random vs systematic error
+Random error → fluctuate around actual value → mainly aﬀects
+precision
+Systematic error → consistent bias → mainly aﬀects accuracy
+Random error can often be reduced by replication; systematic error
+requires calibration/correction
+Sensitivity and limit of detection
+Sensitivity: ability to detect a small change in analyte
+Limit of detection (LOD): lowest quantity reliably distinguishable from
+background
+Critical for toxins, hormones, biomarkers, pathogens and heavy metals
+Specificity and selectivity
+Specificity: ability to measure the target analyte despite other
+components
+Biological samples are chemically complex
+A highly sensitive but non-specific method can still produce misleading
+results
+Calibration
+Calibration establishes the relationship between instrument response
+and known standards.
+Example: glucose standards → absorbance → calibra on curve →
+unknown concentration.
+Recalibration is needed when instruments drift or conditions change
+Controls and blanks
+Known standards
+0 → 4 mg/mL
+Unknown sample
+→ read from
+curve
+Blank: estimates background signal
+Negative control: should show no target response
+Positive control: should show the expected response
+Controls answer: 'Is this signal really due to my biological variable?'
+Replication: technical vs biological
+• Technical replicates: repeated measurements of the same biological
+sample
+• Biological replicates: independent biological samples
+Technical replicates assess measurement consistency; biological replicates
+capture biological variability
+Biological Measurement Techniques
+Direct measurement of cell number
+Microscopy + counting chamber (e.g.,
+hemocytometer)
+Advantages: direct, simple, inexpensive
+Limitations: laborious; small cells can be
+difficult; live/dead distinction may require
+additional staining
+Viable plate count
+Counts colony-forming units (CFU)
+CFU/mL = colonies × dilution factor ÷ volume plated
+(mL)
+Example:
+Dilution
+10-6
+Plate
+0.1 mL
+100
+colonies
+109
+CFU/mL
+One colony does not always equal one individual cell
+Optical density / OD600
+Cells scatter light; spectrophotometer detects
+attenuation
+OD600 is an indirect proxy for cell
+concentration
+Must establish a relationship between OD and
+OD₆₀₀ is not itself a
+biomass/cell number
+measurement of cell number.
+At high density, scattering can become nonmust be correlated with cell
+linear; dilution may be required
+concentration
+Beer–Lambert law
+Cell suspension
+Light
+Detector
+OD600
+Cell
+concentrati
+on
+For absorbing species: A = εcl
+A = absorbance; ε = molar extinction coefficient; c = concentration; l =
+path length
+Under appropriate conditions, absorbance is proportional to
+concentration and inside path Length of the cuvet
+Used in nucleic-acid, protein, metabolite and enzyme assays
+DNA/RNA measurement
+Nucleic acids absorb UV light strongly near 260 nm
+A260 can estimate concentration when appropriate assumptions apply
+A260/A280 is commonly used as a purity indicator
+Contaminants can bias absorbance—purity ratios are not a substitute
+for experimental judgment
+•An OD260 of 1.0 corresponds to 50 µg/mL of double-stranded DNA (dsDNA).
+•An OD260 of 1.0 corresponds to 33 µg/mL of single-stranded DNA (ssDNA).
+•An OD260 of 1.0 corresponds to 40 µg/mL of single-stranded RNA.
+.
+Concentration Formula for dsDNA:
+DNA Concentration (µg/mL )=\OD260 x 50 x Dilution Factor
+Protein measurement
+Lowry: copper chemistry + color
+development:
+Bradford: dye-binding assay
+Direct UV absorbance: rapid but sensitive
+to composition and contaminants
+Choose method according to sample and
+interference profile
+Enzyme activity
+Measure substrate disappearance or product formation over time
+Initial rate: activity ∝ ΔP/Δt
+Often reported as activity units per volume or per amount of protein
+Rates can reveal functional state better than enzyme abundance alone
+Measuring pH
+pH = −log10[H+]
+Methods: indicators, pH paper, electrochemical pH
+meter
+Calibrate pH meters using suitable standards before
+measurement
+Measuring oxygen
+Blood Oxygen Level
+Dissolved Oxygen:
+electrochemical probes and optical
+oxygen sensors
+Modern molecular measurements
+Recognition
+element
+Transducer
+Signal
+processing
+Concentration /
+result
+qPCR: fluorescence linked to nucleic-acid amplification
+Flow cytometry: optical signals from individual cells
+ELISA: antigen/antibody-based detection
+Mass spectrometry: molecular identification/quantification by mass-to-charge ratio
+Omics: thousands of measurements in parallel
+Biological variability + data
+• Biological systems naturally vary—even genetically similar cells
+• Use independent replicates, appropriate sample size and statistical
+summaries
+• Report mean with an appropriate measure of variability
+• Normalize only when the normalization variable is biologically justified
+Replicates
+Technical replicates
+Repeated measurement of the same biological sample.
+They help assess measurement variability.
+Biological replicates
+Independent biological samples.
+They help assess biological variability.
+Summery
+1. Observe
+2. Hypothesize
+Detect intriguing
+patterns, any
+anomaly, research
+gaps
+Formulate testable,
+falsifiable quantitative
+explanations
+Research hypotheses or
+statistical hypotheses
+3. Design experiment
+Gather data using rigorous controls
+and adequate replication.
+• Accuracy and precision of
+measurement
+• Control group | Baseline
+• Statistical test
+4. Conclude
+Final result of experiment – replicated
+multiple times – scientifically conclusive
+
+LAB MANUAL SECTION FOR THIS LECTURE'S EXPERIMENT:
+
+1. BMI and its correlation with blood pressure (Biological Sciences)
+Aim: measure height, weight and blood pressure with replicates, classify the data types, compute BMI from
+averaged replicates, and find the Pearson correlation coefficient r between BMI and BP.
+
+Instruments and principles
+Stadiometer – height from heel plane to the top of the head (vertex), in m. Barefoot, heels and back
+against the board.
+Digital scale – weight via strain-gauge load cells, in kg. Check it reads 0.0 kg first.
+Digital sphygmomanometer – the oscillometric method: senses arterial-wall vibrations as the cuff
+deflates. Systolic BP = peak pressure during ventricular contraction; diastolic BP = minimum pressure
+during ventricular relaxation; in mmHg. Cuff at heart level, subject seated and rested for 3 min, 1 min
+between readings.
+
+BMI
+
+BMI =
+
+mass (kg)
+height2 (m2 )
+
+​
+
+Underweight < 18.5 · Normal 18.5–24.9 · Overweight 25.0–29.9 · Obese ≥ 30.0
+Replicates: three readings each (step off and back on between readings). Mean of replicates cancels
+random error; the replicate range (max − min) shows trial-to-trial precision.
+Limitations of BMI: doesn’t separate muscle from fat (athletes may show “overweight”), ignores fat
+distribution (visceral belly fat is the riskiest), ignores differences of age, sex and ethnicity. It’s a
+screening tool, not a diagnosis.
+Data types: subject label – nominal; BMI category – ordinal; temperature in °C – interval; height, weight,
+BMI, BP – ratio.
+
+BITS U104 · Ch. 3: The eight experiments
+
+Compre Guide 2026-27 · page 1 of 7
+
+Correlation: r between −1 and +1; a positive r between BMI and BP shows association, not causation.
+
+Worked example
+Heights 1.721, 1.719, 1.723 m → mean 1.721 m; weights 68.4, 68.6, 68.5 kg → 68.5 kg. BMI = 68.5/1.721²
+= 68.5/2.962 = 23.1 (normal).

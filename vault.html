@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>Vault · ACE104</title><meta name="description" content="ACE104 — lectures, podcasts, video overviews, lab manuals and tests for BITS U104 Foundations of Measurement & Experimentation."/>
+<link rel="icon" href="assets/logo.svg"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script><script src="assets/js/tw.js"></script>
+<style>html,body{margin:0}body{overscroll-behavior:none;font-family:Inter,system-ui,sans-serif}::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400;line-height:1}.fill{font-variation-settings:'FILL' 1}@media print{header,nav,.noprint{display:none!important}main{padding:0!important}}</style>
+<script src="assets/js/lectures.js"></script><script src="assets/js/questions.js"></script><script src="assets/js/media.js"></script><script src="assets/js/app.js"></script>
+</head>
+<body class="bg-surface text-on-surface antialiased min-h-screen">
+<main class="max-w-3xl mx-auto pt-16 pb-24">
+<section class="px-gutter-mobile pt-space-sm pb-space-xs">
+  <div class="relative overflow-hidden rounded-xl bg-primary-container text-on-primary-container shadow-md p-space-md">
+    <svg class="absolute -right-6 -bottom-6 w-36 h-36 opacity-10 text-secondary-fixed" fill="none" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" stroke="currentColor" stroke-dasharray="4 2" stroke-width="1.5"/><circle cx="50" cy="50" r="30" stroke="currentColor"/><path d="M50 0v100M0 50h100" stroke="currentColor"/></svg>
+    <div class="relative z-10 flex flex-col gap-space-sm">
+      <div class="flex items-center gap-space-xs"><span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-secondary text-on-secondary"><span class="material-symbols-outlined text-[15px]">inventory_2</span></span><span class="font-label-mono-sm text-label-mono-sm uppercase text-secondary-fixed tracking-wider">Course Vault</span></div>
+      <h2 class="font-headline-sm text-headline-sm text-surface-container-lowest">All U104 Materials</h2>
+      <p class="font-body-sm text-body-sm text-primary-fixed-dim">The original lecture slides from every department, the Compre Guide chapters and the lab manual summary.</p>
+    </div>
+  </div>
+</section>
+<section class="sticky top-16 z-30 px-gutter-mobile pt-space-sm pb-space-xs bg-surface/95 backdrop-blur-md">
+  <div class="relative flex items-center w-full mb-space-sm"><span class="absolute left-3.5 text-on-surface-variant material-symbols-outlined text-[20px]">search</span><input id="q" type="search" placeholder="Search slides, guides, media…" class="w-full pl-10 pr-3 py-2.5 rounded-xl bg-surface-container-low placeholder:text-outline font-body-md text-body-md focus:bg-surface-container-lowest focus:outline-none shadow-sm"></div>
+  <div id="pills" class="flex items-center gap-space-xs overflow-x-auto no-scrollbar py-0.5"></div>
+</section>
+<div id="stream" class="flex flex-col px-gutter-mobile gap-space-sm mt-space-sm"></div>
+<p id="empty" class="hidden text-center text-on-surface-variant font-body-sm text-body-sm py-space-xl">No files match.</p>
+</main>
+<script>
+const { shell, esc, pad } = ACE;
+shell({ active: "vault", title: "Vault" });
+const items = [
+  ...GUIDES.map(g => ({ cat: "guides", icon: "menu_book", code: g.tag, title: g.title, meta: `${g.pages} pages · PDF`, href: "assets/pdf/" + g.file })),
+  ...LECTURES.map(l => ({ cat: "slides", icon: "picture_as_pdf", code: `L${pad(l.no)} // ${l.track.toUpperCase()}`, title: l.title, meta: `${l.slides} slides · ${l.prof}`, href: `assets/pdf/${l.id}.pdf`, page: `lecture.html?id=${l.id}` })),
+  ...Object.entries(window.MEDIA || {}).flatMap(([id, m]) => { const l = LECTURES.find(x => x.id === id); return [
+    m.audio && { cat: "media", icon: "podcasts", code: `PODCAST // L${pad(l.no)}`, title: `${l.track} audio overview`, meta: "Gemini Notebook audio", href: m.audio, page: `lecture.html?id=${id}` },
+    m.video && { cat: "media", icon: "videocam", code: `VIDEO // L${pad(l.no)}`, title: `${l.track} video overview`, meta: "Gemini Notebook video", href: m.video, page: `lecture.html?id=${id}` }].filter(Boolean); })
+];
+const cats = [["all", "All"], ["slides", "Lecture Slides"], ["guides", "Compre Guide"], ["media", "Podcasts & Videos"]];
+let cat = "all";
+function draw() {
+  pills.innerHTML = cats.map(([k, t]) => `<button data-k="${k}" class="pill px-3.5 py-1.5 rounded-full font-label-mono-sm text-label-mono-sm whitespace-nowrap ${k === cat ? "bg-primary text-on-primary" : "bg-surface-container-low text-on-surface-variant"}">${t} (${k === "all" ? items.length : items.filter(i => i.cat === k).length})</button>`).join("");
+  document.querySelectorAll(".pill").forEach(b => b.onclick = () => { cat = b.dataset.k; draw(); });
+  const v = q.value.toLowerCase();
+  const shown = items.filter(i => (cat === "all" || i.cat === cat) && (!v || (i.title + i.code + i.meta).toLowerCase().includes(v)));
+  empty.classList.toggle("hidden", shown.length > 0);
+  stream.innerHTML = shown.map(i => `<article class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md flex flex-col gap-space-sm">
+    <div class="flex items-start gap-space-md"><div class="w-12 h-12 rounded-lg bg-surface-container-high flex flex-col items-center justify-center flex-shrink-0 text-secondary"><span class="material-symbols-outlined text-[26px]">${i.icon}</span></div>
+    <div class="flex flex-col min-w-0 flex-1"><span class="font-label-mono-sm text-label-mono-sm text-secondary truncate">${esc(i.code)}</span><h4 class="font-title-md text-title-md truncate">${esc(i.title)}</h4><p class="font-body-sm text-body-sm text-on-surface-variant truncate">${esc(i.meta)}</p></div></div>
+    <div class="flex items-center justify-end gap-1.5 bg-surface-container-low/60 -mx-space-md -mb-space-md px-space-md py-2.5 rounded-b-xl">
+      ${i.page ? `<a href="${i.page}" class="px-2.5 py-1 rounded bg-surface-container-highest font-label-mono-sm text-label-mono-sm hover:bg-surface-variant">Open lecture</a>` : ""}
+      <a href="${i.href}" target="_blank" class="px-2.5 py-1 rounded bg-surface-container-highest font-label-mono-sm text-label-mono-sm hover:bg-surface-variant">Inspect</a>
+      <a href="${i.href}" download class="w-7 h-7 rounded bg-secondary text-on-secondary flex items-center justify-center"><span class="material-symbols-outlined text-[16px]">download</span></a></div></article>`).join("");
+}
+q.oninput = draw; draw();
+</script>
+</body></html>

@@ -1,0 +1,21 @@
+<body class="bg-surface text-on-surface antialiased min-h-screen">
+<main class="max-w-3xl mx-auto pt-16 pb-24 px-gutter-mobile">
+<section class="pt-space-md"><h2 class="font-headline-sm text-headline-sm">Practice</h2><p class="font-body-sm text-body-sm text-on-surface-variant">4 sample tests (27 Qs from all lectures) and a 12-question quiz per lecture. 108 questions in total, all with explanations.</p></section>
+<section class="mt-space-md"><div class="flex items-center gap-2 mb-space-sm"><div class="w-2.5 h-2.5 rounded-full bg-secondary"></div><h3 class="font-title-md text-title-md">Sample Tests</h3></div><div id="st" class="grid sm:grid-cols-2 gap-space-sm"></div></section>
+<section class="mt-space-lg"><div class="flex items-center gap-2 mb-space-sm"><div class="w-2.5 h-2.5 rounded-full bg-tertiary-fixed-dim"></div><h3 class="font-title-md text-title-md">Lecture Quizzes</h3></div><div id="lq" class="flex flex-col gap-2"></div></section>
+<button id="reset" class="mt-space-lg mx-auto block font-label-mono-sm text-label-mono-sm text-on-surface-variant underline">Reset my progress in this browser</button>
+</main>
+<script>
+const { shell, esc, pad, scores, SAMPLE_TESTS, toast } = ACE;
+shell({ active: "practice", title: "Practice & Tests" });
+const sc = scores();
+st.innerHTML = SAMPLE_TESTS.map((t, i) => `<a href="test.html?id=${t.id}" class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md flex flex-col gap-1">
+  <div class="flex items-center justify-between"><span class="font-label-mono-sm text-label-mono-sm px-2 py-0.5 rounded-full bg-secondary-fixed/40 text-on-secondary-fixed-variant">Test ${pad(i + 1)} · ${esc(t.tag)}</span>${sc[t.id] ? `<span class="font-label-mono-sm text-label-mono-sm text-secondary font-semibold">Best ${sc[t.id].best}%</span>` : ""}</div>
+  <h4 class="font-title-md text-title-md mt-1">${esc(t.title.split("· ")[1])}</h4><p class="font-body-sm text-body-sm text-on-surface-variant">${esc(t.desc)}</p>
+  <span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant mt-1">27 Qs · ${t.min} min</span></a>`).join("");
+lq.innerHTML = LECTURES.map(l => `<a href="test.html?id=${l.id}" class="flex items-center justify-between gap-3 p-3 rounded-xl bg-surface-container-lowest shadow-sm hover:shadow-md">
+  <div class="flex items-center gap-3 min-w-0"><span class="w-9 h-9 rounded-lg bg-surface-container-high text-secondary flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-[20px]">${l.icon}</span></span><div class="min-w-0"><p class="font-label-mono-sm text-label-mono-sm text-secondary">L${pad(l.no)} · ${esc(l.track)}</p><p class="font-body-sm text-body-sm font-medium truncate">${esc(l.title)}</p></div></div>
+  <span class="font-label-mono-sm text-label-mono-sm px-2.5 py-1 rounded-full ${sc[l.id] ? "bg-surface-container text-secondary font-semibold" : "bg-primary text-on-primary"} whitespace-nowrap">${sc[l.id] ? sc[l.id].best + "%" : "Start"}</span></a>`).join("");
+reset.onclick = () => { if (confirm("Clear lecture progress, scores and booklet entries saved in this browser?")) { Object.keys(localStorage).filter(k => k.startsWith("ace104:")).forEach(k => localStorage.removeItem(k)); toast("Progress cleared"); setTimeout(() => location.reload(), 600); } };
+</script>
+</body></html>

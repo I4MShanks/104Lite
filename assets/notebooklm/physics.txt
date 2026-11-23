@@ -1,0 +1,429 @@
+BITS U104 Foundations of Measurement & Experimentation — lecture slide text (physics).
+
+Foundations of Measurements and
+Experimentation
+BITS-U104 – Experiment Lecture
+Measurement of Surface Tension by the Capillary Rise Method
+Prof. Raj Kumar Gupta
+Department of Physics, BITS Pilani
+raj@pilani.bits-pilani.ac.in
+October 16, 2026
+1 / 19
+Today’s Lecture – Outline
+1. Aim and apparatus
+2. Where does surface tension come from?
+3. Capillary rise: the force-balance derivation
+4. This semester’s liquids – why glycerol–water mixtures?
+5. Measuring h: graph-paper reading and the web-app tool
+6. Uncertainty: quadrature combination, for both new techniques
+7. Bore-radius verification
+8. Procedure, at a glance
+9. Science & Technology applications of surface tension
+measurement
+2 / 19
+Aim
+To measure the surface tension of four liquids – water,
+5 mM aqueous SDS, and 25% and 50% glycerol–water
+mixtures – by the capillary rise method, using two
+independent techniques (direct graph-paper reading
+and web-app image-based measurement), and compare
+accuracy, precision, and propagated uncertainty.
+Techniques (this semester)
+▶ Graph paper on tube, direct
+reading
+▶ Web-app, image-based
+measurement
+Liquids (this semester)
+▶ Water, 5 mM SDS
+▶ 25% and 50% glycerol in
+water
+Travelling microscope is on order; will replace the web-app technique as
+Method B once available.
+3 / 19
+Why Measure Surface Tension? – Science
+Biology & Medicine
+▶ Pulmonary surfactant:
+lines the alveoli, lowering γ
+of the air–liquid interface so
+the lungs don’t collapse on
+exhalation. Premature
+infants lacking it develop
+respiratory distress syndrome
+– treated with
+surfactant-replacement
+therapy.
+▶ Insect locomotion: water
+striders exploit high γwater
+(≈ 0.072 N/m) to walk on
+the surface without breaking
+it.
+Earth & Materials Science
+▶ Enhanced oil recovery:
+surfactant flooding lowers
+oil–water interfacial tension,
+mobilising trapped oil in
+reservoir rock pores.
+▶ Soil physics: capillary rise
+of groundwater through pore
+spaces controls moisture
+retention and plant-root
+water uptake.
+4 / 19
+Why Measure Surface Tension? – Technology
+Manufacturing & Printing
+▶ Inkjet & 3D printing: droplet
+formation and jet breakup are
+governed by γ; ink and bio-ink
+formulations are tuned precisely
+for this.
+▶ Soldering & coating:
+wetting/spreading of molten
+solder or paint depends directly
+on γ and contact angle θ.
+Microfluidics & Detergency
+▶ Lab-on-a-chip devices:
+capillary-driven flow (no pump)
+moves microlitre volumes through
+channels – the same γ-balance
+you derived today, at a smaller
+scale.
+▶ Detergent design: surfactants
+(like your SDS sample) lower γ,
+letting water penetrate fabric
+fibres and lift away oily soil.
+The same capillary-rise principle you measured today underlies
+device choices from microfluidic channel widths to inkjet nozzle
+diameters.
+5 / 19
+Physical origin of surface tenstion (γ)
+▶ A bulk molecule is
+surrounded symmetrically ⇒
+net cohesive force ≈ 0.
+▶ A surface molecule has
+neighbours only below and to
+the sides ⇒ net inward pull.
+▶ The surface behaves like a
+stretched elastic membrane,
+always minimising its own
+area.
+γ=
+work done
+[J/m2 = N/m] – equivalently, force per
+increase in area
+unit length tangential to the surface.
+6 / 19
+Capillary rise: Setting up the force balance
+▶ Narrow capillary (radius r )
+dipped into a wetting liquid.
+▶ Liquid climbs the inner wall,
+meeting glass at contact
+angle θ.
+▶ Surface tension acts along
+the contact circle (length
+2πr ), tangent to the liquid
+surface.
+▶ Only the vertical
+component, γ cos θ,
+supports the column.
+7 / 19
+Capillary rise: The working formula
+At equilibrium, the vertical surface-tension force balances the
+weight of the risen column:
+2πr γ cos θ
+| {z }
+=
+⇒
+γ=
+surface tension force
+πr 2 h ρg
+| {z }
+weight of risen column
+hρg r
+2 cos θ
+If the liquid completely wets the tube, θ ≈ 0, and
+γ=
+hρg r
+2
+– the working formula used throughout this experiment.
+8 / 19
+Propagating the Uncertainty
+Since γ = g2 (h ρ r ) is a product of independently measured
+quantities, fractional uncertainties combine in quadrature:
+
+δγ
+γ
+2
+
+=
+δh
+h
+2
+
++
+δρ
+ρ
+2
+
++
+δr
+r
+2
+▶ δρ is taken as negligible (standard tables at measured T ).
+▶ Instrument uncertainty for a single reading = half the least
+count.
+▶ This quadrature rule applies whichever technique measures
+h – graph paper, web app, or (eventually) microscope. What
+changes between techniques is only how δh itself is worked
+out.
+9 / 19
+Experimental setup – The general principle
+Figure: Schematic of the experiment
+10 / 19
+The four liquids for measurement
+▶ Water (Ultrapure ion-free)
+▶ 5 mM water solution of sodium dodecylsulphate (SDS)
+▶ 50% v/v aqueous solution of glycerine
+▶ 25% v/v aqueous solution of glycerine
+11 / 19
+Liquids – Properties (Concentration by v/v)
+ρ20 (kg/m3 )
+β (kg m−3 K−1 )
+γlit (mN/m)
+Water
+998
+0.20
+72.8
+5 mM SDS (aq.)
+≈998
+0.20
+≈43
+25% glycerol
+1072
+0.4
+∼71.0
+Liquid
+50% glycerol
+1142
+≈0.5
+†
+∼66.0
+Density at room temperature T (linear correction):
+3
+ρ(T ) ≈ ρ20 − β (T − 20) kg/m ,
+T in ◦ C
+ρ20 : density at 20 ◦ C.
+β: temperature coefficient of density. γlit : literature
+surface tension.
+†
+Interpolated estimate (water–glycerine), not from a primary table.
+12 / 19
+Method A: Graph paper affixed on the tube
+▶ Millimetre graph paper is pasted directly on the back of each
+round-bottom test tube, in the same plane as the capillary.
+▶ Read the meniscus height h directly against the ruled grid.
+▶ For standard 1 mm graph paper, the uncertainty
+(δhgraph ) ≈ 0.5 mm.
+δhgraph =
+LCgraph paper
+(same structure as the old
+2
+meter-scale uncertainty)
+Please take care of the parallax!!!
+13 / 19
+Method B: Web-App, Image-Based Measurement
+https://rajkguptabits.github.
+io/capillary_rise_method
+Scan the QR code provided in the lab.
+1. Capture: photograph the tube, camera
+nearly perpendicular, capillary and graph
+paper in the same plane.
+2. Calibrate: tap the two ends of a known
+graph-paper length ⇒ app computes a
+pixel-to-mm scale.
+3. Measure: tap the bulk liquid level, then
+the meniscus bottom ⇒ app reports h.
+Scan to open the app
+Please take care of the parallax. If the meniscus in the capillary tube is not
+visible clearly in the image, place a dark object behind and then capture the
+image. Make sure the appearance of meniscus in the test tube, capillary tube
+and the scale on the graph paper is visible in the captured image clearly. If not,
+you can retake the image.
+14 / 19
+Uncertainty in the Web-App Technique
+Each h comes from four taps (measurement: bulk level, meniscus; calibration:
+two reference points) – but unlike the vernier’s LC, per-tap placement error
+cannot be assigned a single quantified value: it mixes device resolution,
+lighting, image sharpness, and the individual student’s finger/stylus precision.
+So measure the uncertainty directly, instead of propagating it:
+For each liquid, repeat the full measurement (photograph → calibrate
+→ tap) 5 times, independently. Compute the mean h̄ and standard
+deviation σh of the 5 readings; take δhapp = σh .
+5
+1X
+h̄ =
+hi ,
+5 i=1
+v
+u
+5
+u1 X
+δhapp = σh = t
+(hi − h̄)2
+4 i=1
+This is a Type-A (statistical) uncertainty – from repeated observations, not
+an assumed instrument spec – the correct approach whenever a least count
+can’t be defined.
+15 / 19
+Bore Radius: Verified in our research lab
+▶ Catalog spec: I.D. = 0.55 ± 0.10 mm ⇒ nominal
+r = 0.275 mm.
+▶ Verified separately (departmental microscope, prior to this
+semester’s sessions): horizontal vernier at left inner edge, then
+right inner edge ⇒ d = Rright − Rleft , r = d/2.
+▶ d is again a difference of two readings ⇒ quadrature applies:
+δd
+LC
+≈ 0.0035 mm
+δd = √ ≈ 0.00707 mm ⇒ δr =
+2
+2
+Verified radius agrees with the catalog value:
+r = 0.275 mm, δr ≈ 0.0035 mm, δr /r ≈ 1.3%.
+16 / 19
+Procedure – At a Glance
+1. Dip capillary to a small, fixed depth; let the meniscus stabilize.
+2. Graph paper: read height of meniscus above free liquid
+surface directly against the grid.
+3. Web app: photograph the tube; calibrate (2 taps on graph
+paper); measure (2 taps: bulk level, meniscus) ⇒ app reports
+h.
+4. Repeat for all four liquids, fresh dedicated capillary each time.
+5. Complete the calculation table; plot the bar chart with error
+bars.
+h ρ(T ) g r
+γ=
+,
+2
+δγ
+=
+γ
+s
+δh
+h
+2
+
++
+δr
+r
+2
+17 / 19
+Expected result: Comparing the two techniques
+γ (mN/m)
+80
+60
+40
+20
+0
+Water
+SDS
+Graph paper (γ ± δγ)
+25% Glyc
+50% Glyc
+Web app (γ ± δγ)
+Illustrative data only – not actual results. Each liquid gets two bars, one per
+technique, each with its own propagated δγ as an error bar. Compare bar
+heights and error-bar overlap across techniques, liquid by liquid.
+18 / 19
+Take-home message
+A simple force balance – surface tension against gravity
+– gives a quantitative, testable measurement of a
+fundamental liquid property, and the same property
+governs phenomena from breathing to microfluidic chip
+design.
+Go measure it carefully. Happy learning.
+19 / 19
+
+LAB MANUAL SECTION FOR THIS LECTURE'S EXPERIMENT:
+
+8. Surface tension by capillary rise (Physics)
+Aim: measure the surface tension of water, a 5 mM SDS solution and glycerol–water mixtures (this semester
+25% and 50%; the manual also lists ethanol and pure glycerine) by capillary rise, using two techniques of
+different resolution, and compare accuracy, precision and propagated uncertainty.
+
+BITS U104 · Ch. 3: The eight experiments
+
+Compre Guide 2026-27 · page 5 of 7
+
+Force balance
+Upward pull of surface tension round the contact circle = weight of the raised column:
+
+hρgr
+hρgr
+θ=0
+γ=
+2 cos θ
+2
+2
+2
+2
+2
+δγ
+δh
+δρ
+δr
+( ) =( ) +( ) +( )
+(δρ taken as negligible)
+γ
+h
+ρ
+r
+2πr γ cos θ = πr2 hρg
+
+​
+
+​
+
+⇒
+
+​
+
+γ=
+
+​
+
+​
+
+​
+
+​
+
+Capillary bore: I.D. 0.55 ± 0.10 mm (catalogue); verified r = 0.275 mm, δr ≈ 0.0035 mm (δr/r ≈ 1.3%) –
+found as a difference of two microscope readings, so δd = LC/√2 ≈ 0.00707 mm and δr = δd/2.
+Techniques:
+Graph paper fixed on the tube (or a metre scale, LC 1 mm): δh ≈ 0.5 mm.
+Web-app image method (this semester): photograph, calibrate with two taps on a known graph-paper
+length (pixel → mm), then tap the bulk level and the meniscus. No least count can be defined, so
+measure 5 times and take δh = standard deviation – a Type A uncertainty.
+
+Travelling microscope (LC 0.01 mm): h = R_top − R_bottom, so δh = LC/√2 ≈ 0.00707 mm (not
+simply half the LC).
+SDS is a surfactant (hydrophilic head, hydrophobic tail); it collects at the surface and lowers γ (≈ 43
+mN/m vs 72.8 for water). That’s why soaps and detergents work.
+Literature values at 20 °C: water 72.8 mN/m (ρ 998), 25% glycerol ≈ 71, 50% glycerol ≈ 66 mN/m.
+Density changes with temperature: ρ(T) ≈ ρ₂₀ − β(T − 20).
+
+Precautions: clean capillary held perfectly vertical (tilt is a systematic error not covered by the LC), dip
+only ~1 cm and don’t touch the walls, read at eye level (parallax), record the actual liquid temperature,
+gloves for SDS, a dedicated capillary for each liquid.
+If a result is far off, incomplete wetting (θ > 0) may be a more likely cause than instrument error.
+
+Water
+h = 54.0 mm, ρ = 998 kg/m³, r = 0.275 mm: γ = 0.0540 × 998 × 9.81 × 2.75 × 10⁻⁴ / 2 = 0.0727 N/m.
+Graph paper (δh = 0.5 mm): δγ/γ = √(0.93² + 1.3²)% = 1.6% → γ = 72.7 ± 1.2 mN/m. With a travelling
+microscope δh/h ≈ 0.013%, so the radius term dominates (1.3%).
+
+BITS U104 · Ch. 3: The eight experiments
+
+Compre Guide 2026-27 · page 6 of 7
+
+
