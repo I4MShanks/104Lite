@@ -6,7 +6,8 @@ const { $, esc, pad, slideSrc, TTS, toast, store } = ACE;
 
 /* ---------- generic narrated sequencer ---------- */
 function Sequencer(items, cb) {
-  const s = { i: 0, on: false, rate: 1, muted: !TTS.usable, timers: [], waiting: false };
+  const s = { i: 0, on: false, rate: 1, userMuted: false, timers: [], waiting: false };
+  Object.defineProperty(s, 'muted', { get: () => s.userMuted || !TTS.usable });
   const clear = () => { s.timers.forEach(clearTimeout); s.timers = []; TTS.stop(); };
   const words = t => t.split(/\s+/).length;
   function silentRun(k) {
@@ -19,12 +20,13 @@ function Sequencer(items, cb) {
   }
   s.play = (k = s.i) => {
     clear(); s.on = true; s.i = Math.max(0, Math.min(items.length - 1, k));
+    if (!s.userMuted && !TTS.usable && !Sequencer.warned) { Sequencer.warned = true; toast(TTS.ok ? "No speech voice found in this browser — playing with captions. Try Chrome or Edge." : "This browser can't speak — playing with captions."); }
     if (s.muted) return silentRun(s.i);
     TTS.play(items, s.i, { onItem: j => { s.i = j; cb.onItem && cb.onItem(j); }, onWord: cb.onWord, onEnd: () => { s.on = false; cb.onEnd && cb.onEnd(); },
       onItemEnd: j => cb.onItemEnd ? cb.onItemEnd(j) : true }, s.rate);
   };
   s.pause = () => { clear(); s.on = false; };
-  s.toggleMute = () => { s.muted = !s.muted; if (!TTS.usable) s.muted = true; if (s.on) s.play(s.i); return s.muted; };
+  s.toggleMute = () => { s.userMuted = !s.userMuted; if (s.on) s.play(s.i); return s.muted; };
   s.duration = items.reduce((a, it) => a + Math.max(2.2, words(it.text) / 2.75), 0);
   s.startOf = k => items.slice(0, k).reduce((a, it) => a + Math.max(2.2, words(it.text) / 2.75), 0);
   return s;
@@ -147,7 +149,7 @@ function videoPlayer(L, mount, bus) {
   $("#vNext").onclick = () => go(front + 1, seq.on);
   $("#vSpeed").onclick = () => { const r = [1, 1.25, 1.5, 0.75]; seq.rate = r[(r.indexOf(seq.rate) + 1) % r.length]; $("#vSpeed").textContent = seq.rate.toFixed(seq.rate % 1 ? 2 : 1).replace(/0$/, "") + "x"; if (seq.on) seq.play(front); };
   $("#vMute").onclick = () => { const m = seq.toggleMute(); $("#vMute").innerHTML = `<span class="material-symbols-outlined text-[19px]">${m ? "volume_off" : "volume_up"}</span>`; toast(m ? (TTS.usable ? "Narration muted — captions only" : "No voice available — captions only") : "Narration on"); };
-  if (seq.muted) $("#vMute").innerHTML = `<span class="material-symbols-outlined text-[19px]">volume_off</span>`;
+  const vIco = () => $("#vMute").innerHTML = `<span class="material-symbols-outlined text-[19px]">${seq.muted ? "volume_off" : "volume_up"}</span>`; vIco(); document.addEventListener("voicesready", vIco);
   $("#vQuiz").onclick = () => { quizOn = !quizOn; $("#vQuiz").className = `px-1.5 py-0.5 rounded flex items-center gap-1 ${quizOn ? "bg-secondary/40" : "bg-surface-variant/20"}`; $("#vQuiz").querySelector("span:last-child").textContent = quizOn ? "ON" : "OFF"; toast(quizOn ? "Quiz checkpoints on" : "Quiz checkpoints off"); };
   $("#vCC").onclick = () => { cc = !cc; caption(front, -1); toast(cc ? "Captions on" : "Captions off"); };
   $("#vFull").onclick = () => { const el = $("#vStage"); (document.fullscreenElement ? document.exitFullscreen() : (el.requestFullscreen || el.webkitRequestFullscreen).call(el)); };
@@ -223,7 +225,7 @@ function podcastPlayer(L, mount, bus) {
   $("#pFwd").onclick = () => play(Math.min(P.length - 1, cur + 1));
   $("#pSpeed").onclick = () => { const r = [1, 1.25, 1.5, 2]; seq.rate = r[(r.indexOf(seq.rate) + 1) % r.length]; $("#pSpeed").textContent = seq.rate + "x"; if (seq.on) play(cur); };
   $("#pMute").onclick = () => { const m = seq.toggleMute(); $("#pMute").innerHTML = `<span class="material-symbols-outlined text-[20px]">${m ? "volume_off" : "volume_up"}</span>`; toast(m ? "Voice off — read along as it plays" : "Voice on"); };
-  if (seq.muted) $("#pMute").innerHTML = `<span class="material-symbols-outlined text-[20px]">volume_off</span>`;
+  const pIco = () => $("#pMute").innerHTML = `<span class="material-symbols-outlined text-[20px]">${seq.muted ? "volume_off" : "volume_up"}</span>`; pIco(); document.addEventListener("voicesready", pIco);
   $("#pFollow").onclick = () => { follow = !follow; $("#pFollow").textContent = "Auto-scroll: " + (follow ? "on" : "off"); };
   $("#pTrack").onclick = e => { const r = $("#pTrack").getBoundingClientRect(), t = (e.clientX - r.left) / r.width * seq.duration; let i = 0; while (i < P.length - 1 && seq.startOf(i + 1) <= t) i++; play(i); };
   document.querySelectorAll(".pLine").forEach(b => b.onclick = () => play(+b.dataset.i));

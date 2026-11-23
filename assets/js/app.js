@@ -49,11 +49,11 @@ function toast(m) { const t = $("#toast"); if (!t) return; $("#toastMsg").textCo
 /* ---------- narration engine (Web Speech API) ---------- */
 const TTS = {
   ok: "speechSynthesis" in window, voices: [], token: 0,
-  load() { if (!this.ok) return; const f = () => { this.voices = speechSynthesis.getVoices().filter(v => /^en/i.test(v.lang)); }; f(); speechSynthesis.onvoiceschanged = f; },
+  load() { if (!this.ok) return; const f = () => { const all = speechSynthesis.getVoices(); const en = all.filter(v => /^en/i.test(v.lang)); this.voices = en.length ? en : all; document.dispatchEvent(new Event('voicesready')); }; f(); speechSynthesis.addEventListener ? speechSynthesis.addEventListener('voiceschanged', f) : (speechSynthesis.onvoiceschanged = f); setTimeout(f, 800); setTimeout(f, 2500); },
   pick(i) { const v = this.voices; if (!v.length) return null; const pref = v.filter(x => /en-(IN|GB|US)/i.test(x.lang)); const pool = pref.length > 1 ? pref : v;
     if (i === 0) return pool.find(x => /female|zira|samantha|heera|aria|jenny|google uk english female/i.test(x.name)) || pool[0];
     return pool.find(x => /male|david|ravi|guy|daniel|google uk english male/i.test(x.name) && !/female/i.test(x.name)) || pool[1 % pool.length]; },
-  get usable() { return this.ok && this.voices.length > 0; },
+  get usable() { if (this.ok && !this.voices.length) this.voices = speechSynthesis.getVoices().filter(v => /^en/i.test(v.lang)); if (this.ok && !this.voices.length && speechSynthesis.getVoices().length) this.voices = speechSynthesis.getVoices(); return this.ok && this.voices.length > 0; },
   stop() { this.token++; if (this.ok) speechSynthesis.cancel(); },
   /* play list of {text, voice} from index i; cb.onItem(i), cb.onEnd() */
   play(items, i, cb, rate) {
@@ -69,7 +69,7 @@ const TTS = {
       u.onboundary = e => { if (tok === this.token && e.name !== "sentence") cb.onWord && cb.onWord(k, e.charIndex); };
       u.onend = () => { if (tok !== this.token) return; if (cb.onItemEnd && cb.onItemEnd(k) === false) return; step(k + 1); };
       u.onerror = () => { if (tok === this.token) step(k + 1); };
-      speechSynthesis.speak(u);
+      speechSynthesis.speak(u); if (speechSynthesis.paused) speechSynthesis.resume();
     };
     step(i);
   }
