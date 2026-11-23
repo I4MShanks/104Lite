@@ -1,0 +1,17 @@
+<body class="bg-surface text-on-surface antialiased min-h-screen">
+<main class="max-w-3xl mx-auto pt-16 pb-24">
+<section class="sticky top-16 z-30 px-gutter-mobile pt-space-md pb-space-sm bg-surface/95 backdrop-blur-md">
+  <h2 class="font-headline-sm text-headline-sm mb-space-sm">Formula Sheet</h2>
+  <div class="relative flex items-center"><span class="absolute left-3.5 text-on-surface-variant material-symbols-outlined text-[20px]">search</span><input id="q" type="search" placeholder="Search: Cd, friability, γ, LOD…" class="w-full pl-10 pr-3 py-2.5 rounded-xl bg-surface-container-low placeholder:text-outline font-body-md text-body-md focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-secondary/30 shadow-sm"></div>
+</section>
+<div id="list" class="stagger px-gutter-mobile flex flex-col gap-space-sm mt-space-sm"></div>
+</main>
+<script>
+const { shell, esc } = ACE;
+shell({ active: "formulas", title: "Formulas" });
+list.innerHTML = TOPICS.map(t => `<section class="blk bg-surface-container-lowest rounded-xl p-space-md shadow-sm" data-s="${esc((t.name + t.f.flat().join(" ")).toLowerCase())}">
+  <a href="topic.html?id=${t.id}" class="flex items-center gap-2 mb-2"><span class="material-symbols-outlined text-secondary text-[20px]">${t.icon}</span><h3 class="font-title-md text-title-md">${t.code} · ${esc(t.name)}</h3></a>
+  <div class="grid sm:grid-cols-2 gap-2">${t.f.map(([k, v]) => `<div class="row rounded-lg bg-surface-container-low p-2.5" data-s="${esc((k + " " + v).toLowerCase())}"><p class="font-label-mono-sm text-label-mono-sm text-on-surface-variant">${esc(k)}</p><p class="font-label-mono-md text-label-mono-md mt-0.5">${esc(v)}</p></div>`).join("")}</div></section>`).join("");
+q.oninput = () => { const v = q.value.toLowerCase().trim(); document.querySelectorAll(".blk").forEach(b => { let any = false; b.querySelectorAll(".row").forEach(r => { const m = !v || r.dataset.s.includes(v) || b.dataset.s.startsWith(v); r.classList.toggle("hidden", !m); any = any || m; }); b.classList.toggle("hidden", !any); }); };
+</script>
+</body></html>

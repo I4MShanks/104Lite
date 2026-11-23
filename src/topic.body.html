@@ -1,0 +1,23 @@
+<body class="bg-surface text-on-surface antialiased min-h-screen">
+<main class="max-w-3xl mx-auto pt-16 pb-24 px-gutter-mobile" id="app"></main>
+<script>
+const { shell, results, topicQuizzes, esc, params } = ACE;
+const T = TOPICS.find(t => t.id === params.get("id")) || TOPICS[0];
+document.title = T.name + " · 104Lite";
+shell({ active: "topics", back: "topics.html", kicker: T.code + " · " + T.dept, title: T.name });
+const R = results(), B = BANK[T.id];
+app.innerHTML = `
+<section class="pt-space-md flex items-start gap-3"><span class="w-12 h-12 rounded-xl bg-primary-container text-secondary-fixed flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-[26px]">${T.icon}</span></span>
+  <div><h2 class="font-headline-sm text-headline-sm leading-tight">${esc(T.name)}</h2><p class="font-body-sm text-body-sm text-on-surface-variant">${esc(T.sub)}</p></div></section>
+<section class="mt-space-md stagger flex flex-col gap-space-sm">${topicQuizzes(T.id).map(q => { const r = R[q.id];
+  return `<a href="quiz.html?id=${q.id}" class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md flex items-center justify-between gap-3">
+  <div class="flex items-center gap-3"><span class="w-10 h-10 rounded-full ${r ? "bg-secondary text-on-secondary" : "bg-surface-container-high text-on-surface"} flex items-center justify-center font-title-md text-title-md">${q.k}</span>
+  <div><p class="font-title-md text-title-md">Quiz ${q.k}</p><p class="font-label-mono-sm text-label-mono-sm text-on-surface-variant">10 Qs · 15 min · 6 numerical + 4 conceptual</p></div></div>
+  ${r ? `<div class="text-right"><p class="font-headline-sm text-headline-sm">${r.best}<span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant">/30</span></p><p class="font-label-mono-sm text-[10px] text-on-surface-variant">best · ${r.attempts} try</p></div>` : `<span class="px-3.5 py-1.5 rounded-lg bg-primary text-on-primary font-label-mono-sm text-label-mono-sm font-semibold flex items-center gap-1">Start<span class="material-symbols-outlined text-[14px]">play_arrow</span></span>`}</a>`; }).join("")}</section>
+<section class="mt-space-lg bg-surface-container-lowest rounded-xl p-space-md shadow-sm">
+  <div class="flex items-center gap-2 mb-3"><span class="material-symbols-outlined text-secondary text-[20px]">functions</span><h3 class="font-title-md text-title-md">Formulas you'll need</h3></div>
+  <div class="flex flex-col gap-2">${T.f.map(([k, v]) => `<div class="rounded-lg bg-surface-container-low p-2.5"><p class="font-label-mono-sm text-label-mono-sm text-on-surface-variant">${esc(k)}</p><p class="font-label-mono-md text-label-mono-md mt-0.5">${esc(v)}</p></div>`).join("")}</div>
+</section>
+<p class="mt-space-md font-label-mono-sm text-label-mono-sm text-on-surface-variant text-center">Bank: ${B.gen.length} numerical generators · ${B.con.length} conceptual problems. "New numbers" after a quiz gives a fresh variant.</p>`;
+</script>
+</body></html>

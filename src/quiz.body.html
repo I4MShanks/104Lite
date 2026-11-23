@@ -1,0 +1,116 @@
+<body class="bg-surface text-on-surface antialiased min-h-screen">
+<main class="max-w-3xl mx-auto pt-16 pb-10"><div id="app" class="flex flex-col px-gutter-mobile gap-space-md pt-space-sm"></div></main>
+<div id="sheet" class="fixed inset-0 z-50 bg-inverse-surface/40 backdrop-blur-sm flex items-end sm:items-center justify-center sm:p-4 hidden">
+  <div class="bg-surface-container-lowest w-full max-w-md max-h-[85vh] rounded-t-2xl sm:rounded-2xl shadow-xl flex flex-col overflow-hidden fade-in">
+    <div class="p-space-md bg-surface-container-low flex items-center justify-between"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-[22px]">functions</span><div><h3 class="font-title-md text-title-md">Formula Sheet</h3><span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant">Lecture 1 + all 8 experiments</span></div></div>
+    <button onclick="sheet.classList.add('hidden')" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center"><span class="material-symbols-outlined text-[18px]">close</span></button></div>
+    <div id="sheetBody" class="p-space-md flex flex-col gap-space-sm overflow-y-auto font-body-sm text-body-sm"></div>
+  </div>
+</div>
+<script>
+const { $, esc, pad, params, shell, toast, buildQuiz, saveResult, results, MARK, bumpVariant, calculator } = ACE;
+const id = params.get("id") || "mock-1";
+const Q = buildQuiz(id) || buildQuiz("mock-1");
+const isMock = /^mock/.test(Q.meta.id), TP = Object.fromEntries(TOPICS.map(t => [t.id, t]));
+document.title = Q.meta.title + " · 104Lite";
+shell({ nav: false, back: isMock ? "mocks.html" : `topic.html?id=${Q.meta.topic}`, kicker: isMock ? "Mixed mock · 20 Qs · 30 min" : "Topic quiz · 10 Qs · 15 min", title: Q.meta.title,
+  right: `<button id="calcBtn" title="Calculator" class="w-10 h-10 rounded-full bg-secondary-fixed/40 text-on-secondary-fixed-variant flex items-center justify-center"><span class="material-symbols-outlined text-[21px]">calculate</span></button>` });
+$("#calcBtn").onclick = calculator;
+sheetBody.innerHTML = TOPICS.map(t => `<div class="bg-surface-container-low p-3 rounded-lg"><p class="font-label-mono-sm text-label-mono-sm text-secondary font-semibold uppercase mb-1">${t.code} · ${esc(t.name)}</p>${t.f.map(([k, v]) => `<p class="text-[12.5px] leading-snug py-0.5"><span class="text-on-surface-variant">${esc(k)}:</span> <span class="font-label-mono-md">${esc(v)}</span></p>`).join("")}</div>`).join("");
+const n = Q.qs.length, maxM = n * MARK.right;
+let cur = 0, ans = Array(n).fill(null), flags = Array(n).fill(false), secs = Q.meta.min * 60, done = false, timer;
+const marks = () => ans.reduce((s, a, i) => s + (a === null ? 0 : a === Q.qs[i].a ? MARK.right : MARK.wrong), 0);
+
+function intro() {
+  const prev = results()[Q.meta.id];
+  const mix = {}; Q.qs.forEach(q => mix[q.topic] = (mix[q.topic] || 0) + 1);
+  const numC = Q.qs.filter(q => q.kind === "Numerical").length;
+  app.innerHTML = `<section class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-3 fade-in">
+    <div class="flex items-center gap-1.5 flex-wrap"><span class="font-label-mono-sm text-label-mono-sm px-2 py-0.5 rounded-full bg-secondary-fixed/50 text-on-secondary-fixed-variant">${isMock ? "Mixed mock" : "Topic quiz"}</span>${Q.meta.variant ? `<span class="font-label-mono-sm text-label-mono-sm px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant">Variant ${Q.meta.variant + 1}</span>` : ""}${prev ? `<span class="font-label-mono-sm text-label-mono-sm px-2 py-0.5 rounded-full bg-surface-container text-secondary font-semibold">Best ${prev.best}/${maxM}</span>` : ""}</div>
+    <h2 class="font-headline-sm text-headline-sm">${esc(Q.meta.title)}</h2>
+    <div class="grid grid-cols-4 gap-2 text-center font-label-mono-sm text-label-mono-sm">
+      ${[["Questions", n], ["Time", Q.meta.min + " min"], ["Max marks", maxM], ["Numericals", numC + "/" + n]].map(([k, v]) => `<div class="bg-surface-container-low p-2 rounded-lg"><span class="text-on-surface-variant block text-[10px]">${k}</span><span class="font-semibold">${v}</span></div>`).join("")}</div>
+    ${isMock ? `<div class="flex flex-wrap gap-1.5">${Object.entries(mix).map(([t, c]) => `<span class="font-label-mono-sm text-label-mono-sm px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant">${TP[t].code} ×${c}</span>`).join("")}</div>` : ""}
+    <ul class="text-on-surface-variant font-body-sm text-body-sm space-y-1.5">
+      <li class="flex gap-2"><span class="material-symbols-outlined text-secondary text-[16px]">add_circle</span><span><b class="text-on-surface">+3</b> for a correct answer, <b class="text-error">−1</b> for a wrong one, 0 if left blank — skip when unsure.</span></li>
+      <li class="flex gap-2"><span class="material-symbols-outlined text-secondary text-[16px]">calculate</span>Calculator allowed — tap the calculator icon (top right) any time.</li>
+      <li class="flex gap-2"><span class="material-symbols-outlined text-secondary text-[16px]">timer</span>Auto-submits when the timer ends. Worked solutions follow.</li></ul>
+    <button id="start" class="w-full py-3 rounded-lg bg-primary text-on-primary font-title-md text-title-md flex items-center justify-center gap-2 shadow">Start ${isMock ? "Mock" : "Quiz"}<span class="material-symbols-outlined text-[20px]">play_arrow</span></button></section>`;
+  $("#start").onclick = () => { timer = setInterval(tick, 1000); render(); };
+}
+function tick() { if (done) return; secs--; const el = $("#timer"); if (el) { el.textContent = `${pad(Math.floor(secs / 60))}:${pad(secs % 60)}`; if (secs === 300) toast("5 minutes left"); } if (secs <= 0) { toast("Time's up — submitting"); submit(); } }
+function render(dir = 0) {
+  const q = Q.qs[cur], t = TP[q.topic], answered = ans.filter(a => a !== null).length, prog = (answered / n * 100).toFixed(0);
+  app.innerHTML = `
+  <section class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-sm">
+    <div class="flex items-center justify-between"><div class="flex items-center gap-space-xs"><span class="font-label-mono-sm text-label-mono-sm text-secondary uppercase bg-secondary-fixed/30 px-2 py-0.5 rounded-full">In progress</span><span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant font-medium">Q ${cur + 1} of ${n}</span></div>
+    <div class="flex items-center gap-1.5 bg-error-container/40 px-2.5 py-1 rounded-full"><span class="material-symbols-outlined text-[16px] text-error ${secs < 300 ? "animate-pulse" : ""}">timer</span><span id="timer" class="font-label-mono-md text-label-mono-md font-semibold text-on-error-container">${pad(Math.floor(secs / 60))}:${pad(secs % 60)}</span></div></div>
+    <div class="w-full bg-surface-container h-2 rounded-full overflow-hidden"><div class="bg-secondary h-full rounded-full transition-all duration-500" style="width:${prog}%"></div></div>
+    <div class="flex justify-between items-center text-on-surface-variant font-label-mono-sm text-label-mono-sm"><span>Attempted ${answered}/${n}</span><span>Pace: ${(Q.meta.min / n).toFixed(1)} min/q</span></div>
+  </section>
+  <section class="flex items-center justify-between gap-space-sm">
+    <div class="flex items-center gap-1.5 flex-wrap min-w-0"><span class="font-label-mono-sm text-label-mono-sm text-on-tertiary-fixed-variant bg-tertiary-fixed/40 px-2 py-0.5 rounded-full">${t.code} · ${esc(t.dept)}</span><span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant bg-surface-container-high px-2 py-0.5 rounded-full">${q.kind}</span></div>
+    <button onclick="sheet.classList.remove('hidden')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-lowest text-secondary shadow-sm hover:bg-surface-container-low flex-shrink-0"><span class="material-symbols-outlined text-[18px]">menu_book</span><span class="font-label-mono-sm text-label-mono-sm font-semibold">Formulas</span></button>
+  </section>
+  <section class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-md ${dir ? "fade-in" : ""}">
+    <div class="flex flex-col gap-space-xs"><div class="flex items-center justify-between"><span class="font-label-mono-sm text-label-mono-sm text-secondary font-semibold uppercase tracking-wider">Problem ${pad(cur + 1)}</span>
+      <button id="flag" class="flex items-center gap-1 ${flags[cur] ? "text-error" : "text-on-surface-variant hover:text-on-surface"} p-1 rounded-lg"><span class="material-symbols-outlined text-[20px] ${flags[cur] ? "fill" : ""}">bookmark</span><span class="font-label-mono-sm text-label-mono-sm">${flags[cur] ? "Flagged" : "Flag"}</span></button></div>
+      <p class="font-body-md text-body-md leading-relaxed">${esc(q.q)}</p></div>
+    <div class="flex flex-col gap-2.5">${q.o.map((o, i) => { const sel = ans[cur] === i; return `<button data-i="${i}" class="opt flex items-center justify-between p-3 rounded-lg text-left transition-all ${sel ? "bg-secondary-fixed/25 ring-1 ring-secondary shadow-sm" : "bg-surface-container-low hover:bg-surface-container"}">
+      <div class="flex items-center gap-3"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center ${sel ? "bg-secondary" : "bg-surface-container-highest"}"><span class="w-2 h-2 rounded-full ${sel ? "bg-on-secondary" : ""}"></span></span><span class="font-label-mono-sm text-label-mono-sm font-bold ${sel ? "text-secondary" : "text-on-surface-variant"}">${"ABCD"[i]}.</span><span class="font-body-md text-body-md ${sel ? "font-semibold" : ""}">${esc(o)}</span></div>
+      ${sel ? `<span class="material-symbols-outlined text-[18px] text-secondary">check_circle</span>` : ""}</button>`; }).join("")}</div>
+    ${ans[cur] !== null ? `<button id="clear" class="self-start font-label-mono-sm text-label-mono-sm text-on-surface-variant hover:text-error flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">backspace</span>Clear response (no penalty if blank)</button>` : ""}
+  </section>
+  <section class="flex items-center justify-between gap-space-sm">
+    <button id="prev" ${cur ? "" : "disabled"} class="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high disabled:opacity-40 flex-1"><span class="material-symbols-outlined text-[18px]">arrow_back</span><span class="font-label-mono-md text-label-mono-md font-semibold">Previous</span></button>
+    <button id="next" class="flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-lg bg-primary text-on-primary shadow-sm flex-[1.4]"><span class="font-label-mono-md text-label-mono-md font-semibold">${cur === n - 1 ? "Review & Submit" : "Save & Next"}</span><span class="material-symbols-outlined text-[18px]">${cur === n - 1 ? "task_alt" : "arrow_forward"}</span></button>
+  </section>
+  <section class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-sm">
+    <div class="flex items-center justify-between"><div class="flex flex-col"><span class="font-title-md text-title-md">Question Navigator</span><span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant">${n} items • tap to jump</span></div>
+      <button id="submit" class="font-label-mono-sm text-label-mono-sm px-3 py-1.5 rounded-lg bg-secondary text-on-secondary font-semibold">Submit</button></div>
+    <div class="flex items-center justify-between flex-wrap gap-2 font-label-mono-sm text-label-mono-sm text-on-surface-variant bg-surface-container-low px-2.5 py-1.5 rounded-lg">
+      <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>Answered (${answered})</span><span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-secondary-container"></span>Current</span><span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-primary-fixed-dim"></span>Flagged (${flags.filter(Boolean).length})</span><span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-surface-container-highest"></span>Blank (${n - answered})</span></div>
+    <div class="grid grid-cols-5 sm:grid-cols-10 gap-2 pt-1">${Q.qs.map((_, i) => `<button data-j="${i}" class="chip relative h-9 rounded-lg font-label-mono-sm text-label-mono-sm font-semibold flex items-center justify-center ${i === cur ? "bg-secondary-container text-on-secondary-fixed shadow-sm" : flags[i] ? "bg-primary-fixed-dim text-on-primary-fixed" : ans[i] !== null ? "bg-secondary text-on-secondary" : "bg-surface-container-highest text-on-surface-variant hover:bg-surface-variant"}">${pad(i + 1)}${flags[i] ? '<span class="w-1.5 h-1.5 rounded-full bg-error absolute top-1 right-1"></span>' : ""}</button>`).join("")}</div>
+  </section>`;
+  document.querySelectorAll(".opt").forEach(b => b.onclick = () => { ans[cur] = +b.dataset.i; render(); });
+  document.querySelectorAll(".chip").forEach(b => b.onclick = () => { cur = +b.dataset.j; render(1); });
+  $("#flag").onclick = () => { flags[cur] = !flags[cur]; toast(flags[cur] ? `Q${cur + 1} flagged` : "Flag removed"); render(); };
+  $("#clear") && ($("#clear").onclick = () => { ans[cur] = null; render(); });
+  $("#prev").onclick = () => { cur--; render(1); };
+  $("#next").onclick = () => { if (cur < n - 1) { cur++; render(1); scrollTo({ top: 0, behavior: "smooth" }); } else confirmSubmit(); };
+  $("#submit").onclick = confirmSubmit;
+}
+function confirmSubmit() { const left = ans.filter(a => a === null).length; if (left && !confirm(`${left} question(s) are blank (0 marks each). Submit now?`)) return; submit(); }
+function submit() {
+  done = true; clearInterval(timer);
+  const correct = ans.filter((a, i) => a !== null && a === Q.qs[i].a).length, wrong = ans.filter((a, i) => a !== null && a !== Q.qs[i].a).length, blank = n - correct - wrong, m = marks();
+  const used = Q.meta.min * 60 - Math.max(secs, 0);
+  saveResult(Q.meta.id, { marks: m, correct, wrong, blank, max: maxM, used });
+  const by = {}; Q.qs.forEach((q, i) => { const b = by[q.topic] = by[q.topic] || { c: 0, w: 0, t: 0 }; b.t++; if (ans[i] === null) return; ans[i] === q.a ? b.c++ : b.w++; });
+  const pct = Math.round(Math.max(0, m) / maxM * 100);
+  app.innerHTML = `
+  <section class="bg-primary-container text-surface-bright rounded-xl p-space-md shadow-md relative overflow-hidden fade-in">
+    <div class="absolute -right-6 -bottom-6 w-36 h-36 bg-secondary rounded-full blur-3xl opacity-30"></div>
+    <span class="font-label-mono-sm text-label-mono-sm uppercase text-secondary-fixed">Result · ${esc(Q.meta.title)}</span>
+    <div class="flex items-end gap-3 mt-1"><span class="font-display-lg-mobile text-display-lg-mobile">${m}<span class="font-headline-sm text-headline-sm text-on-primary-container">/${maxM}</span></span><span class="font-body-sm text-body-sm text-on-primary-container mb-2">${pct}% · ${pad(Math.floor(used / 60))}:${pad(used % 60)} used</span></div>
+    <div class="grid grid-cols-3 gap-2 mt-3 relative">${[["Correct", correct, "+" + correct * 3, "text-secondary-fixed"], ["Wrong", wrong, "−" + wrong, "text-error-container"], ["Blank", blank, "0", "text-on-primary-container"]].map(([k, c, s, cl]) => `<div class="rounded-lg bg-surface-container-lowest/10 p-2 text-center"><p class="font-label-mono-sm text-[10px] uppercase text-on-primary-container">${k}</p><p class="font-headline-sm text-headline-sm ${cl}">${c}</p><p class="font-label-mono-sm text-label-mono-sm text-on-primary-container">${s} marks</p></div>`).join("")}</div>
+    <p class="font-body-sm text-body-sm text-on-primary-container mt-3 relative">${wrong > correct / 2 ? "Negative marks are costing you — skip questions you can't narrow down to two options." : pct >= 75 ? "Excellent — compre ready on this set." : pct >= 50 ? "Solid. Review the misses below, then try a new variant." : "Revise the formulas for your weakest topics and retry."}</p>
+    <div class="flex flex-wrap gap-2 mt-3 relative"><a href="quiz.html?id=${Q.meta.id}" class="px-3 py-2 rounded-lg bg-secondary-container text-on-secondary-fixed font-label-mono-sm text-label-mono-sm font-semibold flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">replay</span>Retake same</a>
+      <button id="newVar" class="px-3 py-2 rounded-lg bg-surface-container-lowest/15 font-label-mono-sm text-label-mono-sm font-semibold flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">shuffle</span>New numbers</button>
+      <a href="${isMock ? "mocks.html" : "topic.html?id=" + Q.meta.topic}" class="px-3 py-2 rounded-lg bg-surface-container-lowest/15 font-label-mono-sm text-label-mono-sm font-semibold">Done</a></div>
+  </section>
+  ${isMock ? `<section class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm fade-in"><h3 class="font-title-md text-title-md mb-2">Topic-wise</h3><div class="flex flex-col gap-2">${TOPICS.filter(t => by[t.id]).map(t => { const b = by[t.id], s = b.c * 3 - b.w, mx = b.t * 3; return `<a href="topic.html?id=${t.id}" class="flex items-center gap-3"><span class="font-label-mono-sm text-label-mono-sm w-36 truncate">${t.code} ${esc(t.name)}</span><div class="flex-1 bg-surface-container h-2 rounded-full overflow-hidden"><div class="h-full rounded-full ${s / mx >= .6 ? "bg-secondary" : s > 0 ? "bg-tertiary-fixed-dim" : "bg-error"}" style="width:${Math.max(0, s) / mx * 100}%"></div></div><span class="font-label-mono-sm text-label-mono-sm w-12 text-right">${s}/${mx}</span></a>`; }).join("")}</div></section>` : ""}
+  <section class="flex flex-col gap-space-sm"><div class="flex items-center justify-between"><h3 class="font-title-md text-title-md">Solutions</h3><div class="flex gap-1 font-label-mono-sm text-label-mono-sm">${["all", "wrong", "blank"].map(f => `<button data-f="${f}" class="flt px-2.5 py-1 rounded-full ${f === "all" ? "bg-primary text-on-primary" : "bg-surface-container"}">${f[0].toUpperCase() + f.slice(1)}</button>`).join("")}</div></div>
+  <div id="sol" class="flex flex-col gap-space-sm stagger">${Q.qs.map((q, i) => { const st = ans[i] === null ? "blank" : ans[i] === q.a ? "right" : "wrong"; return `<div data-s="${st}" class="sol bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-2">
+    <div class="flex items-center justify-between"><span class="font-label-mono-sm text-label-mono-sm text-secondary">Q${pad(i + 1)} · ${TP[q.topic].code} · ${q.kind}</span><span class="font-label-mono-sm text-label-mono-sm px-2 py-0.5 rounded-full ${st === "right" ? "bg-secondary-fixed/40 text-on-secondary-fixed-variant" : st === "blank" ? "bg-surface-container text-on-surface-variant" : "bg-error-container text-on-error-container"}">${st === "right" ? "+3" : st === "blank" ? "0 · blank" : "−1"}</span></div>
+    <p class="font-body-sm text-body-sm font-medium">${esc(q.q)}</p>
+    <div class="flex flex-col gap-1">${q.o.map((o, j) => `<div class="font-body-sm text-body-sm px-2.5 py-1.5 rounded-lg ${j === q.a ? "bg-secondary-fixed/30 text-on-secondary-fixed-variant font-semibold" : j === ans[i] ? "bg-error-container/60 text-on-error-container line-through" : "text-on-surface-variant"}">${"ABCD"[j]}. ${esc(o)}</div>`).join("")}</div>
+    <p class="font-body-sm text-body-sm text-on-surface-variant bg-surface-container-low rounded-lg p-2.5"><span class="material-symbols-outlined text-secondary text-[15px] align-[-3px]">lightbulb</span> ${esc(q.e)}</p></div>`; }).join("")}</div></section>`;
+  $("#newVar").onclick = () => { bumpVariant(Q.meta.id); location.href = "quiz.html?id=" + Q.meta.id; };
+  document.querySelectorAll(".flt").forEach(b => b.onclick = () => { document.querySelectorAll(".flt").forEach(x => x.className = "flt px-2.5 py-1 rounded-full bg-surface-container"); b.className = "flt px-2.5 py-1 rounded-full bg-primary text-on-primary"; document.querySelectorAll(".sol").forEach(s => s.classList.toggle("hidden", b.dataset.f !== "all" && s.dataset.s !== b.dataset.f)); });
+  scrollTo({ top: 0 });
+}
+window.addEventListener("beforeunload", e => { if (timer && !done) { e.preventDefault(); e.returnValue = ""; } });
+intro();
+</script>
+</body></html>

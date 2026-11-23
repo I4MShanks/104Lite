@@ -1,9 +1,8 @@
-/* 104Lite shared app shell, storage, narration engine and result-booklet calculators */
+/* 104Lite — shell, storage, quiz engine, calculator */
 (function () {
 const $ = (s, r = document) => r.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const pad = n => String(n).padStart(2, "0");
-const slideSrc = (id, n) => `assets/slides/${id}/p-${pad(n)}.jpg`;
 const params = new URLSearchParams(location.search);
 
 /* ---------- storage ---------- */
@@ -11,23 +10,81 @@ const store = {
   get(k, d) { try { const v = localStorage.getItem("lite104:" + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
   set(k, v) { try { localStorage.setItem("lite104:" + k, JSON.stringify(v)); } catch (e) {} }
 };
-function markVisited(id) { const v = store.get("visited", []); if (!v.includes(id)) { v.push(id); store.set("visited", v); } }
-function scores() { return store.get("scores", {}); }
-function saveScore(key, pct) { const s = scores(); s[key] = { best: Math.max(pct, (s[key] || {}).best || 0), last: pct, at: Date.now() }; store.set("scores", s); }
+const results = () => store.get("results", {});
+function saveResult(id, r) { const all = results(); const p = all[id] || { attempts: 0, best: -Infinity }; all[id] = { attempts: p.attempts + 1, best: Math.max(p.best, r.marks), last: r, at: Date.now() }; store.set("results", all); }
+
+/* ---------- marking ---------- */
+const MARK = { right: 3, wrong: -1, blank: 0 };
+
+/* ---------- seeded RNG ---------- */
+function hash(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+function rng(seed) {
+  let s = seed >>> 0;
+  const n = () => { s = (s + 0x6D2B79F5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  return { n, f: (a, b, d) => +(a + (b - a) * n()).toFixed(d), i: (a, b) => a + Math.floor(n() * (b - a + 1)), pick: a => a[Math.floor(n() * a.length)] };
+}
+function shuffle(q, seed) {
+  const r = rng(seed), idx = q.o.map((_, i) => i);
+  for (let i = idx.length - 1; i > 0; i--) { const j = Math.floor(r.n() * (i + 1)); [idx[i], idx[j]] = [idx[j], idx[i]]; }
+  return { ...q, o: idx.map(i => q.o[i]), a: idx.indexOf(q.a) };
+}
+
+/* ---------- quiz catalogue ---------- */
+const EXPS = ["bio", "chemeng", "chem", "civil", "eee", "mech", "pharm", "phys"];
+const MOCKS = Array.from({ length: 10 }, (_, m) => ({ id: "mock-" + (m + 1), n: m + 1, title: `Mixed Mock ${pad(m + 1)}`, qs: 20, min: 30 }));
+const topicQuizzes = t => [1, 2, 3].map(k => ({ id: `t-${t}-${k}`, topic: t, k, title: `${TOPICS.find(x => x.id === t).name} · Quiz ${k}`, qs: 10, min: 15 }));
+function variant(id) { return store.get("variant:" + id, 0); }
+function bumpVariant(id) { store.set("variant:" + id, variant(id) + 1); }
+
+function mk(topic, kind, idx, seedKey) {
+  const T = BANK[topic];
+  if (kind === "g") { const g = T.gen[idx % T.gen.length]; return { ...g(rng(hash(seedKey))), topic, kind: "Numerical" }; }
+  return { ...T.con[idx % T.con.length], topic, kind: "Conceptual" };
+}
+/* Mock m: 4 × Lecture 1 (2 numerical + 2 conceptual) + 2 × each experiment (numerical-heavy) = 20 */
+function buildMock(m, v) {
+  const out = [], key = `mock${m}v${v}`;
+  [0, 1].forEach(j => out.push(mk("l1", "g", m * 2 + j + v * 3, `${key}l1g${j}`)));
+  [0, 1].forEach(j => out.push(mk("l1", "c", m * 2 + j + v * 5, "")));
+  EXPS.forEach((t, j) => {
+    out.push(mk(t, "g", m * 2 + v, `${key}${t}g0`));
+    out.push((m + j) % 2 === 0 ? mk(t, "c", m + v * 3, "") : mk(t, "g", m * 2 + 1 + v, `${key}${t}g1`));
+  });
+  return out;
+}
+/* Topic quiz k: 6 numerical + 4 conceptual */
+function buildTopic(t, k, v) {
+  const out = [], T = BANK[t], key = `t${t}${k}v${v}`;
+  for (let j = 0; j < 6; j++) out.push(mk(t, "g", (k - 1) * 6 + j + v, `${key}g${j}`));
+  for (let j = 0; j < 4; j++) out.push(mk(t, "c", (k - 1) * 4 + j + v * 4 + (t === "l1" ? (k - 1) * 1 : 0), ""));
+  return out;
+}
+function buildQuiz(id) {
+  const v = variant(id);
+  let meta, qs;
+  const mm = /^mock-(\d+)$/.exec(id), tm = /^t-(\w+)-(\d)$/.exec(id);
+  if (mm) { const m = +mm[1] - 1; meta = MOCKS[m]; qs = buildMock(m, v); }
+  else if (tm && BANK[tm[1]]) { meta = topicQuizzes(tm[1])[+tm[2] - 1]; qs = buildTopic(tm[1], +tm[2], v); }
+  else return null;
+  // interleave: mocks are shown in a fixed shuffled order; options shuffled per question
+  const order = qs.map((q, i) => [hash(id + v + i + q.q), i]).sort((a, b) => a[0] - b[0]).map(x => x[1]);
+  qs = (mm ? order.map(i => qs[i]) : qs).map((q, i) => shuffle(q, hash(id + v + "o" + i + q.q)));
+  return { meta: { ...meta, variant: v }, qs };
+}
 
 /* ---------- shell ---------- */
-const NAV = [["home", "index.html", "home", "Home"], ["lectures", "lectures.html", "play_circle", "Lectures"], ["practice", "practice.html", "assignment_turned_in", "Practice"], ["vault", "vault.html", "folder_zip", "Vault"]];
+const NAV = [["home", "index.html", "home", "Home"], ["topics", "topics.html", "category", "Topics"], ["mocks", "mocks.html", "timer", "Mocks"], ["formulas", "formulas.html", "functions", "Formulas"]];
 function shell(o) {
   const head = document.createElement("header");
-  head.className = "fixed top-0 w-full z-40 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]";
+  head.className = "fixed top-0 w-full z-40 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.06)]";
   head.innerHTML = `<div class="max-w-3xl mx-auto h-16 px-gutter-mobile flex items-center justify-between gap-space-sm">
     <div class="flex items-center gap-space-sm min-w-0">
       ${o.back ? `<a href="${o.back}" aria-label="Go back" class="min-w-[44px] min-h-[44px] -ml-2 flex items-center justify-center rounded-lg hover:text-secondary"><span class="material-symbols-outlined text-[24px]">arrow_back</span></a>` : ""}
-      <a href="index.html" class="flex-shrink-0"><img src="assets/logo.svg" alt="104Lite logo" class="h-8 w-8"></a>
-      <div class="flex flex-col min-w-0"><span class="font-label-mono-sm text-label-mono-sm text-secondary truncate uppercase">${esc(o.kicker || "BITS U104 // 104Lite")}</span>
-      <span class="font-title-md text-title-md truncate">${esc(o.title || "Foundations of Measurement")}</span></div>
+      <a href="index.html" class="flex-shrink-0"><img src="assets/logo.svg" alt="104Lite" class="h-8 w-8"></a>
+      <div class="flex flex-col min-w-0"><span class="font-label-mono-sm text-label-mono-sm text-secondary truncate uppercase">${esc(o.kicker || "BITS U104 · Compre Prep")}</span>
+      <span class="font-title-md text-title-md truncate">${esc(o.title || "104Lite")}</span></div>
     </div>
-    <div class="flex items-center gap-2 flex-shrink-0"><span class="hidden sm:inline font-label-mono-sm text-label-mono-sm px-2 py-1 rounded-full bg-surface-container text-on-surface-variant">Sem I · 2026–27</span>
+    <div class="flex items-center gap-2 flex-shrink-0">${o.right || ""}
     <button id="themeBtn" aria-label="Toggle dark mode" title="Dark / light mode" class="w-10 h-10 rounded-full bg-surface-container-low hover:bg-surface-container-high text-on-surface flex items-center justify-center"><span class="material-symbols-outlined text-[21px]">${document.documentElement.classList.contains("dark") ? "light_mode" : "dark_mode"}</span></button></div>
   </div>`;
   document.body.prepend(head);
@@ -40,134 +97,57 @@ function shell(o) {
     const nav = document.createElement("nav");
     nav.className = "fixed bottom-0 w-full z-40 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_-2px_12px_rgba(11,28,48,0.06)]";
     nav.innerHTML = `<div class="max-w-3xl mx-auto flex justify-around items-center h-16 px-space-xs">${NAV.map(([k, h, ic, l]) =>
-      `<a href="${h}" ${k === o.active ? 'aria-current="page"' : ""} class="flex flex-col items-center justify-center min-w-[64px] min-h-[44px] px-space-sm py-space-xs rounded-lg transition-colors ${k === o.active ? "text-secondary bg-surface-container-low font-semibold" : "text-on-surface-variant hover:text-on-surface"}"><span class="material-symbols-outlined text-[22px]">${ic}</span><span class="font-label-mono-sm text-label-mono-sm mt-0.5">${l}</span></a>`).join("")}</div>`;
+      `<a href="${h}" ${k === o.active ? 'aria-current="page"' : ""} class="flex flex-col items-center justify-center min-w-[64px] min-h-[44px] px-space-sm py-space-xs rounded-lg ${k === o.active ? "text-secondary bg-surface-container-low font-semibold" : "text-on-surface-variant hover:text-on-surface"}"><span class="material-symbols-outlined text-[22px] ${k === o.active ? "fill" : ""}">${ic}</span><span class="font-label-mono-sm text-label-mono-sm mt-0.5">${l}</span></a>`).join("")}</div>`;
     document.body.append(nav);
   }
   const t = document.createElement("div");
   t.id = "toast";
-  t.className = "fixed bottom-20 left-1/2 -translate-x-1/2 z-50 bg-inverse-surface text-inverse-on-surface px-4 py-2 rounded-xl shadow-lg flex items-center gap-2 font-label-mono-sm text-label-mono-sm pointer-events-none opacity-0 transition-opacity duration-200 whitespace-nowrap";
-  t.innerHTML = `<span class="material-symbols-outlined text-secondary-fixed text-[18px]">check_circle</span><span id="toastMsg"></span>`;
+  t.className = "fixed bottom-20 left-1/2 -translate-x-1/2 z-[60] bg-inverse-surface text-inverse-on-surface px-4 py-2 rounded-xl shadow-lg flex items-center gap-2 font-label-mono-sm text-label-mono-sm pointer-events-none opacity-0 transition-opacity duration-200 whitespace-nowrap";
+  t.innerHTML = `<span class="material-symbols-outlined text-secondary-fixed-dim text-[18px]">check_circle</span><span id="toastMsg"></span>`;
   document.body.append(t);
 }
 let toastT;
-function toast(m) { const t = $("#toast"); if (!t) return; $("#toastMsg").textContent = m; t.classList.remove("opacity-0"); clearTimeout(toastT); toastT = setTimeout(() => t.classList.add("opacity-0"), 2300); }
+function toast(m) { const t = $("#toast"); if (!t) return; $("#toastMsg").textContent = m; t.classList.remove("opacity-0"); clearTimeout(toastT); toastT = setTimeout(() => t.classList.add("opacity-0"), 2200); }
 
-/* ---------- narration engine (Web Speech API) ---------- */
-const TTS = {
-  ok: "speechSynthesis" in window, voices: [], token: 0,
-  load() { if (!this.ok) return; const f = () => { const all = speechSynthesis.getVoices(); const en = all.filter(v => /^en/i.test(v.lang)); this.voices = en.length ? en : all; document.dispatchEvent(new Event('voicesready')); }; f(); speechSynthesis.addEventListener ? speechSynthesis.addEventListener('voiceschanged', f) : (speechSynthesis.onvoiceschanged = f); setTimeout(f, 800); setTimeout(f, 2500); },
-  pick(i) { const v = this.voices; if (!v.length) return null; const pref = v.filter(x => /en-(IN|GB|US)/i.test(x.lang)); const pool = pref.length > 1 ? pref : v;
-    if (i === 0) return pool.find(x => /female|zira|samantha|heera|aria|jenny|google uk english female/i.test(x.name)) || pool[0];
-    return pool.find(x => /male|david|ravi|guy|daniel|google uk english male/i.test(x.name) && !/female/i.test(x.name)) || pool[1 % pool.length]; },
-  get usable() { if (this.ok && !this.voices.length) this.voices = speechSynthesis.getVoices().filter(v => /^en/i.test(v.lang)); if (this.ok && !this.voices.length && speechSynthesis.getVoices().length) this.voices = speechSynthesis.getVoices(); return this.ok && this.voices.length > 0; },
-  stop() { this.token++; if (this.ok && (speechSynthesis.speaking || speechSynthesis.pending)) { speechSynthesis.cancel(); this.lastCancel = Date.now(); } },
-  /* play list of {text, voice} from index i; cb.onItem(i), cb.onEnd() */
-  play(items, i, cb, rate) {
-    this.stop(); if (!this.ok) { cb.onError && cb.onError(); return; }
-    const tok = this.token;
-    const say = (u, k, tries) => {
-      let started = false; u.onstart = () => { started = true; };
-      const go = () => { if (tok !== this.token) return; speechSynthesis.speak(u); if (speechSynthesis.paused) speechSynthesis.resume(); };
-      // Chrome drops speak() issued right after cancel(): leave a short gap
-      Date.now() - (this.lastCancel || 0) < 150 ? setTimeout(go, 160) : go();
-      setTimeout(() => { if (tok === this.token && !started && !speechSynthesis.speaking) { if (tries < 2) { speechSynthesis.cancel(); this.lastCancel = Date.now(); say(u, k, tries + 1); } else { u.onend && u.onend(); } } }, 1800);
-    };
-    const step = k => {
-      if (tok !== this.token) return;
-      if (k >= items.length) { cb.onEnd && cb.onEnd(); return; }
-      cb.onItem && cb.onItem(k);
-      const u = new SpeechSynthesisUtterance(items[k].text);
-      const v = this.pick(items[k].voice || 0); if (v) u.voice = v;
-      u.rate = rate || 1; u.pitch = items[k].voice ? 0.95 : 1.05;
-      let ended = false;
-      u.onboundary = e => { if (tok === this.token && e.name !== "sentence") cb.onWord && cb.onWord(k, e.charIndex); };
-      u.onend = () => { if (ended || tok !== this.token) return; ended = true; if (cb.onItemEnd && cb.onItemEnd(k) === false) return; step(k + 1); };
-      u.onerror = e => { if (ended || tok !== this.token || (e && e.error === "interrupted") || (e && e.error === "canceled")) return; ended = true; step(k + 1); };
-      say(u, k, 0);
-    };
-    step(i);
-  }
-};
-TTS.load();
-
-/* ---------- result-booklet calculators ---------- */
-const num = id => parseFloat(($("#c_" + id) || {}).value);
-const fmt = (x, d = 3) => (isFinite(x) ? (Math.abs(x) >= 1e4 || (Math.abs(x) < 1e-3 && x !== 0) ? x.toExponential(d - 1) : (+x.toFixed(d)).toString()) : "—");
-const CALC = {
-  stats: { title: "Mean, SD & standard error", inputs: [["vals", "Readings (comma separated)", "", "9.8, 10.1, 10.0, 9.9, 10.2", "text"]],
-    run() { const a = $("#c_vals").value.split(/[ ,;]+/).map(parseFloat).filter(isFinite); const n = a.length; if (n < 2) return "Enter at least two readings.";
-      const m = a.reduce((x, y) => x + y) / n, s = Math.sqrt(a.reduce((x, y) => x + (y - m) ** 2, 0) / (n - 1)), se = s / Math.sqrt(n);
-      return `N = ${n} · mean = <b>${fmt(m, 4)}</b> · s = ${fmt(s, 3)} · SE = s/√N = ${fmt(se, 3)} · %RSD = ${fmt(100 * s / m, 3)}%<br>Report: <b>${fmt(m, 4)} ± ${fmt(se, 2)}</b>`; } },
-  bmi: { title: "BMI & Pearson correlation (BMI vs SBP)", inputs: [["h", "Mean height", "m", "1.721"], ["w", "Mean weight", "kg", "68.5"], ["gx", "Group BMIs xᵢ", "", "20.5, 22.0, 23.1, 24.6, 26.2, 28.0", "text"], ["gy", "Group SBP_avg yᵢ", "mmHg", "110, 112, 118, 115, 124, 127", "text"]],
-    run() { const h = num("h"), w = num("w"); const b = w / (h * h); const c = b < 18.5 ? "Underweight" : b < 25 ? "Normal" : b < 30 ? "Overweight" : "Obese";
-      const p = s => $("#c_" + s).value.split(/[ ,;]+/).map(parseFloat).filter(isFinite); const x = p("gx"), y = p("gy"), n = Math.min(x.length, y.length);
-      let r = "—"; if (n >= 3) { const mx = x.slice(0, n).reduce((a, v) => a + v) / n, my = y.slice(0, n).reduce((a, v) => a + v) / n; let sxy = 0, sxx = 0, syy = 0;
-        for (let i = 0; i < n; i++) { const X = x[i] - mx, Y = y[i] - my; sxy += X * Y; sxx += X * X; syy += Y * Y; } r = sxy / Math.sqrt(sxx * syy); }
-      return `BMI = ${fmt(w)} / ${fmt(h)}² = <b>${fmt(b, 3)} kg/m²</b> → <b>${c}</b><br>Group of ${n}: r = ΣXᵢYᵢ/√(ΣXᵢ²·ΣYᵢ²) = <b>${typeof r === "number" ? fmt(r, 3) : r}</b>${typeof r === "number" ? ` → ${r > 0.5 ? "strong positive" : r > 0 ? "weak positive" : r > -0.5 ? "weak negative" : "strong negative"} association (not causation)` : ""}`; } },
-  venturi: { title: "Venturi / orifice: Qt, Qa and Cd", inputs: [["h", "Manometer reading h", "cm Hg", "10"], ["R", "Tank rise R", "cm", "4.6"], ["t", "Time t", "s", "6.0"]],
-    run() { const a1 = 6.157e-4, a2 = 1.539e-4, H = (num("h") / 100) * (13600 / 1000 - 1); const Qt = a1 * a2 * Math.sqrt(2 * 9.81 * H) / Math.sqrt(a1 * a1 - a2 * a2); const Qa = 0.1 * (num("R") / 100) / num("t");
-      return `H = ${fmt(H)} m of water · Qt = ${fmt(Qt, 3)} m³/s · Qa = ${fmt(Qa, 3)} m³/s<br>C<sub>d</sub> = Qa/Qt = <b>${fmt(Qa / Qt, 3)}</b> (venturi ≈ 0.95–0.98, orifice ≈ 0.6–0.65)`; } },
-  ph: { title: "pH from [H⁺]", inputs: [["hc", "[H⁺]", "mol/L", "1e-3"]],
-    run() { const p = -Math.log10(num("hc")); return `pH = −log₁₀[H⁺] = <b>${fmt(p, 3)}</b> → ${p < 7 ? "acidic (turmeric stays yellow)" : p > 7 ? "basic (turmeric turns orange-red)" : "neutral"}`; } },
-  capillary: { title: "γ ± δγ by capillary rise", inputs: [["h", "Rise h", "mm", "54.0"], ["dh", "δh", "mm", "0.5"], ["rho", "Density ρ", "kg/m³", "998"], ["r", "Radius r", "mm", "0.275"], ["dr", "δr", "mm", "0.0035"]],
-    run() { const h = num("h") / 1000, r = num("r") / 1000; const g = h * num("rho") * 9.81 * r / 2; const f = Math.sqrt((num("dh") / num("h")) ** 2 + (num("dr") / num("r")) ** 2);
-      return `γ = hρgr/2 = <b>${fmt(g * 1000, 4)} mN/m</b> · δγ/γ = ${fmt(100 * f, 3)}% → <b>γ = ${fmt(g * 1000, 3)} ± ${fmt(g * 1000 * f, 2)} mN/m</b>`; } },
-  lvdt: { title: "LVDT sensitivity (least-squares slope)", inputs: [["x", "Displacements x", "mm", "0, 0.5, 1.0, 1.5, 2.0", "text"], ["y", "Outputs V₀", "mV", "0, 61, 119, 182, 240", "text"]],
-    run() { const p = s => $("#c_" + s).value.split(/[ ,;]+/).map(parseFloat).filter(isFinite); const x = p("x"), y = p("y"), n = Math.min(x.length, y.length); if (n < 2) return "Enter matching x and y lists.";
-      let sx = 0, sy = 0, sxy = 0, sxx = 0; for (let i = 0; i < n; i++) { sx += x[i]; sy += y[i]; sxy += x[i] * y[i]; sxx += x[i] * x[i]; }
-      const m = (n * sxy - sx * sy) / (n * sxx - sx * sx), c = (sy - m * sx) / n; const ym = sy / n; let ss = 0, sr = 0; for (let i = 0; i < n; i++) { ss += (y[i] - ym) ** 2; sr += (y[i] - m * x[i] - c) ** 2; }
-      return `Sensitivity = slope = <b>${fmt(m, 4)} mV/mm</b> · intercept = ${fmt(c, 3)} mV · R² = ${fmt(1 - sr / ss, 4)}`; } },
-  visc: { title: "Relative viscosity (Ostwald)", inputs: [["mw", "μ water", "mPa·s", "0.890"], ["rw", "ρ water", "kg/m³", "997"], ["tw", "t water", "s", "60.0"], ["rx", "ρ sample", "kg/m³", "1050"], ["tx", "t sample", "s", "96.0"]],
-    run() { const mu = num("mw") * num("rx") * num("tx") / (num("rw") * num("tw")); return `μx = μw·ρx·tx/(ρw·tw) = <b>${fmt(mu, 4)} mPa·s</b> · ν = μ/ρ = <b>${fmt(mu / num("rx") * 1000, 4)} mm²/s</b>`; } },
-  friab: { title: "Friability & hardness", inputs: [["w0", "Initial weight W₀", "g", "6.512"], ["wf", "Final weight W_f", "g", "6.468"], ["hd", "Hardness", "kg/cm²", "6"]],
-    run() { const f = 100 * (num("w0") - num("wf")) / num("w0"); const hd = num("hd");
-      return `Friability = <b>${fmt(f, 3)}%</b> → ${f <= 1 ? '<b class="text-secondary">PASS</b> (≤ 1.0%)' : '<b class="text-error">FAIL</b> (> 1.0%)'}<br>Hardness ${fmt(hd)} kg/cm² ≈ ${fmt(hd * 9.807, 3)} N → ${hd >= 4 && hd <= 8 ? "within the typical 4–8 kg/cm²" : "outside the typical 4–8 kg/cm²"}`; } },
-  theo: { title: "Height of a building (theodolite)", inputs: [["h", "Instrument height h", "m", "1.45"], ["D", "Horizontal distance D", "m", "25.50"], ["deg", "Mean angle θ (degrees)", "°", "32"], ["min", "and minutes", "′", "15"]],
-    run() { const th = (num("deg") + (num("min") || 0) / 60) * Math.PI / 180; const H = num("h") + num("D") * Math.tan(th);
-      return `tan θ = ${fmt(Math.tan(th), 4)} · H = h + D tan θ = <b>${fmt(H, 4)} m</b>`; } }
-};
-function calcHTML(key) {
-  const c = CALC[key]; if (!c) return "";
-  return `<div class="bg-surface-container-low rounded-lg p-3 flex flex-col gap-2">
-    <div class="flex items-center gap-2 text-secondary"><span class="material-symbols-outlined text-[18px]">calculate</span><span class="font-label-mono-sm text-label-mono-sm font-semibold uppercase">${c.title}</span></div>
-    <div class="grid grid-cols-2 gap-2">${c.inputs.map(([id, l, u, d, t]) => `<label class="flex flex-col gap-0.5 ${t === "text" ? "col-span-2" : ""}"><span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant">${l}${u ? ` (${u})` : ""}</span><input id="c_${id}" value="${d}" ${t === "text" ? 'type="text"' : 'type="number" step="any"'} class="w-full px-2.5 py-1.5 rounded-lg bg-surface-container-lowest border border-outline-variant/70 font-label-mono-md text-label-mono-md focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20"></label>`).join("")}</div>
-    <div id="calcOut" class="font-body-sm text-body-sm text-on-surface bg-surface-container-lowest rounded p-2.5 leading-relaxed"></div></div>`;
+/* ---------- scientific calculator ---------- */
+function calcEval(expr, deg, ans) {
+  let e = expr.replace(/×/g, "*").replace(/÷/g, "/").replace(/−/g, "-").replace(/π/g, "(PI)").replace(/\be\b/g, "(E)").replace(/Ans/g, "(" + ans + ")").replace(/\^/g, "**").replace(/√\(/g, "sqrt(").replace(/√(\d+(\.\d+)?)/g, "sqrt($1)");
+  e = e.replace(/(\d+(?:\.\d+)?)E([+-]?\d+)/g, "($1*10**$2)").replace(/(\d)\s*\(/g, "$1*(").replace(/\)\s*(\d|\()/g, ")*$1");
+  if (/[^0-9+\-*/().,\s a-zA-Z_]/.test(e)) throw 0;
+  const words = e.match(/[a-zA-Z_]+/g) || [];
+  const ok = ["sin", "cos", "tan", "asin", "acos", "atan", "log", "ln", "sqrt", "PI", "E", "abs"];
+  if (words.some(w => !ok.includes(w))) throw 0;
+  const D = deg ? Math.PI / 180 : 1;
+  const f = new Function("sin", "cos", "tan", "asin", "acos", "atan", "log", "ln", "sqrt", "PI", "E", "abs", `return (${e});`);
+  const v = f(x => Math.sin(x * D), x => Math.cos(x * D), x => Math.tan(x * D), x => Math.asin(x) / D, x => Math.acos(x) / D, x => Math.atan(x) / D, Math.log10, Math.log, Math.sqrt, Math.PI, Math.E, Math.abs);
+  if (!isFinite(v)) throw 0; return v;
 }
-function bindCalc(key) {
-  const c = CALC[key]; if (!c) return;
-  const go = () => { try { $("#calcOut").innerHTML = c.run(); } catch (e) { $("#calcOut").textContent = "Check your inputs."; } };
-  c.inputs.forEach(([id]) => $("#c_" + id).addEventListener("input", go)); go();
+function calculator() {
+  if ($("#calc")) { $("#calc").classList.toggle("hidden"); return; }
+  const keys = [["sin(", "cos(", "tan(", "deg"], ["log(", "ln(", "√(", "^"], ["(", ")", "π", "e"], ["7", "8", "9", "÷"], ["4", "5", "6", "×"], ["1", "2", "3", "−"], ["0", ".", "E", "+"], ["Ans", "⌫", "C", "="]];
+  const el = document.createElement("div"); el.id = "calc";
+  el.className = "fixed z-50 right-3 bottom-20 sm:bottom-6 w-[290px] bg-surface-container-lowest rounded-2xl shadow-2xl border border-outline-variant/60 p-3 flex flex-col gap-2 fade-in";
+  el.innerHTML = `<div class="flex items-center justify-between cursor-move" id="calcBar"><span class="font-label-mono-sm text-label-mono-sm text-secondary uppercase font-semibold flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">calculate</span>Calculator</span><button id="calcX" class="w-7 h-7 rounded-full hover:bg-surface-container flex items-center justify-center"><span class="material-symbols-outlined text-[18px]">close</span></button></div>
+  <div class="rounded-lg bg-surface-container-low px-3 py-2 text-right"><div id="cIn" class="font-label-mono-md text-label-mono-md text-on-surface-variant min-h-[18px] break-all"></div><div id="cOut" class="font-headline-sm text-headline-sm truncate">0</div></div>
+  <div class="grid grid-cols-4 gap-1.5">${keys.flat().map(k => `<button data-k="${k}" class="h-10 rounded-lg font-label-mono-md text-label-mono-md ${k === "=" ? "bg-secondary text-on-secondary font-bold" : /^[0-9.]$/.test(k) ? "bg-surface-container-high" : k === "C" || k === "⌫" ? "bg-error-container/60 text-on-error-container" : "bg-surface-container"} hover:brightness-95 active:scale-95">${k === "deg" ? '<span id="cMode">DEG</span>' : k.replace("(", "")}</button>`).join("")}</div>`;
+  document.body.append(el);
+  let expr = "", ans = 0, deg = true; const inp = $("#cIn"), out = $("#cOut");
+  const show = () => { inp.textContent = expr; try { out.textContent = expr ? +calcEval(expr, deg, ans).toPrecision(10) : (ans || 0); out.classList.remove("text-error"); } catch (e) { out.classList.add("text-error"); } };
+  el.querySelectorAll("button[data-k]").forEach(b => b.onclick = () => {
+    const k = b.dataset.k;
+    if (k === "C") expr = ""; else if (k === "⌫") expr = expr.slice(0, -1);
+    else if (k === "deg") { deg = !deg; $("#cMode").textContent = deg ? "DEG" : "RAD"; }
+    else if (k === "=") { try { ans = +calcEval(expr, deg, ans).toPrecision(12); out.textContent = ans; inp.textContent = expr + " ="; expr = ""; return; } catch (e) { out.textContent = "Error"; out.classList.add("text-error"); return; } }
+    else expr += k;
+    show();
+  });
+  document.addEventListener("keydown", e => { if ($("#calc").classList.contains("hidden") || /INPUT|TEXTAREA/.test(document.activeElement.tagName)) return;
+    const map = { "*": "×", "/": "÷", "-": "−", Enter: "=", Backspace: "⌫", Escape: "C" }; const k = map[e.key] || e.key;
+    const b = el.querySelector(`button[data-k="${CSS.escape(k)}"]`); if (b && (/^[0-9.+^()]$/.test(e.key) || map[e.key])) { e.preventDefault(); b.click(); } });
+  $("#calcX").onclick = () => el.classList.add("hidden");
+  // drag
+  let dx, dy; $("#calcBar").onpointerdown = e => { const r = el.getBoundingClientRect(); dx = e.clientX - r.left; dy = e.clientY - r.top; const mv = ev => { el.style.left = ev.clientX - dx + "px"; el.style.top = ev.clientY - dy + "px"; el.style.right = "auto"; el.style.bottom = "auto"; }; document.addEventListener("pointermove", mv); document.addEventListener("pointerup", () => document.removeEventListener("pointermove", mv), { once: true }); };
 }
 
-/* ---------- tests ---------- */
-const SAMPLE_TESTS = [
-  { id: "s1", title: "Sample Test 01 · Core Diagnostic", tag: "Diagnostic", desc: "Units, errors, Kline–McClintock and one key idea from every department.", min: 40 },
-  { id: "s2", title: "Sample Test 02 · Instruments & Methods", tag: "Instruments", desc: "Sensors, assays, analytical techniques and meters across all nine lectures.", min: 40 },
-  { id: "s3", title: "Sample Test 03 · Numericals & Formulas", tag: "Numericals", desc: "Calculations: CFU, Cd, γ, hysteresis, viscosity, friability, levelling and more.", min: 40 },
-  { id: "s4", title: "Sample Test 04 · Final Compre Simulation", tag: "Timed Mock", desc: "Full-syllabus mock with procedures, precautions and sources of error.", min: 40 }
-];
-/* each sample test takes 3 questions per lecture from disjoint slices of the bank */
-function buildTest(key) {
-  const L = window.LECTURES, Q = window.QUESTIONS;
-  const st = SAMPLE_TESTS.findIndex(t => t.id === key);
-  if (st >= 0) {
-    const out = [];
-    L.forEach(l => { const bank = Q[l.id]; [0, 1, 2].forEach(j => out.push({ ...bank[(st * 3 + j + l.no) % bank.length], lec: l.id })); });
-    // interleave deterministically
-    return { meta: SAMPLE_TESTS[st], qs: out.sort((a, b) => (hash(a.q + key) - hash(b.q + key))) };
-  }
-  const l = L.find(x => x.id === key); if (!l) return null;
-  return { meta: { id: key, title: `Lecture ${pad(l.no)} Quick Quiz · ${l.track}`, tag: "Lecture Quiz", min: 15 }, qs: Q[key].map(q => ({ ...q, lec: key })) };
-}
-/* shuffle options per question (seeded per attempt) so the correct letter varies */
-function shuffleOpts(q, seed) {
-  let s = hash(seed + q.q) >>> 0;
-  const rnd = () => { s = (s + 0x6D2B79F5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
-  const idx = q.o.map((_, i) => i);
-  for (let i = idx.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [idx[i], idx[j]] = [idx[j], idx[i]]; }
-  return { ...q, o: idx.map(i => q.o[i]), a: idx.indexOf(q.a) };
-}
-function hash(s) { let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0; return h; }
-
-window.ACE = { $, esc, pad, slideSrc, params, store, markVisited, scores, saveScore, shell, toast, TTS, CALC, calcHTML, bindCalc, SAMPLE_TESTS, buildTest, shuffleOpts };
+window.ACE = { $, esc, pad, params, store, results, saveResult, MARK, MOCKS, EXPS, topicQuizzes, buildQuiz, variant, bumpVariant, shell, toast, calculator, calcEval, hash };
 })();

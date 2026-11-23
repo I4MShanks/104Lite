@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-<title>Home · 104Lite</title><meta name="description" content="104Lite — lectures, podcasts, video overviews, lab manuals and tests for BITS U104 Foundations of Measurement & Experimentation."/>
+<title>Home · 104Lite</title><meta name="description" content="104Lite — compre prep for BITS U104 Foundations of Measurement: 10 timed mixed mocks and 27 topic quizzes with +3/−1 marking."/>
 <link rel="icon" href="assets/logo.svg"/>
 <script>try{var t=localStorage.getItem("lite104:theme");t=t?JSON.parse(t):(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark")document.documentElement.classList.add("dark")}catch(e){}</script>
 <meta name="theme-color" content="#0a1120" media="(prefers-color-scheme: dark)"/><meta name="theme-color" content="#f8f9ff" media="(prefers-color-scheme: light)"/>
@@ -9,87 +9,72 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com"></script><script src="assets/js/tw.js"></script>
 <style>html,body{margin:0}body{overscroll-behavior:none;font-family:Inter,system-ui,sans-serif}::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400;line-height:1}.fill{font-variation-settings:'FILL' 1}@media print{header,nav,.noprint{display:none!important}main{padding:0!important}}</style>
-<script src="assets/js/lectures.js"></script><script src="assets/js/questions.js"></script><script src="assets/js/media.js"></script><script src="assets/js/app.js"></script><script src="assets/js/players.js"></script>
+<script src="assets/js/topics.js"></script><script src="assets/js/bank.js"></script><script src="assets/js/app.js"></script>
 </head>
 <body class="bg-surface text-on-surface antialiased min-h-screen">
 <main class="max-w-3xl mx-auto pt-16 pb-24">
-<!-- Hero -->
 <section class="px-gutter-mobile pt-space-md pb-space-lg bg-surface-container-low rounded-b-2xl shadow-sm">
-  <div class="flex items-start justify-between gap-space-sm mb-space-md">
-    <div class="min-w-0">
-      <div class="flex items-center gap-space-xs mb-1 flex-wrap">
-        <span class="font-label-mono-sm text-label-mono-sm uppercase text-secondary tracking-wider bg-secondary-fixed/50 px-2 py-0.5 rounded-full">BITS U104 // METROLOGY</span>
-        <span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-secondary-container animate-pulse inline-block"></span>Compre ready</span>
-      </div>
-      <h1 class="font-headline-lg-mobile text-headline-lg-mobile tracking-tight">Ace Foundations of Measurement</h1>
-      <p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">9 lectures · podcasts · video overviews · lab manuals · result booklets · tests</p>
-    </div>
+  <div class="flex items-center gap-space-xs mb-1 flex-wrap">
+    <span class="font-label-mono-sm text-label-mono-sm uppercase text-on-secondary-fixed-variant tracking-wider bg-secondary-fixed/60 px-2 py-0.5 rounded-full">BITS U104 // COMPRE PREP</span>
+    <span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">calculate</span>Calculator allowed</span>
   </div>
-  <div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm">
-    <div class="flex items-center gap-space-md">
-      <div class="relative w-16 h-16 flex-shrink-0">
-        <svg class="w-16 h-16 -rotate-90" viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" fill="none" stroke="rgb(var(--c-surface-variant))" stroke-width="5"/><circle id="ring" cx="32" cy="32" r="26" fill="none" stroke="rgb(var(--c-secondary))" stroke-width="5" stroke-linecap="round" stroke-dasharray="163.36" stroke-dashoffset="163.36" style="transition:stroke-dashoffset .8s"/></svg>
-        <div class="absolute inset-0 flex flex-col items-center justify-center"><span id="ringPct" class="font-label-mono-md text-label-mono-md text-secondary font-bold leading-none">0%</span><span class="font-label-mono-sm text-[9px] text-on-surface-variant mt-0.5">DONE</span></div>
-      </div>
-      <div class="flex-1 min-w-0">
-        <div class="flex items-baseline justify-between mb-1 gap-2"><span class="font-title-md text-title-md">Course Mastery</span><span id="ringCount" class="font-label-mono-sm text-label-mono-sm text-secondary font-semibold whitespace-nowrap">0 / 9 Lectures</span></div>
-        <p id="nextUp" class="font-body-sm text-body-sm text-on-surface-variant mb-2 truncate">Next: Lecture 01</p>
-        <div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden"><div id="bar" class="bg-secondary h-full rounded-full transition-all duration-700" style="width:0%"></div></div>
-      </div>
+  <h1 class="font-headline-lg-mobile text-headline-lg-mobile tracking-tight">Foundations of Measurement</h1>
+  <p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">10 timed mixed mocks · 27 topic quizzes · numericals & concepts · +3 / −1</p>
+  <div class="mt-space-md bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex items-center gap-space-md">
+    <div class="relative w-16 h-16 flex-shrink-0">
+      <svg class="w-16 h-16 -rotate-90" viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" fill="none" stroke="rgb(var(--c-surface-variant))" stroke-width="5"/><circle id="ring" cx="32" cy="32" r="26" fill="none" stroke="rgb(var(--c-secondary))" stroke-width="5" stroke-linecap="round" stroke-dasharray="163.36" stroke-dashoffset="163.36" style="transition:stroke-dashoffset 1s cubic-bezier(.2,.7,.2,1)"/></svg>
+      <div class="absolute inset-0 flex flex-col items-center justify-center"><span id="ringPct" class="font-label-mono-md text-label-mono-md text-secondary font-bold leading-none">—</span><span class="font-label-mono-sm text-[9px] text-on-surface-variant mt-0.5">READY</span></div>
+    </div>
+    <div class="flex-1 min-w-0">
+      <div class="flex items-baseline justify-between gap-2 mb-1"><span class="font-title-md text-title-md">Compre readiness</span><span id="mockCount" class="font-label-mono-sm text-label-mono-sm text-secondary font-semibold whitespace-nowrap">0 / 10 mocks</span></div>
+      <p id="readyTxt" class="font-body-sm text-body-sm text-on-surface-variant mb-2">Average score across your latest mock attempts.</p>
+      <a id="nextBtn" href="quiz.html?id=mock-1" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary text-on-primary font-label-mono-sm text-label-mono-sm font-semibold"><span id="nextTxt">Start Mock 01</span><span class="material-symbols-outlined text-[16px]">play_arrow</span></a>
     </div>
   </div>
 </section>
-<!-- Stats ribbon -->
 <section class="px-gutter-mobile -mt-3">
-  <div class="grid grid-cols-3 gap-2 bg-primary-container text-on-primary rounded-xl p-space-sm shadow-md">
-    <div class="flex flex-col items-center text-center py-1"><span class="font-label-mono-sm text-[10px] uppercase text-primary-fixed-dim tracking-wider">Lectures opened</span><span id="stVisited" class="font-headline-sm text-headline-sm text-surface-bright font-bold mt-0.5">0</span><span class="font-label-mono-sm text-[10px] text-secondary-fixed">of 9</span></div>
-    <div class="flex flex-col items-center text-center py-1 border-x border-on-primary-fixed-variant/60"><span class="font-label-mono-sm text-[10px] uppercase text-primary-fixed-dim tracking-wider">Tests done</span><span id="stTests" class="font-headline-sm text-headline-sm text-surface-bright font-bold mt-0.5">0 / 4</span><span class="font-label-mono-sm text-[10px] text-tertiary-fixed-dim">sample tests</span></div>
-    <div class="flex flex-col items-center text-center py-1"><span class="font-label-mono-sm text-[10px] uppercase text-primary-fixed-dim tracking-wider">Avg score</span><span id="stAvg" class="font-headline-sm text-headline-sm text-surface-bright font-bold mt-0.5">—</span><span class="font-label-mono-sm text-[10px] text-secondary-fixed">all attempts</span></div>
+  <div class="grid grid-cols-3 gap-2 bg-primary-container text-surface-bright rounded-xl p-space-sm shadow-md">
+    <div class="flex flex-col items-center text-center py-1"><span class="font-label-mono-sm text-[10px] uppercase text-on-primary-container tracking-wider">Best mock</span><span id="stBest" class="font-headline-sm text-headline-sm font-bold mt-0.5">—</span><span class="font-label-mono-sm text-[10px] text-secondary-fixed">out of 60</span></div>
+    <div class="flex flex-col items-center text-center py-1 border-x border-surface-tint/40"><span class="font-label-mono-sm text-[10px] uppercase text-on-primary-container tracking-wider">Accuracy</span><span id="stAcc" class="font-headline-sm text-headline-sm font-bold mt-0.5">—</span><span class="font-label-mono-sm text-[10px] text-tertiary-fixed-dim">correct / attempted</span></div>
+    <div class="flex flex-col items-center text-center py-1"><span class="font-label-mono-sm text-[10px] uppercase text-on-primary-container tracking-wider">Quizzes</span><span id="stQ" class="font-headline-sm text-headline-sm font-bold mt-0.5">0 / 27</span><span class="font-label-mono-sm text-[10px] text-secondary-fixed">topic quizzes</span></div>
   </div>
 </section>
-<!-- Sample tests -->
-<section class="mt-space-lg px-gutter-mobile">
-  <div class="flex items-center justify-between mb-space-sm"><div class="flex items-center gap-2"><div class="w-2.5 h-2.5 rounded-full bg-secondary"></div><h2 class="font-title-md text-title-md">4 Comprehensive Sample Tests</h2></div><span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant">27 Qs · all 9 lectures</span></div>
-  <div id="tests" class="stagger space-y-space-sm"></div>
-</section>
-<!-- Lectures -->
-<section class="mt-space-lg px-gutter-mobile">
-  <div class="flex items-center justify-between mb-space-sm">
-    <div><h2 class="font-title-md text-title-md">Lectures by Topic</h2><p class="font-body-sm text-body-sm text-on-surface-variant">Each with video, podcast, notes, lab manual & booklet</p></div>
-    <a href="lectures.html" class="font-label-mono-sm text-label-mono-sm text-secondary font-semibold flex items-center whitespace-nowrap">View All (9)<span class="material-symbols-outlined text-[16px]">chevron_right</span></a>
+<section class="mt-space-md px-gutter-mobile">
+  <div class="rounded-xl bg-surface-container-lowest shadow-sm p-3 flex items-center gap-3">
+    <span class="w-9 h-9 rounded-lg bg-secondary-fixed/40 text-on-secondary-fixed-variant flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-[20px]">rule</span></span>
+    <div class="font-body-sm text-body-sm"><b>Marking:</b> <span class="text-secondary font-semibold">+3</span> correct · <span class="text-error font-semibold">−1</span> wrong · 0 unattempted. Mocks: 20 Qs in 30 min (4 from Lecture 1 + 2 from each experiment). Topic quizzes: 10 Qs in 15 min.</div>
   </div>
-  <div id="lecs" class="stagger grid sm:grid-cols-2 gap-space-md"></div>
+</section>
+<section class="mt-space-lg px-gutter-mobile">
+  <div class="flex items-center justify-between mb-space-sm"><div class="flex items-center gap-2"><div class="w-2.5 h-2.5 rounded-full bg-secondary"></div><h2 class="font-title-md text-title-md">Mixed Mock Tests</h2></div><a href="mocks.html" class="font-label-mono-sm text-label-mono-sm text-secondary font-semibold flex items-center">All 10<span class="material-symbols-outlined text-[16px]">chevron_right</span></a></div>
+  <div id="mocks" class="stagger grid grid-cols-2 sm:grid-cols-5 gap-2"></div>
+</section>
+<section class="mt-space-lg px-gutter-mobile">
+  <div class="flex items-center justify-between mb-space-sm"><div class="flex items-center gap-2"><div class="w-2.5 h-2.5 rounded-full bg-tertiary-fixed-dim"></div><h2 class="font-title-md text-title-md">Topic Quizzes</h2></div><a href="topics.html" class="font-label-mono-sm text-label-mono-sm text-secondary font-semibold flex items-center">All topics<span class="material-symbols-outlined text-[16px]">chevron_right</span></a></div>
+  <div id="topics" class="stagger grid sm:grid-cols-2 gap-2"></div>
 </section>
 </main>
 <script>
-const { shell, scores, store, esc, pad, slideSrc, SAMPLE_TESTS } = ACE;
+const { shell, results, MOCKS, topicQuizzes, esc, pad } = ACE;
 shell({ active: "home" });
-const L = LECTURES, sc = scores(), visited = store.get("visited", []);
-const done = L.filter(l => visited.includes(l.id)).length, pct = Math.round(done / L.length * 100);
-document.getElementById("ring").style.strokeDashoffset = 163.36 * (1 - pct / 100);
-ringPct.textContent = pct + "%"; ringCount.textContent = `${done} / 9 Lectures`; bar.style.width = pct + "%";
-const nx = L.find(l => !visited.includes(l.id)); nextUp.textContent = nx ? `Next: ${nx.track} — ${nx.title}` : "All lectures opened — try a sample test!";
-stVisited.textContent = done;
-stTests.textContent = SAMPLE_TESTS.filter(t => sc[t.id]).length + " / 4";
-const all = Object.values(sc).map(s => s.last); stAvg.textContent = all.length ? Math.round(all.reduce((a, b) => a + b) / all.length) + "%" : "—";
-tests.innerHTML = SAMPLE_TESTS.map((t, i) => { const s = sc[t.id];
-  return `<a href="test.html?id=${t.id}" class="block bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all active:scale-[0.99]">
-  <div class="flex items-start justify-between gap-space-xs mb-2"><div class="flex flex-wrap items-center gap-1.5">
-   <span class="font-label-mono-sm text-label-mono-sm px-2 py-0.5 rounded-full bg-secondary-fixed/40 text-on-secondary-fixed-variant">Test ${pad(i + 1)}</span>
-   <span class="font-label-mono-sm text-label-mono-sm px-2 py-0.5 rounded-full ${i === 3 ? "bg-primary-container text-primary-fixed font-semibold" : "bg-surface-container text-on-surface-variant"}">${t.tag}</span></div>
-   ${s ? `<span class="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface-container text-secondary font-label-mono-sm text-label-mono-sm font-semibold"><span class="material-symbols-outlined text-[14px]">military_tech</span>Best: ${s.best}%</span>` : `<span class="font-label-mono-sm text-label-mono-sm px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-semibold">Ready to Start</span>`}</div>
-  <h3 class="font-title-md text-title-md mb-1">${esc(t.title.split("· ")[1])}</h3>
-  <p class="font-body-sm text-body-sm text-on-surface-variant mb-space-sm">${esc(t.desc)}</p>
-  <div class="flex items-center justify-between text-on-surface-variant font-label-mono-sm text-label-mono-sm"><div class="flex items-center gap-space-sm">
-   <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">quiz</span>27 Questions</span><span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">timer</span>${t.min} Min</span></div>
-   <span class="px-3.5 py-1.5 rounded-lg ${s ? "bg-surface-container-low text-secondary" : "bg-primary text-on-primary"} font-semibold flex items-center gap-1">${s ? "Retake" : "Start Now"}<span class="material-symbols-outlined text-[14px]">${s ? "replay" : "play_arrow"}</span></span></div></a>`; }).join("");
-lecs.innerHTML = L.map(l => { const m = (window.MEDIA || {})[l.id] || {};
-  return `<a href="lecture.html?id=${l.id}" class="block bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-  <div class="relative h-36 w-full bg-surface-container-high"><img src="${slideSrc(l.id, 1)}" alt="${esc(l.title)} title slide" class="w-full h-full object-cover" loading="lazy">
-   <div class="absolute inset-0 bg-gradient-to-t from-primary-container/85 via-primary-container/25 to-transparent"></div>
-   <span class="absolute top-2.5 left-2.5 font-label-mono-sm text-label-mono-sm ${visited.includes(l.id) ? "bg-secondary text-on-secondary" : "bg-surface-container-lowest/90 text-on-surface"} px-2.5 py-0.5 rounded-full font-semibold shadow-sm">Lecture ${pad(l.no)}${visited.includes(l.id) ? " · Opened" : ""}</span>
-   <div class="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between"><span class="font-label-mono-sm text-label-mono-sm bg-primary-container/75 backdrop-blur-md px-2 py-0.5 rounded text-secondary-fixed">${esc(l.track)} Track</span><span class="font-label-mono-sm text-label-mono-sm bg-primary-container/75 backdrop-blur-md px-2 py-0.5 rounded text-surface-bright flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">auto_stories</span>${l.slides} slides</span></div></div>
-  <div class="p-space-md"><h3 class="font-title-md text-title-md mb-1">${esc(l.title)}</h3><p class="font-body-sm text-body-sm text-on-surface-variant mb-space-sm">${esc(l.short)}</p>
-   <div class="flex flex-wrap gap-1.5">${[["videocam", m.video ? "Video" : "Video overview"], ["podcasts", "Podcast"], ["description", "Lab manual"], ["table_chart", "Booklet"], ["quiz", "12-Q quiz"]].map(([i, t]) => `<span class="flex items-center gap-1 px-2 py-1 rounded-lg bg-surface-container font-label-mono-sm text-label-mono-sm"><span class="material-symbols-outlined text-[15px] text-secondary">${i}</span>${t}</span>`).join("")}</div></div></a>`; }).join("");
+const R = results();
+const mockRes = MOCKS.map(m => R[m.id]).filter(Boolean);
+const lastPct = mockRes.map(r => Math.max(0, r.last.marks) / 60 * 100);
+const ready = lastPct.length ? Math.round(lastPct.reduce((a, b) => a + b) / lastPct.length) : null;
+if (ready != null) { ring.style.strokeDashoffset = 163.36 * (1 - ready / 100); ringPct.textContent = ready + "%"; readyTxt.textContent = ready >= 75 ? "Strong — keep going with an untried mock." : ready >= 50 ? "Good base. Target weak topics, then retake mocks." : "Practise topic quizzes first, then retake the mocks."; }
+mockCount.textContent = `${mockRes.length} / 10 mocks`;
+const next = MOCKS.find(m => !R[m.id]); if (next) { nextBtn.href = "quiz.html?id=" + next.id; nextTxt.textContent = `Start Mock ${pad(next.n)}`; } else { nextBtn.href = "mocks.html"; nextTxt.textContent = "Review mocks"; }
+const all = Object.values(R).map(r => r.last); const att = all.reduce((a, r) => a + r.correct + r.wrong, 0), cor = all.reduce((a, r) => a + r.correct, 0);
+stAcc.textContent = att ? Math.round(cor / att * 100) + "%" : "—";
+stBest.textContent = mockRes.length ? Math.max(...mockRes.map(r => r.best)) : "—";
+const tq = TOPICS.flatMap(t => topicQuizzes(t.id)); stQ.textContent = `${tq.filter(q => R[q.id]).length} / 27`;
+mocks.innerHTML = MOCKS.map(m => { const r = R[m.id]; return `<a href="quiz.html?id=${m.id}" class="rounded-xl p-3 shadow-sm flex flex-col gap-1 bg-surface-container-lowest hover:shadow-md">
+  <span class="font-label-mono-sm text-label-mono-sm ${r ? "text-secondary" : "text-on-surface-variant"}">MOCK ${pad(m.n)}</span>
+  <span class="font-headline-sm text-headline-sm ${r ? "" : "text-on-surface-variant"}">${r ? r.best : "—"}<span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant">/60</span></span>
+  <span class="font-label-mono-sm text-[10px] text-on-surface-variant">${r ? r.attempts + " attempt" + (r.attempts > 1 ? "s" : "") : "20 Qs · 30 min"}</span></a>`; }).join("");
+topics.innerHTML = TOPICS.map(t => { const qz = topicQuizzes(t.id); return `<a href="topic.html?id=${t.id}" class="flex items-center gap-3 p-3 rounded-xl bg-surface-container-lowest shadow-sm hover:shadow-md">
+  <span class="w-10 h-10 rounded-lg bg-surface-container-high text-secondary flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-[22px]">${t.icon}</span></span>
+  <div class="min-w-0 flex-1"><p class="font-label-mono-sm text-label-mono-sm text-secondary">${t.code} · ${esc(t.dept)}</p><p class="font-body-sm text-body-sm font-semibold truncate">${esc(t.name)}</p></div>
+  <div class="flex gap-1">${qz.map(q => { const r = R[q.id]; const p = r ? Math.max(0, r.best) / 30 : 0; return `<span title="Quiz ${q.k}${r ? ": best " + r.best + "/30" : ""}" class="w-2.5 h-2.5 rounded-full ${!r ? "bg-surface-container-highest" : p >= .7 ? "bg-secondary" : p >= .4 ? "bg-tertiary-fixed-dim" : "bg-error"}"></span>`; }).join("")}</div></a>`; }).join("");
 </script>
 </body></html>

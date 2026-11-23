@@ -1,41 +1,25 @@
 # 104Lite
 
-A study site for **BITS U104 — Foundations of Measurement & Experimentation** (BITS Pilani, Semester I 2026–27).
+Compre prep for **BITS U104 — Foundations of Measurement & Experimentation** (BITS Pilani, Sem I 2026–27).
 
-**Live site:** https://i4mshanks.github.io/104Lite/
+**Live:** https://i4mshanks.github.io/104Lite/
 
 ## What's inside
+- **10 mixed mock tests**: 20 questions in 30 minutes (60 marks). Each mock has 4 questions from Lecture 1 and 2 from each of the 8 experiments. About 14 of the 20 are numericals.
+- **27 topic quizzes**: 3 for each topic (Lecture 1 plus the eight experiments). Each has 10 questions (6 numerical, 4 conceptual) in 15 minutes.
+- **Marking**: +3 correct, −1 wrong, 0 unattempted.
+- **Built-in scientific calculator** (DEG/RAD, log/ln, powers, √, scientific notation), plus a **formula sheet** for every topic.
+- Results show a marks breakdown, topic-wise performance and worked solutions. "New numbers" gives a fresh variant of any quiz.
+- Dark and light mode. Scores are saved only in your browser.
 
-| Page | What it has |
-|---|---|
-| **Home** (`index.html`) | Course mastery ring, progress stats, the **4 comprehensive sample tests** (27 questions each, 3 from every lecture) and all lecture cards |
-| **Lecture** (`lecture.html?id=…`) | For each of the 9 lectures: **video overview**, **podcast**, **Notes**, **Lab Manual**, **Result Booklet** (editable observation table + live calculator + worked example) and a 12-question **quiz** |
-| **Lectures** | Searchable lecture library |
-| **Practice** | All sample tests and lecture quizzes with best scores |
-| **Test** (`test.html?id=…`) | Timed assessment: question navigator, flagging, formula sheet, scoring, per-lecture breakdown and explanations |
-| **Vault** | Original lecture slide PDFs, Compre Guide chapters 1–3 and any podcast/video files |
+## Topics
+L1 Measurement Fundamentals · E1 BMI & BP (Bio) · E2 Venturi & Orifice (Chem Engg) · E3 pH & Analytical Chemistry · E4 Theodolite & Surveying (Civil) · E5 LVDT & Sensors (EEE) · E6 Ostwald Viscometer (Mech) · E7 Tablet Quality (Pharmacy) · E8 Surface Tension (Physics)
 
-### Lectures
-1. Foundations of Measurement & Experiments — Dr. Biswadip Shome (ME)
-2. Measurement of Biological Systems — Prof. S. K. Verma (Bio) · *BMI vs BP*
-3. Industrial Instrumentation: Pressure & Flow — Prof. A. K. Pani (Chem Engg) · *Venturi & orifice*
-4. Analytical Chemistry — Prof. Bibhas R. Sarkar (Chem) · *pH scale with turmeric*
-5. Surface Tension by Capillary Rise — Prof. Raj Kumar Gupta (Physics)
-6. Basics of Measurement & the LVDT — Dr. Sujan Yenuganti (EEE)
-7. Uncertainty & the Ostwald Viscometer — Dr. Biswadip Shome (ME)
-8. Evaluation of Tablets — Dr. Jagpreet Singh Sidhu (Pharmacy)
-9. Introduction to Surveying — Dr. Saurabh Gupta (Civil) · *Theodolite*
+## How questions work
+`assets/js/bank.js` holds two kinds of question for each topic:
+- **Conceptual problems**, written by hand.
+- **Numerical generators**, which create a question with new values each time, compute the correct answer in code, and build the wrong options from common mistakes (forgetting h, LC/2 vs LC/√2, not squaring, unit slips…).
 
-## Podcasts & video overviews
-- When a Gemini Notebook (NotebookLM) audio or video overview has been added to `assets/media/` and listed in `assets/js/media.js`, the lecture page plays it.
-- Otherwise the page uses an **interactive video overview** (real lecture slides with zoom-pan, word-by-word captions, a chapter timeline, speed control and pop-quiz checkpoints) and a **two-host podcast** with a live chat-style transcript, tap-to-jump lines and a mid-episode quick check. Both are voiced by the browser’s text-to-speech and still run silently with captions if no voice is available.
-- `assets/notebooklm/*.txt` are the source text packs used to generate the NotebookLM overviews.
+Quizzes are seeded, so a given quiz stays the same until you ask for new numbers.
 
-## Editing
-Content lives in `assets/js/lectures.js` (notes, narration, podcast scripts, lab manual, booklet) and `assets/js/questions.js` (108 MCQs).
-Page markup lives in `src/*.body.html`; run `./build.sh` to rebuild the root HTML files.
-Progress, scores and booklet entries are stored only in your browser (localStorage).
-
-## Credits
-Lecture slides © their respective instructors and BITS Pilani. They are shared here for course study only.
-Design system: *Foundations of Measurement* (Plus Jakarta Sans / Inter / JetBrains Mono, slate + precision cyan).
+Edit pages in `src/*.body.html`, then run `./build.sh`.
