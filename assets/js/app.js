@@ -100,6 +100,10 @@ function shell(o) {
       `<a href="${h}" ${k === o.active ? 'aria-current="page"' : ""} class="flex flex-col items-center justify-center min-w-[64px] min-h-[44px] px-space-sm py-space-xs rounded-lg ${k === o.active ? "text-secondary bg-surface-container-low font-semibold" : "text-on-surface-variant hover:text-on-surface"}"><span class="material-symbols-outlined text-[22px] ${k === o.active ? "fill" : ""}">${ic}</span><span class="font-label-mono-sm text-label-mono-sm mt-0.5">${l}</span></a>`).join("")}</div>`;
     document.body.append(nav);
   }
+  const credit = document.createElement("div");
+  credit.className = `noprint fixed right-3 ${o.nav !== false ? "bottom-[76px]" : "bottom-3"} z-30 px-2.5 py-1 rounded-full bg-surface-container-lowest/85 backdrop-blur-md shadow-sm border border-outline-variant/50 font-label-mono-sm text-[10px] text-on-surface-variant pointer-events-none select-none`;
+  credit.innerHTML = `Made by <span class="text-secondary font-semibold">Parth Potdar</span> · 2026A7PS0677P`;
+  document.body.append(credit);
   const t = document.createElement("div");
   t.id = "toast";
   t.className = "fixed bottom-20 left-1/2 -translate-x-1/2 z-[60] bg-inverse-surface text-inverse-on-surface px-4 py-2 rounded-xl shadow-lg flex items-center gap-2 font-label-mono-sm text-label-mono-sm pointer-events-none opacity-0 transition-opacity duration-200 whitespace-nowrap";
@@ -126,7 +130,7 @@ function calculator() {
   if ($("#calc")) { $("#calc").classList.toggle("hidden"); return; }
   const keys = [["sin(", "cos(", "tan(", "deg"], ["log(", "ln(", "√(", "^"], ["(", ")", "π", "e"], ["7", "8", "9", "÷"], ["4", "5", "6", "×"], ["1", "2", "3", "−"], ["0", ".", "E", "+"], ["Ans", "⌫", "C", "="]];
   const el = document.createElement("div"); el.id = "calc";
-  el.className = "fixed z-50 right-3 bottom-20 sm:bottom-6 w-[290px] bg-surface-container-lowest rounded-2xl shadow-2xl border border-outline-variant/60 p-3 flex flex-col gap-2 fade-in";
+  el.className = "fixed z-50 right-3 bottom-12 w-[290px] bg-surface-container-lowest rounded-2xl shadow-2xl border border-outline-variant/60 p-3 flex flex-col gap-2 fade-in";
   el.innerHTML = `<div class="flex items-center justify-between cursor-move" id="calcBar"><span class="font-label-mono-sm text-label-mono-sm text-secondary uppercase font-semibold flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">calculate</span>Calculator</span><button id="calcX" class="w-7 h-7 rounded-full hover:bg-surface-container flex items-center justify-center"><span class="material-symbols-outlined text-[18px]">close</span></button></div>
   <div class="rounded-lg bg-surface-container-low px-3 py-2 text-right"><div id="cIn" class="font-label-mono-md text-label-mono-md text-on-surface-variant min-h-[18px] break-all"></div><div id="cOut" class="font-headline-sm text-headline-sm truncate">0</div></div>
   <div class="grid grid-cols-4 gap-1.5">${keys.flat().map(k => `<button data-k="${k}" class="h-10 rounded-lg font-label-mono-md text-label-mono-md ${k === "=" ? "bg-secondary text-on-secondary font-bold" : /^[0-9.]$/.test(k) ? "bg-surface-container-high" : k === "C" || k === "⌫" ? "bg-error-container/60 text-on-error-container" : "bg-surface-container"} hover:brightness-95 active:scale-95">${k === "deg" ? '<span id="cMode">DEG</span>' : k.replace("(", "")}</button>`).join("")}</div>`;
