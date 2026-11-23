@@ -60,22 +60,30 @@ const TTS = {
     if (i === 0) return pool.find(x => /female|zira|samantha|heera|aria|jenny|google uk english female/i.test(x.name)) || pool[0];
     return pool.find(x => /male|david|ravi|guy|daniel|google uk english male/i.test(x.name) && !/female/i.test(x.name)) || pool[1 % pool.length]; },
   get usable() { if (this.ok && !this.voices.length) this.voices = speechSynthesis.getVoices().filter(v => /^en/i.test(v.lang)); if (this.ok && !this.voices.length && speechSynthesis.getVoices().length) this.voices = speechSynthesis.getVoices(); return this.ok && this.voices.length > 0; },
-  stop() { this.token++; if (this.ok) speechSynthesis.cancel(); },
+  stop() { this.token++; if (this.ok && (speechSynthesis.speaking || speechSynthesis.pending)) { speechSynthesis.cancel(); this.lastCancel = Date.now(); } },
   /* play list of {text, voice} from index i; cb.onItem(i), cb.onEnd() */
   play(items, i, cb, rate) {
     this.stop(); if (!this.ok) { cb.onError && cb.onError(); return; }
     const tok = this.token;
+    const say = (u, k, tries) => {
+      let started = false; u.onstart = () => { started = true; };
+      const go = () => { if (tok !== this.token) return; speechSynthesis.speak(u); if (speechSynthesis.paused) speechSynthesis.resume(); };
+      // Chrome drops speak() issued right after cancel(): leave a short gap
+      Date.now() - (this.lastCancel || 0) < 150 ? setTimeout(go, 160) : go();
+      setTimeout(() => { if (tok === this.token && !started && !speechSynthesis.speaking) { if (tries < 2) { speechSynthesis.cancel(); this.lastCancel = Date.now(); say(u, k, tries + 1); } else { u.onend && u.onend(); } } }, 1800);
+    };
     const step = k => {
       if (tok !== this.token) return;
       if (k >= items.length) { cb.onEnd && cb.onEnd(); return; }
       cb.onItem && cb.onItem(k);
       const u = new SpeechSynthesisUtterance(items[k].text);
       const v = this.pick(items[k].voice || 0); if (v) u.voice = v;
-      u.rate = rate || 1; u.pitch = items[k].voice ? 0.92 : 1.05;
+      u.rate = rate || 1; u.pitch = items[k].voice ? 0.95 : 1.05;
+      let ended = false;
       u.onboundary = e => { if (tok === this.token && e.name !== "sentence") cb.onWord && cb.onWord(k, e.charIndex); };
-      u.onend = () => { if (tok !== this.token) return; if (cb.onItemEnd && cb.onItemEnd(k) === false) return; step(k + 1); };
-      u.onerror = () => { if (tok === this.token) step(k + 1); };
-      speechSynthesis.speak(u); if (speechSynthesis.paused) speechSynthesis.resume();
+      u.onend = () => { if (ended || tok !== this.token) return; ended = true; if (cb.onItemEnd && cb.onItemEnd(k) === false) return; step(k + 1); };
+      u.onerror = e => { if (ended || tok !== this.token || (e && e.error === "interrupted") || (e && e.error === "canceled")) return; ended = true; step(k + 1); };
+      say(u, k, 0);
     };
     step(i);
   }
