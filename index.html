@@ -5,12 +5,12 @@
 <script>(function(){try{if(!localStorage.getItem("lite104:session")&&!/login\.html$/.test(location.pathname)){var n=location.pathname.split("/").pop()||"index.html";window.__gated=1;document.documentElement.style.visibility="hidden";location.replace("login.html?next="+encodeURIComponent(n+location.search));}}catch(e){}})();window.addEventListener("error",function(e){if(window.__gated)e.preventDefault()});</script>
 <script>try{var t=localStorage.getItem("lite104:theme");t=t?JSON.parse(t):(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark")document.documentElement.classList.add("dark")}catch(e){}</script>
 <meta name="theme-color" content="#0a1120" media="(prefers-color-scheme: dark)"/><meta name="theme-color" content="#f8f9ff" media="(prefers-color-scheme: light)"/>
-<link rel="stylesheet" href="assets/theme.css?v=202611231535"/>
+<link rel="stylesheet" href="assets/theme.css?v=202611231549"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet"/>
-<script src="https://cdn.tailwindcss.com"></script><script src="assets/js/tw.js?v=202611231535"></script>
+<script src="https://cdn.tailwindcss.com"></script><script src="assets/js/tw.js?v=202611231549"></script>
 <style>html,body{margin:0}body{overscroll-behavior:none;font-family:Inter,system-ui,sans-serif}::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400;line-height:1}.fill{font-variation-settings:'FILL' 1}@media print{header,nav,.noprint{display:none!important}main{padding:0!important}}</style>
-<script src="assets/js/topics.js?v=202611231535"></script><script src="assets/js/bank.js?v=202611231535"></script><script src="assets/js/app.js?v=202611231535"></script>
+<script src="assets/js/topics.js?v=202611231549"></script><script src="assets/js/bank.js?v=202611231549"></script><script src="assets/js/app.js?v=202611231549"></script>
 </head>
 <body class="bg-surface text-on-surface antialiased min-h-screen">
 <main class="max-w-3xl mx-auto pt-16 pb-28">
@@ -96,14 +96,7 @@ topics.innerHTML = TOPICS.map(t => { const qz = topicQuizzes(t.id); return `<a h
   const weak = seen.sort((a, b) => acc(a.x) - acc(b.x) || net(a.x) - net(b.x))[0];
   const cell = (v, cls = "") => `<td class="px-2 py-2 text-center ${cls}">${v}</td>`;
   const accChip = a => a == null ? "—" : `<span class="px-1.5 py-0.5 rounded ${a >= 75 ? "bg-secondary-fixed/40 text-on-secondary-fixed-variant" : a >= 50 ? "bg-tertiary-fixed/40 text-on-tertiary-fixed-variant" : "bg-error-container text-on-error-container"}">${a}%</span>`;
-  const L = "ABCD";
-  const qList = tid => { const Qs = ACE.topicQuestions(tid); if (!Qs.length) return "";
-    const tag = { c: ["Correct", "text-secondary", "check_circle"], w: ["Wrong", "text-error", "cancel"], b: ["Unattempted", "text-on-surface-variant", "radio_button_unchecked"] };
-    return `<div class="mt-3"><div class="flex items-center gap-1.5 mb-1.5 flex-wrap"><p class="font-semibold mr-1">Questions (${Qs.length})</p>${["all", "w", "b", "c"].map(f => `<button data-f="${f}" data-qt="${tid}" class="qf px-2 py-0.5 rounded-full border border-outline-variant ${f === "all" ? "bg-secondary text-on-secondary" : ""}">${f === "all" ? "All" : tag[f][0]}</button>`).join("")}</div>
-      <div class="space-y-1.5 max-h-[420px] overflow-y-auto pr-1" data-ql="${tid}">${Qs.map((x, j) => `<details data-s="${x.s}" class="qi rounded-lg bg-surface-container-lowest border border-outline-variant/50">
-        <summary class="flex items-start gap-2 p-2 cursor-pointer list-none"><span class="material-symbols-outlined text-[17px] ${tag[x.s][1]}">${tag[x.s][2]}</span><span class="flex-1 font-body-sm text-body-sm text-left line-clamp-2">${esc(x.q)}</span><span class="text-[10px] text-on-surface-variant whitespace-nowrap">${esc(ACE.quizTitle(x.src))} · Q${x.n}<br>${x.k === "N" ? "Numerical" : "Conceptual"}</span></summary>
-        <div class="px-2 pb-2 text-left font-body-sm text-body-sm"><p class="mb-1.5">${esc(x.q)}</p>${x.o.map((o, k) => `<p class="px-2 py-1 my-0.5 rounded ${k === x.a ? "bg-secondary-fixed/40 font-semibold" : k === x.u ? "bg-error-container text-on-error-container line-through" : ""}">${L[k]}. ${esc(o)}${k === x.a ? " ✓" : k === x.u ? " (your answer)" : ""}</p>`).join("")}
-        <p class="mt-1 text-on-surface-variant">${x.u == null ? "Not attempted · 0 marks" : x.u === x.a ? "+3 marks" : "−1 mark"}${x.e ? " · " + esc(x.e) : ""}</p></div></details>`).join("")}</div></div>`; };
+  const qList = tid => { const Qs = ACE.topicQuestions(tid); return Qs.length ? `<div class="mt-3"><p class="font-semibold mb-1.5">Questions</p>${ACE.qReviewHTML(Qs, tid, true)}</div>` : ""; };
   ana.innerHTML = `
   ${weak ? `<a href="topic.html?id=${weak.t.id}" class="flex items-center gap-2 px-space-md py-2.5 bg-error-container/30 border-b border-outline-variant/50 font-body-sm text-body-sm hover:bg-error-container/50"><span class="material-symbols-outlined text-error text-[19px]">target</span><span>Focus next: <b>${esc(weak.t.code)} ${esc(weak.t.name)}</b> — ${acc(weak.x)}% accuracy</span><span class="material-symbols-outlined ml-auto text-[18px]">chevron_right</span></a>` : ""}
   <div class="overflow-x-auto no-scrollbar"><table class="w-full font-label-mono-sm text-label-mono-sm">
@@ -121,8 +114,7 @@ topics.innerHTML = TOPICS.map(t => { const qz = topicQuizzes(t.id); return `<a h
     <tfoot class="bg-surface-container-low font-semibold"><tr class="border-t border-outline-variant/70"><td class="px-3 py-2 text-left">All topics</td>${cell(N)}${cell(tot.c, "text-secondary")}${cell(tot.w, "text-error")}${cell(tot.b)}${cell(accChip(acc(tot)))}${cell(`${net(tot)}<span class="text-on-surface-variant">/${3 * N}</span>`)}</tr></tfoot>
   </table></div>
   <p class="px-space-md py-2 font-label-mono-sm text-[10px] text-on-surface-variant border-t border-outline-variant/50">Every question from every mock and topic quiz is pooled under its own topic. Accuracy = correct ÷ (correct + wrong). Tap a topic to see where its questions came from.</p>`;
-  document.querySelectorAll(".qf").forEach(b => b.onclick = () => { const f = b.dataset.f; document.querySelectorAll(`.qf[data-qt="${b.dataset.qt}"]`).forEach(x => { const on = x === b; x.classList.toggle("bg-secondary", on); x.classList.toggle("text-on-secondary", on); });
-    document.querySelectorAll(`[data-ql="${b.dataset.qt}"] .qi`).forEach(d => d.classList.toggle("hidden", f !== "all" && d.dataset.s !== f)); });
+  ACE.bindQFilters(ana);
   document.querySelectorAll(".anaRow").forEach(r => r.onclick = () => { const d = document.querySelector(`.anaDet[data-d="${r.dataset.t}"]`); if (!d) return; d.classList.toggle("hidden"); d.classList.add("fade-in"); r.querySelector(".chev").style.transform = d.classList.contains("hidden") ? "" : "rotate(180deg)"; });
 })();
 </script>

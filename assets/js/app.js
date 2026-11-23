@@ -79,6 +79,21 @@ function topicQuestions(t) { // every logged question of topic t, newest first
   for (const a of store.get("log", [])) a.items.forEach((it, i) => { if (it.t === t && it.q) out.push({ ...it, src: a.id, at: a.at, n: i + 1 }); });
   return out.reverse();
 }
+function quizAttempts(id) { return store.get("log", []).filter(a => a.id === id && a.items.some(it => it.q)); }
+const QTAG = { c: ["Correct", "text-secondary", "check_circle"], w: ["Wrong", "text-error", "cancel"], b: ["Unattempted", "text-on-surface-variant", "radio_button_unchecked"] };
+function qReviewHTML(Qs, key, showSrc) { // Qs: [{q,o,a,u,s,k,e,n,src}]
+  if (!Qs.length) return "";
+  return `<div class="flex items-center gap-1.5 mb-1.5 flex-wrap font-label-mono-sm text-label-mono-sm">${["all", "w", "b", "c"].map(f => `<button data-f="${f}" data-qt="${key}" class="qf px-2 py-0.5 rounded-full border border-outline-variant ${f === "all" ? "bg-secondary text-on-secondary" : ""}">${f === "all" ? "All " + Qs.length : QTAG[f][0] + " " + Qs.filter(x => x.s === f).length}</button>`).join("")}</div>
+  <div class="space-y-1.5 max-h-[460px] overflow-y-auto pr-1" data-ql="${key}">${Qs.map(x => `<details data-s="${x.s}" class="qi rounded-lg bg-surface-container-lowest border border-outline-variant/50">
+    <summary class="flex items-start gap-2 p-2 cursor-pointer list-none"><span class="material-symbols-outlined text-[17px] ${QTAG[x.s][1]}">${QTAG[x.s][2]}</span><span class="flex-1 font-body-sm text-body-sm text-left line-clamp-2">${esc(x.q)}</span><span class="font-label-mono-sm text-[10px] text-on-surface-variant whitespace-nowrap text-right">${showSrc ? esc(quizTitle(x.src)) + " · " : ""}Q${x.n}<br>${x.k === "N" ? "Numerical" : "Conceptual"}</span></summary>
+    <div class="px-2 pb-2 text-left font-body-sm text-body-sm"><p class="mb-1.5">${esc(x.q)}</p>${x.o.map((o, k) => `<p class="px-2 py-1 my-0.5 rounded ${k === x.a ? "bg-secondary-fixed/40 font-semibold" : k === x.u ? "bg-error-container text-on-error-container line-through" : ""}">${"ABCD"[k]}. ${esc(o)}${k === x.a ? " ✓" : k === x.u ? " (your answer)" : ""}</p>`).join("")}
+    <p class="mt-1 text-on-surface-variant">${x.u == null ? "Not attempted · 0 marks" : x.u === x.a ? "+3 marks" : "−1 mark"}${x.e ? " · " + esc(x.e) : ""}</p></div></details>`).join("")}</div>`;
+}
+function bindQFilters(root = document) {
+  root.querySelectorAll(".qf").forEach(b => b.onclick = e => { e.preventDefault(); const f = b.dataset.f, k = b.dataset.qt;
+    document.querySelectorAll(`.qf[data-qt="${k}"]`).forEach(x => { const on = x === b; x.classList.toggle("bg-secondary", on); x.classList.toggle("text-on-secondary", on); });
+    document.querySelectorAll(`[data-ql="${k}"] .qi`).forEach(d => d.classList.toggle("hidden", f !== "all" && d.dataset.s !== f)); });
+}
 function quizTitle(id) { const m = /^mock-(\d+)$/.exec(id); if (m) return "Mock " + String(m[1]).padStart(2, "0"); const t = /^t-(\w+)-(\d)$/.exec(id); if (t) { const T = (window.TOPICS || []).find(x => x.id === t[1]); return (T ? T.code + " " : "") + "Quiz " + t[2]; } return id; }
 
 /* ---------- marking ---------- */
@@ -235,5 +250,5 @@ function calculator() {
   let dx, dy; $("#calcBar").onpointerdown = e => { const r = el.getBoundingClientRect(); dx = e.clientX - r.left; dy = e.clientY - r.top; const mv = ev => { el.style.left = ev.clientX - dx + "px"; el.style.top = ev.clientY - dy + "px"; el.style.right = "auto"; el.style.bottom = "auto"; }; document.addEventListener("pointermove", mv); document.addEventListener("pointerup", () => document.removeEventListener("pointermove", mv), { once: true }); };
 }
 
-window.ACE = { topicStats, topicQuestions, quizTitle, auth, RAW, $, esc, pad, params, store, results, saveResult, MARK, MOCKS, EXPS, topicQuizzes, buildQuiz, variant, bumpVariant, shell, toast, calculator, calcEval, hash };
+window.ACE = { topicStats, topicQuestions, quizAttempts, qReviewHTML, bindQFilters, quizTitle, auth, RAW, $, esc, pad, params, store, results, saveResult, MARK, MOCKS, EXPS, topicQuizzes, buildQuiz, variant, bumpVariant, shell, toast, calculator, calcEval, hash };
 })();
