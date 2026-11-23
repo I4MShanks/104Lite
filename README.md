@@ -28,7 +28,7 @@ A study site for **BITS U104 — Foundations of Measurement & Experimentation** 
 
 ## Podcasts & video overviews
 - When a Gemini Notebook (NotebookLM) audio or video overview has been added to `assets/media/` and listed in `assets/js/media.js`, the lecture page plays it.
-- Otherwise the page uses a **narrated slide video** (the real lecture slides with synced narration and captions) and a **two-host podcast**, both voiced by the browser's text-to-speech. Transcripts are included.
+- Otherwise the page uses an **interactive video overview** (real lecture slides with zoom-pan, word-by-word captions, a chapter timeline, speed control and pop-quiz checkpoints) and a **two-host podcast** with a live chat-style transcript, tap-to-jump lines and a mid-episode quick check. Both are voiced by the browser’s text-to-speech and still run silently with captions if no voice is available.
 - `assets/notebooklm/*.txt` are the source text packs used to generate the NotebookLM overviews.
 
 ## Editing

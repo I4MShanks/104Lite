@@ -50,7 +50,10 @@ function toast(m) { const t = $("#toast"); if (!t) return; $("#toastMsg").textCo
 const TTS = {
   ok: "speechSynthesis" in window, voices: [], token: 0,
   load() { if (!this.ok) return; const f = () => { this.voices = speechSynthesis.getVoices().filter(v => /^en/i.test(v.lang)); }; f(); speechSynthesis.onvoiceschanged = f; },
-  pick(i) { const v = this.voices; if (!v.length) return null; const pref = v.filter(x => /en-(IN|GB|US)/i.test(x.lang)); const pool = pref.length > 1 ? pref : v; return pool[i % pool.length]; },
+  pick(i) { const v = this.voices; if (!v.length) return null; const pref = v.filter(x => /en-(IN|GB|US)/i.test(x.lang)); const pool = pref.length > 1 ? pref : v;
+    if (i === 0) return pool.find(x => /female|zira|samantha|heera|aria|jenny|google uk english female/i.test(x.name)) || pool[0];
+    return pool.find(x => /male|david|ravi|guy|daniel|google uk english male/i.test(x.name) && !/female/i.test(x.name)) || pool[1 % pool.length]; },
+  get usable() { return this.ok && this.voices.length > 0; },
   stop() { this.token++; if (this.ok) speechSynthesis.cancel(); },
   /* play list of {text, voice} from index i; cb.onItem(i), cb.onEnd() */
   play(items, i, cb, rate) {
@@ -63,7 +66,9 @@ const TTS = {
       const u = new SpeechSynthesisUtterance(items[k].text);
       const v = this.pick(items[k].voice || 0); if (v) u.voice = v;
       u.rate = rate || 1; u.pitch = items[k].voice ? 0.92 : 1.05;
-      u.onend = () => step(k + 1); u.onerror = () => { if (tok === this.token) step(k + 1); };
+      u.onboundary = e => { if (tok === this.token && e.name !== "sentence") cb.onWord && cb.onWord(k, e.charIndex); };
+      u.onend = () => { if (tok !== this.token) return; if (cb.onItemEnd && cb.onItemEnd(k) === false) return; step(k + 1); };
+      u.onerror = () => { if (tok === this.token) step(k + 1); };
       speechSynthesis.speak(u);
     };
     step(i);

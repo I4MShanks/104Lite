@@ -6,7 +6,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com"></script><script src="assets/js/tw.js"></script>
 <style>html,body{margin:0}body{overscroll-behavior:none;font-family:Inter,system-ui,sans-serif}::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400;line-height:1}.fill{font-variation-settings:'FILL' 1}@media print{header,nav,.noprint{display:none!important}main{padding:0!important}}</style>
-<script src="assets/js/lectures.js"></script><script src="assets/js/questions.js"></script><script src="assets/js/media.js"></script><script src="assets/js/app.js"></script>
+<script src="assets/js/lectures.js"></script><script src="assets/js/questions.js"></script><script src="assets/js/media.js"></script><script src="assets/js/app.js"></script><script src="assets/js/players.js"></script>
 </head>
 <body class="bg-surface text-on-surface antialiased min-h-screen">
 <main class="max-w-3xl mx-auto pt-16 pb-24" id="app"></main>
@@ -34,46 +34,16 @@ app.innerHTML = `
 
 <!-- VIDEO OVERVIEW -->
 <section class="px-gutter-mobile my-space-sm"><div class="${card} overflow-hidden">
-  <div class="px-space-md pt-3 pb-2 flex items-center justify-between"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-[20px]">videocam</span><h3 class="font-title-md text-title-md">Video Overview</h3></div><span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant">${M.video ? "NotebookLM video" : "Narrated slides"}</span></div>
-  ${M.video ? `<video src="${M.video}" controls preload="metadata" class="w-full aspect-video bg-primary-container" poster="${slideSrc(L.id, 1)}"></video>` : `
-  <div class="relative w-full aspect-video bg-primary-container overflow-hidden">
-    <img id="vImg" src="${slideSrc(L.id, L.narration[0].s)}" alt="Lecture slide" class="w-full h-full object-contain bg-white transition-opacity duration-300">
-    <div class="absolute top-3 left-3 flex items-center gap-1.5 bg-primary/75 backdrop-blur-md px-2 py-0.5 rounded-full text-on-primary"><span id="vDot" class="w-1.5 h-1.5 rounded-full bg-secondary-fixed"></span><span class="font-label-mono-sm text-label-mono-sm uppercase">Slide <span id="vSlide">${L.narration[0].s}</span>/${L.slides}</span></div>
-    <button id="vPlay" aria-label="Play video overview" class="absolute inset-0 m-auto w-14 h-14 rounded-full bg-surface-container-lowest/90 shadow-xl flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"><span class="material-symbols-outlined fill text-[32px] text-secondary ml-0.5">play_arrow</span></button>
-    <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-primary-container/95 via-primary-container/70 to-transparent p-3 pt-8 flex flex-col gap-2">
-      <p id="vCap" class="font-body-sm text-body-sm text-surface-bright line-clamp-2 min-h-[40px]">${esc(L.narration[0].t)}</p>
-      <div class="relative w-full h-1.5 bg-surface-tint/40 rounded-full overflow-hidden"><div id="vBar" class="absolute top-0 left-0 h-full bg-secondary-container rounded-full transition-all" style="width:0%"></div></div>
-      <div class="flex items-center justify-between text-on-primary font-label-mono-sm text-label-mono-sm"><span><span id="vSeg" class="text-secondary-fixed font-semibold">01</span><span class="text-outline-variant"> / </span><span class="text-primary-fixed-dim">${pad(L.narration.length)}</span></span>
-        <div class="flex items-center gap-2"><button id="vPrev" class="hover:text-secondary-fixed"><span class="material-symbols-outlined text-[20px]">skip_previous</span></button><button id="vNext" class="hover:text-secondary-fixed"><span class="material-symbols-outlined text-[20px]">skip_next</span></button><button id="vCC" class="px-1.5 py-0.5 rounded bg-surface-variant/20 hover:bg-surface-variant/40 flex items-center gap-1"><span class="material-symbols-outlined text-[15px]">subtitles</span><span class="text-[10px]">CC</span></button><button id="vFull" class="hover:text-secondary-fixed"><span class="material-symbols-outlined text-[18px]">fullscreen</span></button></div></div>
-    </div>
-  </div>`}
+  <div class="px-space-md pt-3 pb-2 flex items-center justify-between"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-[20px]">videocam</span><h3 class="font-title-md text-title-md">Video Overview</h3></div><span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant">${M.video ? "Gemini Notebook video" : "Interactive · narrated slides"}</span></div>
+  ${M.video ? `<video src="${M.video}" controls preload="metadata" class="w-full aspect-video bg-primary-container" poster="${slideSrc(L.id, 1)}"></video>` : `<div id="videoMount"></div>`}
   <div class="p-space-md">
-    <div class="flex items-center justify-between mb-space-sm"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-[18px]">list_alt</span><h3 class="font-title-md text-title-md">Key Moments</h3></div><span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant">${L.narration.length} chapters</span></div>
+    <div class="flex items-center justify-between mb-space-sm"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-[18px]">list_alt</span><h3 class="font-title-md text-title-md">Chapters</h3></div><span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant">${L.narration.length} chapters · ◆ = quick check</span></div>
     <div id="chapters" class="flex flex-col gap-2 max-h-[290px] overflow-y-auto no-scrollbar"></div>
   </div>
 </div></section>
 
 <!-- PODCAST -->
-<section class="px-gutter-mobile my-space-sm"><div class="${card} p-space-md flex flex-col gap-3.5">
-  <div class="flex items-start justify-between gap-3"><div class="flex items-center gap-3 min-w-0">
-    <div class="w-11 h-11 rounded-lg bg-primary-container flex items-center justify-center flex-shrink-0 text-secondary-fixed shadow-sm"><span class="material-symbols-outlined text-[24px]">podcasts</span></div>
-    <div class="flex flex-col min-w-0"><span class="font-label-mono-sm text-label-mono-sm text-secondary uppercase font-semibold">104Lite Audio #${pad(L.no)}</span><h4 class="font-title-md text-title-md truncate">${esc(L.track)}: ${esc(L.short)}</h4></div></div>
-    <span class="font-label-mono-sm text-label-mono-sm px-2 py-0.5 rounded bg-surface-container text-on-surface-variant flex-shrink-0">${M.audio ? "NotebookLM" : "2 hosts"}</span></div>
-  ${M.audio ? `<audio id="pAudio" src="${M.audio}" preload="metadata"></audio>` : ""}
-  <div class="bg-surface-container-low p-3 rounded-lg flex flex-col gap-2 shadow-inner">
-    <div id="wave" class="flex items-end justify-between h-9 gap-1 px-1"></div>
-    <div class="flex justify-between items-center text-on-surface-variant font-label-mono-sm text-label-mono-sm"><span id="pCur">00:00</span><span id="pNow" class="text-secondary font-medium truncate px-2">Press play to listen</span><span id="pTot">--:--</span></div>
-  </div>
-  <div class="flex items-center justify-between pt-1">
-    <button id="pSpeed" class="px-2.5 py-1 rounded bg-surface-container font-label-mono-sm text-label-mono-sm hover:bg-surface-container-high font-medium">1.0x</button>
-    <div class="flex items-center gap-3"><button id="pBack" class="w-9 h-9 rounded-full bg-surface-container hover:bg-surface-container-high flex items-center justify-center"><span class="material-symbols-outlined text-[19px]">replay_10</span></button>
-      <button id="pPlay" aria-label="Play podcast" class="w-12 h-12 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-md active:scale-95 transition-transform"><span class="material-symbols-outlined fill text-[26px]">play_arrow</span></button>
-      <button id="pFwd" class="w-9 h-9 rounded-full bg-surface-container hover:bg-surface-container-high flex items-center justify-center"><span class="material-symbols-outlined text-[19px]">forward_30</span></button></div>
-    ${M.audio ? `<a href="${M.audio}" download class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:text-secondary"><span class="material-symbols-outlined text-[20px]">download</span></a>` : `<span class="w-8"></span>`}
-  </div>
-  ${M.audio ? "" : `<button id="trT" class="w-full py-2 px-3 rounded-lg bg-surface-container-low hover:bg-surface-container flex items-center justify-between"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-[18px]">description</span><span class="font-body-sm text-body-sm font-medium">Read Full Transcript</span></div><span id="trC" class="material-symbols-outlined text-on-surface-variant text-[18px] transition-transform">expand_more</span></button>
-  <div id="trB" class="hidden p-3 rounded-lg text-on-surface-variant font-body-sm text-body-sm leading-relaxed border-t border-surface-container space-y-2">${L.podcast.map(([s, t], i) => `<p id="pl${i}"><strong class="text-on-surface">${s === "A" ? "Host A" : "Host B"}:</strong> ${esc(t)}</p>`).join("")}</div>`}
-</div></section>
+<section class="px-gutter-mobile my-space-sm"><div id="podcastMount" class="${card} p-space-md flex flex-col gap-3"></div></section>
 
 <!-- TABS -->
 <section class="px-gutter-mobile my-space-sm">
@@ -145,79 +115,23 @@ document.querySelectorAll(".tabBtn").forEach(b => b.onclick = () => {
   const p = $("#tab-" + b.dataset.tab); p.classList.remove("hidden"); p.classList.add("flex");
 });
 
-/* ---------- video overview (narrated slides) ---------- */
-const N = L.narration; let vi = 0, vOn = false, cc = true;
-const vNoTTS = !TTS.ok;
-function chapters() {
-  $("#chapters").innerHTML = N.map((n, i) => `<button data-i="${i}" class="chap flex items-center justify-between gap-3 p-2.5 rounded-lg text-left transition-colors group ${i === vi ? "bg-surface-container-high" : "bg-surface-container-low hover:bg-surface-container"}">
-    <div class="flex items-center gap-3 min-w-0"><span class="font-label-mono-sm text-label-mono-sm px-2 py-0.5 rounded flex-shrink-0 ${i === vi ? "bg-secondary text-on-secondary" : "bg-secondary-fixed/50 text-on-secondary-fixed"}">S${pad(n.s)}</span><span class="font-body-sm text-body-sm font-medium truncate group-hover:text-secondary">${esc(n.t)}</span></div>
-    <span class="material-symbols-outlined ${i === vi ? "fill text-secondary" : "text-on-surface-variant"} text-[18px] flex-shrink-0">play_circle</span></button>`).join("");
-  document.querySelectorAll(".chap").forEach(c => c.onclick = () => { stopPodcast(); vGo(+c.dataset.i, true); });
-}
-function vShow(i) {
-  vi = i; const n = N[i]; const img = $("#vImg"); img.style.opacity = 0;
-  setTimeout(() => { img.src = slideSrc(L.id, n.s); img.style.opacity = 1; }, 150);
-  $("#vSlide").textContent = n.s; $("#vSeg").textContent = pad(i + 1); $("#vCap").textContent = cc ? n.t : "";
-  $("#vBar").style.width = ((i + 1) / N.length * 100) + "%"; chapters();
-}
-function vIcon() { $("#vPlay").innerHTML = `<span class="material-symbols-outlined fill text-[32px] text-secondary ${vOn ? "" : "ml-0.5"}">${vOn ? "pause" : "play_arrow"}</span>`; $("#vPlay").classList.toggle("opacity-0", vOn); $("#vDot").classList.toggle("animate-pulse", vOn); }
-function vGo(i, play) {
-  vShow(i);
-  if (play) {
-    if (vNoTTS) { toast("Narration isn't supported in this browser — captions shown"); return; }
-    vOn = true; vIcon();
-    TTS.play(N.map(n => ({ text: n.t, voice: 0 })), i, { onItem: k => { if (k !== vi) vShow(k); }, onEnd: () => { vOn = false; vIcon(); } });
-  }
-}
+/* ---------- interactive players ---------- */
+const players = {};
+const bus = { stopOthers(who) { Object.entries(players).forEach(([k, p]) => k !== who && p.stop && p.stop()); },
+  chapter(i) { document.querySelectorAll(".chap").forEach((c, j) => { c.classList.toggle("bg-surface-container-high", j === i); c.classList.toggle("bg-surface-container-low", j !== i); c.querySelector(".tag").className = `tag font-label-mono-sm text-label-mono-sm px-2 py-0.5 rounded flex-shrink-0 ${j === i ? "bg-secondary text-on-secondary" : "bg-secondary-fixed/50 text-on-secondary-fixed"}`; }); } };
+const Qs = (window.QUESTIONS || {})[L.id] || [], NN = L.narration.length;
+const cpIdx = new Set([Math.floor(NN * 0.34) - 1, Math.floor(NN * 0.67) - 1, NN - 1]);
+$("#chapters").innerHTML = L.narration.map((n, i) => `<button data-i="${i}" class="chap flex items-center justify-between gap-3 p-2.5 rounded-lg text-left transition-colors group ${i ? "bg-surface-container-low" : "bg-surface-container-high"} hover:bg-surface-container">
+  <div class="flex items-center gap-3 min-w-0"><span class="tag font-label-mono-sm text-label-mono-sm px-2 py-0.5 rounded flex-shrink-0 ${i ? "bg-secondary-fixed/50 text-on-secondary-fixed" : "bg-secondary text-on-secondary"}">S${pad(n.s)}</span><span class="font-body-sm text-body-sm font-medium truncate group-hover:text-secondary">${esc(n.t)}</span></div>
+  <span class="flex items-center gap-1 flex-shrink-0">${!M.video && cpIdx.has(i) ? '<span class="text-secondary-fixed-dim text-[11px]">◆</span>' : ""}<span class="material-symbols-outlined text-on-surface-variant text-[18px]">${M.video ? "image" : "play_circle"}</span></span></button>`).join("");
 if (!M.video) {
-  chapters();
-  $("#vPlay").onclick = () => { stopPodcast(); if (vOn) { TTS.stop(); vOn = false; vIcon(); } else vGo(vi, true); };
-  $("#vPlay").parentElement.addEventListener("mouseenter", () => $("#vPlay").classList.remove("opacity-0"));
-  $("#vPlay").parentElement.addEventListener("mouseleave", () => vOn && $("#vPlay").classList.add("opacity-0"));
-  $("#vPrev").onclick = () => vGo(Math.max(0, vi - 1), vOn);
-  $("#vNext").onclick = () => vGo(Math.min(N.length - 1, vi + 1), vOn);
-  $("#vCC").onclick = () => { cc = !cc; $("#vCap").textContent = cc ? N[vi].t : ""; toast(cc ? "Captions on" : "Captions off"); };
-  $("#vFull").onclick = () => { const el = $("#vImg").parentElement; (el.requestFullscreen || el.webkitRequestFullscreen || (() => {})).call(el); };
-} else {
-  $("#chapters").innerHTML = N.map(n => `<a href="assets/slides/${L.id}/p-${pad(n.s)}.jpg" target="_blank" class="flex items-center gap-3 p-2.5 rounded-lg bg-surface-container-low hover:bg-surface-container"><span class="font-label-mono-sm text-label-mono-sm px-2 py-0.5 rounded bg-secondary-fixed/50 text-on-secondary-fixed flex-shrink-0">S${pad(n.s)}</span><span class="font-body-sm text-body-sm truncate">${esc(n.t)}</span></a>`).join("");
-}
-
-/* ---------- podcast ---------- */
-const P = L.podcast, speeds = [1, 1.25, 1.5, 2]; let si = 0, pi = 0, pOn = false;
-const bars = Array.from({ length: 24 }, (_, i) => 25 + Math.round(70 * Math.abs(Math.sin(i * 1.7 + L.no))));
-function wave(frac) { $("#wave").innerHTML = bars.map((h, i) => `<div class="w-1 rounded-full ${i / bars.length <= frac ? "bg-secondary" : "bg-outline-variant opacity-40"} ${pOn && Math.abs(i / bars.length - frac) < 0.05 ? "animate-pulse" : ""}" style="height:${h}%"></div>`).join(""); }
-const words = P.reduce((a, [, t]) => a + t.split(" ").length, 0), estSec = Math.round(words / 2.6);
-const mmss = s => `${pad(Math.floor(s / 60))}:${pad(Math.floor(s % 60))}`;
-function pIcon() { $("#pPlay").innerHTML = `<span class="material-symbols-outlined fill text-[26px]">${pOn ? "pause" : "play_arrow"}</span>`; }
-function stopPodcast() { if (pOn) { if (M.audio) $("#pAudio").pause(); else TTS.stop(); pOn = false; pIcon(); wave(M.audio ? 0 : pi / P.length); } }
-function pFrom(i) {
-  pi = Math.max(0, Math.min(P.length - 1, i));
-  if (vOn) { TTS.stop(); vOn = false; vIcon && !M.video && vIcon(); }
-  if (!TTS.ok) { toast("Speech isn't supported in this browser — open the transcript"); return; }
-  pOn = true; pIcon();
-  TTS.play(P.map(([s, t]) => ({ text: t, voice: s === "A" ? 0 : 1 })), pi, {
-    onItem: k => { pi = k; $("#pNow").textContent = (P[k][0] === "A" ? "Host A: " : "Host B: ") + P[k][1]; $("#pCur").textContent = mmss(estSec * k / P.length); wave(k / P.length);
-      document.querySelectorAll("#trB p").forEach((p, j) => p.classList.toggle("text-secondary", j === k)); },
-    onEnd: () => { pOn = false; pi = 0; pIcon(); wave(1); $("#pNow").textContent = "Episode finished"; } }, speeds[si]);
-}
+  players.video = PLAYERS.videoPlayer(L, $("#videoMount"), bus);
+  document.querySelectorAll(".chap").forEach(c => c.onclick = () => { bus.stopOthers("video"); players.video.go(+c.dataset.i, true); $("#videoMount").scrollIntoView({ behavior: "smooth", block: "center" }); });
+} else document.querySelectorAll(".chap").forEach(c => c.onclick = () => window.open(slideSrc(L.id, L.narration[+c.dataset.i].s), "_blank"));
 if (M.audio) {
-  const a = $("#pAudio");
-  a.addEventListener("loadedmetadata", () => $("#pTot").textContent = mmss(a.duration));
-  a.addEventListener("timeupdate", () => { $("#pCur").textContent = mmss(a.currentTime); wave(a.currentTime / (a.duration || 1)); });
-  a.addEventListener("ended", () => { pOn = false; pIcon(); });
-  $("#pPlay").onclick = () => { if (pOn) { a.pause(); pOn = false; } else { if (vOn) { TTS.stop(); vOn = false; } a.play(); pOn = true; $("#pNow").textContent = "Gemini Notebook audio overview"; } pIcon(); };
-  $("#pBack").onclick = () => a.currentTime = Math.max(0, a.currentTime - 10);
-  $("#pFwd").onclick = () => a.currentTime = Math.min(a.duration || 0, a.currentTime + 30);
-  $("#pSpeed").onclick = () => { si = (si + 1) % speeds.length; a.playbackRate = speeds[si]; $("#pSpeed").textContent = speeds[si] + "x"; };
-  wave(0);
-} else {
-  $("#pTot").textContent = "~" + mmss(estSec); wave(0);
-  $("#pPlay").onclick = () => pOn ? stopPodcast() : pFrom(pi);
-  $("#pBack").onclick = () => pFrom(pi - 1);
-  $("#pFwd").onclick = () => pFrom(pi + 2);
-  $("#pSpeed").onclick = () => { si = (si + 1) % speeds.length; $("#pSpeed").textContent = speeds[si] + "x"; if (pOn) pFrom(pi); };
-  $("#trT").onclick = () => { const h = $("#trB").classList.toggle("hidden"); $("#trC").style.transform = h ? "" : "rotate(180deg)"; };
-}
+  $("#podcastMount").innerHTML = `<div class="flex items-center gap-3"><div class="w-11 h-11 rounded-lg bg-primary-container flex items-center justify-center text-secondary-fixed"><span class="material-symbols-outlined text-[24px]">podcasts</span></div><div><span class="font-label-mono-sm text-label-mono-sm text-secondary uppercase font-semibold">Gemini Notebook audio overview</span><h4 class="font-title-md text-title-md">${esc(L.track)}: ${esc(L.short)}</h4></div></div><audio controls preload="metadata" src="${M.audio}" class="w-full"></audio>`;
+  const a = $("#podcastMount audio"); a.addEventListener("play", () => bus.stopOthers("audio")); players.audio = { stop: () => a.pause() };
+} else players.podcast = PLAYERS.podcastPlayer(L, $("#podcastMount"), bus);
 window.addEventListener("pagehide", () => TTS.stop());
 </script>
 </body></html>
