@@ -178,7 +178,7 @@ function buildQuiz(id) {
 }
 
 /* ---------- shell ---------- */
-const NAV = [["home", "index.html", "home", "Home"], ["topics", "topics.html", "category", "Topics"], ["mocks", "mocks.html", "timer", "Mocks"], ["formulas", "formulas.html", "functions", "Formulas"]];
+const NAV = [["home", "index.html", "home", "Home"], ["topics", "topics.html", "category", "Topics"], ["mocks", "mocks.html", "timer", "Mocks"], ["formulas", "formulas.html", "functions", "Formulas"], ["notes", "notes.html", "menu_book", "Notes"]];
 function shell(o) {
   if (!auth.session()) { window.__gated = 1; location.replace("login.html?next=" + encodeURIComponent((location.pathname.split("/").pop() || "index.html") + location.search)); throw new Error("LITE_GATE"); }
   const sess = auth.session(), uname = auth.name(), initials = sess.guest ? "G" : uname.split(/\s+/).map(w => w[0]).join("").slice(0, 2).toUpperCase();
@@ -216,7 +216,7 @@ function shell(o) {
     const nav = document.createElement("nav");
     nav.className = "fixed bottom-0 w-full z-40 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_-2px_12px_rgba(11,28,48,0.06)]";
     nav.innerHTML = `<div class="max-w-3xl mx-auto flex justify-around items-center h-16 px-space-xs">${NAV.map(([k, h, ic, l]) =>
-      `<a href="${h}" ${k === o.active ? 'aria-current="page"' : ""} class="flex flex-col items-center justify-center min-w-[64px] min-h-[44px] px-space-sm py-space-xs rounded-lg ${k === o.active ? "text-secondary bg-surface-container-low font-semibold" : "text-on-surface-variant hover:text-on-surface"}"><span class="material-symbols-outlined text-[22px] ${k === o.active ? "fill" : ""}">${ic}</span><span class="font-label-mono-sm text-label-mono-sm mt-0.5">${l}</span></a>`).join("")}</div>`;
+      `<a href="${h}" ${k === o.active ? 'aria-current="page"' : ""} class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] px-2 py-space-xs rounded-lg ${k === o.active ? "text-secondary bg-surface-container-low font-semibold" : "text-on-surface-variant hover:text-on-surface"}"><span class="material-symbols-outlined text-[22px] ${k === o.active ? "fill" : ""}">${ic}</span><span class="font-label-mono-sm text-label-mono-sm mt-0.5">${l}</span></a>`).join("")}</div>`;
     document.body.append(nav);
   }
   const credit = document.createElement("div");

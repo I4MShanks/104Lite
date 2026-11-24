@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>Notes · 104Lite</title><meta name="description" content="104Lite — compre prep for BITS U104 Foundations of Measurement: 10 timed mixed mocks and 27 topic quizzes with +3/−1 marking."/>
+<link rel="icon" href="assets/logo.svg"/>
+<script>(function(){try{if(!localStorage.getItem("lite104:session")&&!/login\.html$/.test(location.pathname)){var n=location.pathname.split("/").pop()||"index.html";window.__gated=1;document.documentElement.style.visibility="hidden";location.replace("login.html?next="+encodeURIComponent(n+location.search));}}catch(e){}})();window.addEventListener("error",function(e){if(window.__gated)e.preventDefault()});</script>
+<script>try{var t=localStorage.getItem("lite104:theme");t=t?JSON.parse(t):(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark")document.documentElement.classList.add("dark")}catch(e){}</script>
+<meta name="theme-color" content="#0a1120" media="(prefers-color-scheme: dark)"/><meta name="theme-color" content="#f8f9ff" media="(prefers-color-scheme: light)"/>
+<link rel="stylesheet" href="assets/theme.css?v=202611241634"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script><script src="assets/js/tw.js?v=202611241634"></script>
+<style>html,body{margin:0}body{overscroll-behavior:none;font-family:Inter,system-ui,sans-serif}::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400;line-height:1}.fill{font-variation-settings:'FILL' 1}@media print{header,nav,.noprint{display:none!important}main{padding:0!important}}</style>
+<script src="assets/js/topics.js?v=202611241634"></script><script src="assets/js/bank.js?v=202611241634"></script>
+<script src="assets/js/notes.js?v=202611241634"></script><script src="assets/js/app.js?v=202611241634"></script>
+</head>
+<body class="bg-surface text-on-surface antialiased min-h-screen">
+<main class="max-w-3xl mx-auto pt-16 pb-28 px-gutter-mobile">
+<section class="pt-space-md">
+  <h2 class="font-headline-sm text-headline-sm">Notes &amp; Question Banks</h2>
+  <p class="font-body-sm text-body-sm text-on-surface-variant">Written from the lecture slides, the experiments and the 2026-27 lab manual. Each set has explanations, worked examples, exam tips, common mistakes, a summary &amp; formula box, and a question bank with answers.</p>
+</section>
+<div class="mt-space-md flex items-center gap-2 p-3 rounded-xl bg-secondary/10 border border-secondary/30 font-body-sm text-body-sm">
+  <span class="material-symbols-outlined text-secondary text-[20px]">tips_and_updates</span>
+  <span>Read the notes for a topic, then take its quizzes. Mistakes show up in your <a href="index.html" class="text-secondary font-semibold underline">Analysis</a>.</span>
+</div>
+<div id="list" class="stagger flex flex-col gap-space-sm mt-space-md"></div>
+</main>
+<script>
+const { shell, esc, results, topicQuizzes } = ACE;
+shell({ active: "notes", title: "Notes" });
+const R = results();
+list.innerHTML = TOPICS.map(t => { const n = NOTES[t.id], done = topicQuizzes(t.id).filter(q => R[q.id]).length;
+  return `<article class="bg-surface-container-lowest rounded-xl shadow-sm hover:shadow-md overflow-hidden">
+  <div class="p-space-md flex items-start gap-3">
+    <span class="w-12 h-14 rounded-lg bg-primary-container text-secondary-fixed flex flex-col items-center justify-center flex-shrink-0 relative overflow-hidden"><span class="material-symbols-outlined text-[22px]">${t.icon}</span><span class="font-label-mono-sm text-[9px] font-bold">${t.code}</span><span class="absolute bottom-0 inset-x-0 h-1 flex"><i class="flex-1 bg-[#f1c232]"></i><i class="flex-1 bg-[#75c3e9]"></i><i class="flex-1 bg-[#ee3624]"></i></span></span>
+    <div class="flex-1 min-w-0">
+      <p class="font-label-mono-sm text-label-mono-sm text-secondary uppercase tracking-wider">${t.code} · ${esc(t.dept)}</p>
+      <h3 class="font-title-md text-title-md leading-tight">${esc(t.name)}</h3>
+      <p class="font-label-mono-sm text-[11px] text-on-surface-variant mt-0.5">${n.pages} pages · ${n.chapters.length} chapter${n.chapters.length > 1 ? "s" : ""} · ${n.qs} practice Qs with answers · ${n.kb} KB</p>
+      <ul class="mt-1.5 font-body-sm text-[13px] text-on-surface-variant list-disc pl-4">${n.chapters.map(c => `<li>${esc(c)}</li>`).join("")}</ul>
+    </div>
+  </div>
+  <div class="flex border-t border-outline-variant/50 font-label-mono-sm text-label-mono-sm font-semibold">
+    <a href="notes/${t.id}.pdf" target="_blank" rel="noopener" class="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-secondary hover:bg-surface-container-low"><span class="material-symbols-outlined text-[18px]">visibility</span>Open</a>
+    <a href="notes/${t.id}.pdf" download="104Lite Notes - ${t.code} ${t.name.replace(/[^\w &()-]/g, "")}.pdf" class="flex-1 flex items-center justify-center gap-1.5 py-2.5 border-x border-outline-variant/50 text-secondary hover:bg-surface-container-low"><span class="material-symbols-outlined text-[18px]">download</span>Download</a>
+    <a href="topic.html?id=${t.id}" class="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-on-surface-variant hover:bg-surface-container-low"><span class="material-symbols-outlined text-[18px]">quiz</span>Quizzes ${done}/3</a>
+  </div></article>`; }).join("");
+</script>
+</body></html>

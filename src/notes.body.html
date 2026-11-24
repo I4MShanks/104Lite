@@ -1,0 +1,34 @@
+<body class="bg-surface text-on-surface antialiased min-h-screen">
+<main class="max-w-3xl mx-auto pt-16 pb-28 px-gutter-mobile">
+<section class="pt-space-md">
+  <h2 class="font-headline-sm text-headline-sm">Notes &amp; Question Banks</h2>
+  <p class="font-body-sm text-body-sm text-on-surface-variant">Written from the lecture slides, the experiments and the 2026-27 lab manual. Each set has explanations, worked examples, exam tips, common mistakes, a summary &amp; formula box, and a question bank with answers.</p>
+</section>
+<div class="mt-space-md flex items-center gap-2 p-3 rounded-xl bg-secondary/10 border border-secondary/30 font-body-sm text-body-sm">
+  <span class="material-symbols-outlined text-secondary text-[20px]">tips_and_updates</span>
+  <span>Read the notes for a topic, then take its quizzes. Mistakes show up in your <a href="index.html" class="text-secondary font-semibold underline">Analysis</a>.</span>
+</div>
+<div id="list" class="stagger flex flex-col gap-space-sm mt-space-md"></div>
+</main>
+<script>
+const { shell, esc, results, topicQuizzes } = ACE;
+shell({ active: "notes", title: "Notes" });
+const R = results();
+list.innerHTML = TOPICS.map(t => { const n = NOTES[t.id], done = topicQuizzes(t.id).filter(q => R[q.id]).length;
+  return `<article class="bg-surface-container-lowest rounded-xl shadow-sm hover:shadow-md overflow-hidden">
+  <div class="p-space-md flex items-start gap-3">
+    <span class="w-12 h-14 rounded-lg bg-primary-container text-secondary-fixed flex flex-col items-center justify-center flex-shrink-0 relative overflow-hidden"><span class="material-symbols-outlined text-[22px]">${t.icon}</span><span class="font-label-mono-sm text-[9px] font-bold">${t.code}</span><span class="absolute bottom-0 inset-x-0 h-1 flex"><i class="flex-1 bg-[#f1c232]"></i><i class="flex-1 bg-[#75c3e9]"></i><i class="flex-1 bg-[#ee3624]"></i></span></span>
+    <div class="flex-1 min-w-0">
+      <p class="font-label-mono-sm text-label-mono-sm text-secondary uppercase tracking-wider">${t.code} · ${esc(t.dept)}</p>
+      <h3 class="font-title-md text-title-md leading-tight">${esc(t.name)}</h3>
+      <p class="font-label-mono-sm text-[11px] text-on-surface-variant mt-0.5">${n.pages} pages · ${n.chapters.length} chapter${n.chapters.length > 1 ? "s" : ""} · ${n.qs} practice Qs with answers · ${n.kb} KB</p>
+      <ul class="mt-1.5 font-body-sm text-[13px] text-on-surface-variant list-disc pl-4">${n.chapters.map(c => `<li>${esc(c)}</li>`).join("")}</ul>
+    </div>
+  </div>
+  <div class="flex border-t border-outline-variant/50 font-label-mono-sm text-label-mono-sm font-semibold">
+    <a href="notes/${t.id}.pdf" target="_blank" rel="noopener" class="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-secondary hover:bg-surface-container-low"><span class="material-symbols-outlined text-[18px]">visibility</span>Open</a>
+    <a href="notes/${t.id}.pdf" download="104Lite Notes - ${t.code} ${t.name.replace(/[^\w &()-]/g, "")}.pdf" class="flex-1 flex items-center justify-center gap-1.5 py-2.5 border-x border-outline-variant/50 text-secondary hover:bg-surface-container-low"><span class="material-symbols-outlined text-[18px]">download</span>Download</a>
+    <a href="topic.html?id=${t.id}" class="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-on-surface-variant hover:bg-surface-container-low"><span class="material-symbols-outlined text-[18px]">quiz</span>Quizzes ${done}/3</a>
+  </div></article>`; }).join("");
+</script>
+</body></html>
